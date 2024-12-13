@@ -1,0 +1,92 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <!-- Loader -->
+    <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+        <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+    </div>
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 flemin-w-0">
+            <!-- Title -->
+            <div class="flex flex-row mt-2 justify-between">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    รายการสั่งซื้อ
+                </h2>
+                <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()">
+                        <mat-icon svgIcon="heroicons_outline:plus-small"></mat-icon>
+                        &nbsp;
+                        เพิ่มคำสั่งซื้อ
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg m-10  bg-white">
+        <div class="flex flex-col flex-auto p-5  sm:overflow-y-auto">
+            <table datatable [dtOptions]="dtOptions" class="table row-border hover w-full bg-white whitespace-nowrap">
+                <thead>
+                    <tr>
+                        <th class="w-[100px]">จัดการ</th>
+                        <th class="w-[10px]">ลำดับ</th>
+                        <th>รหัสสั่งซื้อ</th>
+                        <th>วันที่</th>
+                        <th>ลูกค้า</th>
+                        <th>ยอดรวม</th>
+                        <th>สถานะ</th>
+                        <th>สร้างโดย</th>
+                        <th>วันที่สร้าง</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="dataRow?.length != 0">
+                    <tr *ngFor="let item of dataRow; let i = index">
+                        <td>
+                            <button mat-icon-button color="accent" (click)="editElement(item)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="accent" (click)="deleteElement(item)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button mat-icon-button color="accent" (click)="downloadReport(item)">
+                                <mat-icon>print</mat-icon>
+                            </button>
+                        </td>
+                        <td>{{ pages.begin + (i + 1) }}</td>
+                        <td>{{ item.code ? item.code : "-" }}</td>
+                        <td>{{ item.date | date : "dd-MM-yyyy" }}</td>
+                        <td>{{ item.client ? item.client.name : "-" }}</td>
+                        <td>{{ item.total_price ? item.total_price : "-" }}</td>
+                        <td>
+                            <div *ngIf="item.status === 'Ordered'"
+                                class="bg-blue-200 p-1 rounded-md text-center text-blue-800 font-bold">
+                                กำลังดำเนินการ
+                            </div>
+                            <div *ngIf="item.status === 'Wait'"
+                                class="bg-yellow-200 p-1 rounded-md text-center text-yellow-800 font-bold">
+                                รอตรวจสอบ
+                            </div>
+                            <div *ngIf="item.status === 'Finish'"
+                                class="bg-green-200 p-1 rounded-md text-center text-green-800 font-bold text-center">
+                                เสร็จสิ้น
+                            </div>
+                            <div *ngIf="item.status === 'Repair'"
+                                class="bg-red-200 p-1 rounded-md text-center text-red-800 font-bold text-center">
+                                รออนุมัติซ่อม
+                            </div>
+                        </td>
+                        <td>{{ item.create_by ? item.create_by : "-" }}</td>
+                        <td>{{ item.created_at | date : "dd-MM-yyyy hh:mm a " }}</td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="dataRow?.length == 0">
+                    <tr>
+                        <td colspan="7" class="no-data-available text-center">ไม่มีข้อมูล !</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
