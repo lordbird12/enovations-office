@@ -28,6 +28,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { Router } from '@angular/router';
 import { PictureComponent } from '../../picture/picture.component';
 import { FormReportComponent } from '../../product/form-report/form-report.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
     selector: 'employee-list',
@@ -52,6 +53,7 @@ import { FormReportComponent } from '../../product/form-report/form-report.compo
         MatPaginatorModule,
         MatTableModule,
         DataTablesModule,
+        MatMenuModule
     ],
 })
 export class ListComponent implements OnInit, AfterViewInit {
@@ -81,8 +83,16 @@ export class ListComponent implements OnInit, AfterViewInit {
     editElement(element: any) {
         this._router.navigate(['admin/sales/edit/' + element.id]);
     }
-    addElement() {
-        this._router.navigate(['admin/sales/form']);
+    addElement(data: any) {
+        if(data === 'Echocardiogram') {
+            this._router.navigate(['admin/sales/form/echocardiogram']);
+        } else if (data === 'Ultrasound Imaging') {
+            this._router.navigate(['admin/sales/form/ultrasound-imaging']);
+        } else if (data === 'ec') {
+            this._router.navigate(['admin/sales/form/ec']);
+        } else if (data === 'rc') {
+            this._router.navigate(['admin/sales/form/rc']);
+        } 
     }
 
 

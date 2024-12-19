@@ -10,15 +10,19 @@
             <!-- Title -->
             <div class="flex flex-row mt-2 justify-between">
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    รายการสั่งซื้อ
+                    รายการสั่งจอง
                 </h2>
                 <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()">
+             
+                    <button mat-button [matMenuTriggerFor]="menu" mat-flat-button [color]="'primary'"> 
                         <mat-icon svgIcon="heroicons_outline:plus-small"></mat-icon>
-                        &nbsp;
-                        เพิ่มคำสั่งซื้อ
-                    </button>
-
+                        เพิ่มการจอง</button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="addElement('Echocardiogram')">Echocardiogram</button>
+                      <button mat-menu-item (click)="addElement('Ultrasound Imaging')">Ultrasound Imaging</button>
+                      <button mat-menu-item (click)="addElement('ec')">EC</button>
+                      <button mat-menu-item (click)="addElement('rc')">RC</button>
+                    </mat-menu>
                 </div>
             </div>
         </div>
@@ -69,11 +73,11 @@
                                 รอตรวจสอบ
                             </div>
                             <div *ngIf="item.status === 'Finish'"
-                                class="bg-green-200 p-1 rounded-md text-center text-green-800 font-bold text-center">
+                                class="bg-green-200 p-1 rounded-md text-center text-green-800 font-bold ">
                                 เสร็จสิ้น
                             </div>
                             <div *ngIf="item.status === 'Repair'"
-                                class="bg-red-200 p-1 rounded-md text-center text-red-800 font-bold text-center">
+                                class="bg-red-200 p-1 rounded-md text-center text-red-800 font-bold ">
                                 รออนุมัติซ่อม
                             </div>
                         </td>

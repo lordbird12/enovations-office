@@ -33,7 +33,7 @@ export default [
         component: PageComponent,
         children : [
             {
-                path     : 'form',
+                path     : 'form/echocardiogram',
                 component: FormComponent,
                 resolve  : {
                     products    : () => inject(PageService).getProductEno(),
@@ -43,6 +43,58 @@ export default [
                     // tags      : () => inject(InventoryService).getTags(),
                     // vendors   : () => inject(InventoryService).getVendors(),
                 },
+                data: {
+                    page_type: 'NEW',
+                    type: 'Echocardiogram'
+                }   
+            },
+            {
+                path     : 'form/ec',
+                component: FormComponent,
+                resolve  : {
+                    products    : () => inject(PageService).getProductEno(),
+                    user: () => inject(PageService).getUser(),
+                    client: () => inject(PageService).getClient(),
+                    // products  : () => inject(InventoryService).getProducts(),
+                    // tags      : () => inject(InventoryService).getTags(),
+                    // vendors   : () => inject(InventoryService).getVendors(),
+                },
+                data: {
+                    page_type: 'NEW',
+                    type: 'ec'
+                }
+            },
+            {
+                path     : 'form/ultrasound-imaging',
+                component: FormComponent,
+                resolve  : {
+                    products    : () => inject(PageService).getProductEno(),
+                    user: () => inject(PageService).getUser(),
+                    client: () => inject(PageService).getClient(),
+                    // products  : () => inject(InventoryService).getProducts(),
+                    // tags      : () => inject(InventoryService).getTags(),
+                    // vendors   : () => inject(InventoryService).getVendors(),
+                },
+                data: {
+                    page_type: 'NEW',
+                    type: 'Ultrasound Imaging'
+                }
+            },
+            {
+                path     : 'form/rc',
+                component: FormComponent,
+                resolve  : {
+                    products    : () => inject(PageService).getProductEno(),
+                    user: () => inject(PageService).getUser(),
+                    client: () => inject(PageService).getClient(),
+                    // products  : () => inject(InventoryService).getProducts(),
+                    // tags      : () => inject(InventoryService).getTags(),
+                    // vendors   : () => inject(InventoryService).getVendors(),
+                },
+                data: {
+                    page_type: 'NEW',
+                    type: 'rc'
+                }
             },
             {
                 path     : 'edit/:id',
@@ -57,6 +109,9 @@ export default [
                     // tags      : () => inject(InventoryService).getTags(),
                     // vendors   : () => inject(InventoryService).getVendors(),
                 },
+                data : {
+                    page_type: 'EDIT'
+                }
             },
         ],
     },

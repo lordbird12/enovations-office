@@ -51,7 +51,12 @@ export class FormComponent implements OnInit {
     fixedSubscriptInputWithHint: FormControl = new FormControl('', [Validators.required]);
     dynamicSubscriptInputWithHint: FormControl = new FormControl('', [Validators.required]);
     isForm: boolean = true
-
+    purpose: string[] = [
+        'Demo' , 'Install' , 'Post' ,'Sale' , 'Present' , 'Booth' , 'Workshop' 
+    ]
+    customerType: string[] = [
+        'Government' , 'Private' , 'Clinic' , 'Vet'	
+    ]
     finanaceData: any[] = [];
 
     paymentData: any[] = [];
@@ -65,6 +70,7 @@ export class FormComponent implements OnInit {
     Id: number;
     claimId: number;
     product_select: any;
+    type: any = ''
     saleType: any[] = [
         {
             code: 'Installment_with_finance',
@@ -146,6 +152,7 @@ export class FormComponent implements OnInit {
     clientData: any[] = [];
 
     user: any
+    pageType: any
     /**
      * Constructor
      */
@@ -160,6 +167,8 @@ export class FormComponent implements OnInit {
 
     ) {
 
+        this.type = this.activatedRoute.snapshot.data.type
+        this.pageType = this.activatedRoute.snapshot.data.page_type
 
         this.productData = this.activatedRoute.snapshot.data.products.data
         this.filterProduct.next(this.productData.slice());
@@ -212,7 +221,7 @@ export class FormComponent implements OnInit {
 
     ngOnInit() {
 
-        if (this._router.url !== '/admin/sales/form') {
+        if (this.pageType === 'EDIT') {
             this.activatedRoute.params.subscribe(params => {
                 this.isForm = false;
                 const id = params.id;
@@ -241,7 +250,7 @@ export class FormComponent implements OnInit {
             const currentDateTime = DateTime.now();
             this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy');
             this.formData.patchValue({
-                user_id: this.user_login?.id,
+                // user_id: this.user_login?.id,
                 calendar_date: currentDateTime.toFormat('yyyy-MM-dd')
             })
             this.saleFilter.setValue(this.user_login?.name)
@@ -858,7 +867,7 @@ export class FormComponent implements OnInit {
     openDialogProduct(type: any) {
         const dialogRef = this.dialog.open(ProductDialogComponent, {
             width: '800px',
-            height: '800px',
+            maxHeight: '90vh',
         });
 
         dialogRef.afterClosed().subscribe(result => {
