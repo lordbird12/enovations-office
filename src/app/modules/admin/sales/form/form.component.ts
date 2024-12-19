@@ -178,6 +178,7 @@ export class FormComponent implements OnInit {
 
         this.formData = this._fb.group({
             calendar_date: null,
+            budget: 0,
             request_purpose: null,
             user_id: null,
             product_id: null,
@@ -218,59 +219,22 @@ export class FormComponent implements OnInit {
                 this.Id = id
                 this._service.getById(id).subscribe((resp: any) => {
                     this.itemData = resp.data;
-                    const currentDateTime = DateTime.fromISO(this.itemData?.date)
-                    this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy')
-                    this.saleFilter.setValue(this.itemData.sale?.name)
-                    this.financeFilter.setValue(this.itemData.finance?.name)
-                    this.engineerFilter.setValue(this.itemData.engineer?.name)
-                    this._service.getBrandModel(this.itemData.orders?.brand?.id).subscribe((resp: any) => {
-                        this.brandModelData = resp.data
-                        this.filterBrandModel.next(this.brandModelData.slice());
-                    });
-                 
+                    // const currentDateTime = DateTime.fromISO(this.itemData?.date)
+                    // this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy'
+                    
+                    
+                    this.saleFilter.setValue(this.itemData.user?.name)
+                    this.clientFilter.setValue(this.itemData.client?.name)
+                    this.productFilter.setValue(this.itemData.product?.name)
+                    this.accessorieFilter.setValue(this.itemData.product?.name)
+                    this.workstationFilter.setValue(this.itemData.product?.name)
                     this.formData.patchValue({
                         ...this.itemData,
                     });
-                    this.formData.patchValue({
-                        id: +this.itemData.id,
-                        brand_id: +this.itemData.orders?.brand?.id,
-                        brand_model_id: +this.itemData.orders?.brand_model.id,
-                        customer_name: this.itemData.client?.name,
-                        phone: this.itemData.client?.phone,
-                        idcard: this.itemData.client?.idcard,
-                        address: this.itemData.client?.address,
-                        type: this.itemData.client?.type,
-                        promotion_id: +this.itemData?.promotion_id
-                    });
+         
 
                     this._changeDetectorRef.markForCheck();
-                    // this._service.getClaim(this.claimId).subscribe((res: any) => {
-                    //     this.claimData = res.data;
-                    //     this._changeDetectorRef.markForCheck();
-                    // })
-
-                    const promotionFormArray = this.formData.get('promotion_lists') as FormArray;
-                    this.itemData.promotion_lists.forEach(promotion => {
-                        let promo = this._fb.group({
-                            id: promotion.id,
-                            discount_id: [promotion.discount.id || ''],
-                            name: promotion.discount.name,
-                            amount: promotion.discount.amount,
-                            status: [promotion.status || 'Y'],
-                        });
-
-                        promotionFormArray.push(promo);
-                    });
-                    const repairFormArray = this.formData.get('repairs') as FormArray;
-                    this.itemData.repairs.forEach(repair => {
-                        let promo = this._fb.group({
-                            engineer_id: +repair.engineer_id,
-                            type: [repair.type || 'IN'],
-                            detail: repair.detail,
-                        });
-
-                        repairFormArray.push(promo);
-                    })
+               
                 });
             });
         } else {
@@ -314,44 +278,10 @@ export class FormComponent implements OnInit {
             .subscribe(() => {
                 this._filterWorkStation();
             });
-        this.formData.valueChanges.pipe(distinctUntilChanged())
-            .subscribe(() => this.calculateTotal());
     }
 
 
-    calculateTotal(): void {
-        const formValues = this.formData.value;
-        // let financePrice = formValues.sale_price - formValues.down_price
-        // console.log(financePrice, 'financePrice');
-        // คำนวณยอดจัดไฟแนนซ์ (ราคาขาย - เงินดาวน์)
-        const financeAmount = formValues.sale_price - formValues.down_price;
 
-        // ตรวจสอบว่าผลลัพธ์ไม่ต่ำกว่า 0 (กรณีที่กรอกเกิน)
-        const validFinanceAmount = Math.max(financeAmount, 0);
-        this.total1 =
-            formValues.down_price +
-            formValues.tax_and_plo +
-            formValues.finance_fee +
-            formValues.assemble_fee +
-            formValues.gps_fee +
-            formValues.insurance_price;
-
-        // คำนวณ final_price
-        const finalPrice =
-            this.total1 -
-            formValues.first_payment -
-            formValues.discount +
-            formValues.other_price;
-
-        this.formData.patchValue(
-            {
-                finance_price: validFinanceAmount,  // อัปเดตยอดจัดไฟแนนซ์
-                total_price: this.total1,             // อัปเดตผลรวมทั้งหมด
-                final_price: finalPrice              // ราคาไฟนอล
-            },
-            { emitEvent: false }
-        );
-    }
 
 
         /**
