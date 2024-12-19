@@ -722,7 +722,8 @@ export class FormComponent implements OnInit {
             dialogRef.afterClosed().subscribe((result => {
                 if (result === 'confirmed') {
                     let formValue = this.formData.value;
-                    formValue.calendar_date = moment(formValue.calendar_date).format('YYYY-MM-DD')
+                    formValue.start_date = moment(formValue.start_date).format('YYYY-MM-DD')
+                    formValue.end_date = moment(formValue.end_date).format('YYYY-MM-DD')
                     this._service.create(formValue).subscribe({
                         next: (resp: any) => {
                             this._router.navigate(['admin/sales/list'])
