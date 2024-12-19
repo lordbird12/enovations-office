@@ -61,9 +61,7 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
         plugins: [dayGridPlugin],
         initialView: 'dayGridMonth',
         weekends: false,
-        events: [
-          { title: 'Meeting', start: new Date() }
-        ]
+        events: []
       };
 
     user: any;
@@ -79,19 +77,20 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         this._service.getById(this.user).subscribe((resp:any)=>{
-            // แปลงข้อมูลที่ได้ให้ตรงกับ FullCalendar
+          console.log(resp);
+          
           const events = resp.map((item) => ({
-            // title: item.title,
-            start: item.start_date, // ค่าที่ได้จาก API
-            end: item.end_date // ค่าที่ได้จาก API
+            title: '11111',
+            start: item.start_date, 
+            end: item.end_date 
           }));
-
-          // อัปเดต events ใน calendarOptions
           this.calendarOptions = {
-            ...this.calendarOptions,
-            events
+            events: events
           };
+          // console.log(this.calendarOptions);
+          this._changeDetectorRef.markForCheck()
         })
+
     }
 
     ngAfterViewInit(): void {

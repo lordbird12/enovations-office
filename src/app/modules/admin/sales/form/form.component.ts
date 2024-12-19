@@ -52,10 +52,10 @@ export class FormComponent implements OnInit {
     dynamicSubscriptInputWithHint: FormControl = new FormControl('', [Validators.required]);
     isForm: boolean = true
     purpose: string[] = [
-        'Demo' , 'Install' , 'Post' ,'Sale' , 'Present' , 'Booth' , 'Workshop' 
+        'Demo', 'Install', 'Post', 'Sale', 'Present', 'Booth', 'Workshop'
     ]
     customerType: string[] = [
-        'Government' , 'Private' , 'Clinic' , 'Vet'	
+        'Government', 'Private', 'Clinic', 'Vet'
     ]
     finanaceData: any[] = [];
 
@@ -212,6 +212,8 @@ export class FormComponent implements OnInit {
             status: null,
             create_by: null,
             update_by: null,
+            start_date: null,
+            end_date: null,
         });
     }
 
@@ -230,8 +232,8 @@ export class FormComponent implements OnInit {
                     this.itemData = resp.data;
                     // const currentDateTime = DateTime.fromISO(this.itemData?.date)
                     // this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy'
-                    
-                    
+
+
                     this.saleFilter.setValue(this.itemData.user?.name)
                     this.clientFilter.setValue(this.itemData.client?.name)
                     this.productFilter.setValue(this.itemData.product?.name)
@@ -240,10 +242,10 @@ export class FormComponent implements OnInit {
                     this.formData.patchValue({
                         ...this.itemData,
                     });
-         
+
 
                     this._changeDetectorRef.markForCheck();
-               
+
                 });
             });
         } else {
@@ -251,7 +253,7 @@ export class FormComponent implements OnInit {
             this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy');
             this.formData.patchValue({
                 // user_id: this.user_login?.id,
-                calendar_date: currentDateTime.toFormat('yyyy-MM-dd')
+                // calendar_date: currentDateTime.toFormat('yyyy-MM-dd')
             })
             this.saleFilter.setValue(this.user_login?.name)
 
@@ -693,8 +695,6 @@ export class FormComponent implements OnInit {
 
     }
 
-
-
     onSubmit(): void {
         if (this.isForm === true) {
             const dialogRef = this._fuseConfirmationService.open({
@@ -722,8 +722,8 @@ export class FormComponent implements OnInit {
             dialogRef.afterClosed().subscribe((result => {
                 if (result === 'confirmed') {
                     let formValue = this.formData.value;
-                    formValue.start_date = moment(formValue.start_date).format('YYYY-MM-DD')
-                    formValue.end_date = moment(formValue.end_date).format('YYYY-MM-DD')
+                    formValue.start_date = DateTime.fromISO(this.formData.value.start_date).toFormat('yyyy-MM-dd')
+                    formValue.end_date = DateTime.fromISO(this.formData.value.end_date).toFormat('yyyy-MM-dd')
                     this._service.create(formValue).subscribe({
                         next: (resp: any) => {
                             this._router.navigate(['admin/sales/list'])
@@ -779,11 +779,11 @@ export class FormComponent implements OnInit {
                 },
                 "dismissible": true
             })
-
             dialogRef.afterClosed().subscribe((result => {
                 if (result === 'confirmed') {
                     let formValue = this.formData.value;
-                    formValue.calendar_date = moment(formValue.calendar_date).format('YYYY-MM-DD')
+                    formValue.start_date = DateTime.fromISO(this.formData.value.start_date).toFormat('yyyy-MM-dd')
+                    formValue.end_date = DateTime.fromISO(this.formData.value.end_date).toFormat('yyyy-MM-dd')
                     this._service.update(formValue, this.Id).subscribe({
                         next: (resp: any) => {
                             this._router.navigate(['admin/sales/list'])
@@ -873,23 +873,23 @@ export class FormComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                if(type === 'prod') {
+                if (type === 'prod') {
                     this.productFilter.setValue(result.name)
                     this.formData.patchValue({
-                       product_id: result.id
+                        product_id: result.id
                     })
                 } else if (type === 'acc') {
                     this.accessorieFilter.setValue(result.name)
                     this.formData.patchValue({
-                       accessorie_id: result.id
+                        accessorie_id: result.id
                     })
                 } else if (type === 'work') {
                     this.workstationFilter.setValue(result.name)
                     this.formData.patchValue({
-                       work_station_id: result.id
+                        work_station_id: result.id
                     })
                 }
-              
+
             }
         });
     }
@@ -922,7 +922,7 @@ export class FormComponent implements OnInit {
             this.formData.get('sale_price')?.setValue(formattedValue);
         }
     }
-    
+
     changeDate() {
         let formValue = this.formData.value.calendar_date
         this.formattedDateTime = moment(formValue.calendar_date).format('YYYY-MM-DD')
