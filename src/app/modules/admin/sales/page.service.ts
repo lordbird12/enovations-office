@@ -253,6 +253,20 @@ export class PageService {
                 })
             );
     }
+
+    getPateProduct(dataTablesParameters: any): Observable<DataTablesResponse> {
+        return this._httpClient
+            .post(
+                environment.baseURL + '/api/product_page',
+                dataTablesParameters,
+                this.httpOptionsFormdata
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
     customerCreate(data: FormData): Observable<any> {
         return this._httpClient
             .post<any>(environment.baseURL + '/api/client', data)

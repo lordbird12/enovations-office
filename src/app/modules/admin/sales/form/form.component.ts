@@ -30,6 +30,7 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { MatRadioModule } from '@angular/material/radio';
 import { CustomerDialogComponent } from '../customer-dialog/customer-dialog.component';
 import { CarouselComponent } from '../image-slide/carousel.component';
+import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 @Component({
     selector: 'form-product',
     templateUrl: './form.component.html',
@@ -920,6 +921,26 @@ export class FormComponent implements OnInit {
                     address: result.address ?? null,
                     type: result.type ?? null,
                 })
+            }
+        });
+    }
+
+    openDialogProduct() {
+        const dialogRef = this.dialog.open(ProductDialogComponent, {
+            width: '800px',
+            height: '800px',
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                // this.formData.patchValue({
+                //     client_id: result.id,
+                //     customer_name: result.name ?? null,
+                //     phone: result.phone ?? null,
+                //     idcard: result.idcard ?? null,
+                //     address: result.address ?? null,
+                //     type: result.type ?? null,
+                // })
             }
         });
     }
