@@ -7,9 +7,7 @@
                     <th class="w-[10px]">ลำดับ</th>
                     <th>ชื่อ</th>
                     <th>เบอร์ติดต่อ</th>
-                    <th>อีเมล</th>
-                    <th>สร้างโดย</th>
-                    <th>วันที่สร้าง</th>
+                    <th>สถานะการจอง</th>
                 </tr>
             </thead>
             <tbody *ngIf="dataRow?.length != 0">
@@ -21,10 +19,17 @@
                     </td>
                     <td>{{ pages.begin + (i + 1) }}</td>
                     <td>{{ item.name ? item.name : "-"}}</td>
-                    <td>{{ item.phone ? item.phone : "-"}}</td>
-                    <td>{{ item.email ? item.email : "-"}}</td>
-                    <td>{{ item.create_by ? item.create_by : "-" }}</td>
-                    <td>{{ item.created_at !== null ? (item.created_at | date : "dd-MM-yy, HH:mm"): "-"}}</td>
+                    <td>{{ item.serial_no ? item.serial_no : "-"}}</td>
+                    <td>                      
+                        <div *ngIf="item.book === 'N'"
+                            class="bg-green-200 p-1 rounded-md text-center text-green-800 font-bold ">
+                            ว่าง
+                        </div>
+                        <div *ngIf="item.status === 'Y'"
+                            class="bg-red-200 p-1 rounded-md text-center text-red-800 font-bold">
+                            ไม่ว่าง
+                        </div>
+                    </td>
                 </tr>
             </tbody>
             <tbody *ngIf="dataRow?.length == 0">

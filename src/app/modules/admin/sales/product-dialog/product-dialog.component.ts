@@ -104,7 +104,7 @@ export class ProductDialogComponent implements OnInit {
         const that = this;
         this.dtOptions = {
             pagingType: "full_numbers",
-            pageLength: 25,
+            pageLength: 10,
             serverSide: true,
             processing: true,
             language: {
@@ -136,8 +136,8 @@ export class ProductDialogComponent implements OnInit {
                 { data: 'action', orderable: false },
                 { data: 'No' },
                 { data: 'name' },
-                { data: 'create_by' },
-                { data: 'created_at' },
+                { data: 'serian_no' },
+                { data: 'book' },
 
             ],
         };

@@ -925,7 +925,7 @@ export class FormComponent implements OnInit {
         });
     }
 
-    openDialogProduct() {
+    openDialogProduct(type: any) {
         const dialogRef = this.dialog.open(ProductDialogComponent, {
             width: '800px',
             height: '800px',
@@ -933,14 +933,23 @@ export class FormComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                // this.formData.patchValue({
-                //     client_id: result.id,
-                //     customer_name: result.name ?? null,
-                //     phone: result.phone ?? null,
-                //     idcard: result.idcard ?? null,
-                //     address: result.address ?? null,
-                //     type: result.type ?? null,
-                // })
+                if(type === 'prod') {
+                    this.productFilter.setValue(result.name)
+                    this.formData.patchValue({
+                       product_id: result.id
+                    })
+                } else if (type === 'acc') {
+                    this.accessorieFilter.setValue(result.name)
+                    this.formData.patchValue({
+                       accessorie_id: result.id
+                    })
+                } else if (type === 'work') {
+                    this.workstationFilter.setValue(result.name)
+                    this.formData.patchValue({
+                       work_station_id: result.id
+                    })
+                }
+              
             }
         });
     }
