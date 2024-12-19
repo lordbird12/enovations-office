@@ -109,6 +109,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon: 'checklist',
                 link: '/admin/sales/list',
             },
+            {
+                id: 'calendar.list',
+                title: 'ปฏิทิน',
+                type: 'basic',
+                icon: 'heroicons_outline:calendar-days',
+                link: '/admin/calendar-order/list',
+            },
           
             {
                 id: 'client.list',

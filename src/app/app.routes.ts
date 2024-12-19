@@ -325,6 +325,11 @@ export const appRoutes: Route[] = [
                         loadChildren: () =>
                             import('app/modules/admin/category-product/page.routes'),
                     },
+                    {
+                        path: 'calendar-order',
+                        loadChildren: () =>
+                            import('app/modules/admin/calendar/page.routes'),
+                    },
                 ],
             },
         ],
