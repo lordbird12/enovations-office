@@ -842,7 +842,7 @@ export class FormComponent implements OnInit {
             dialogRef.afterClosed().subscribe((result => {
                 if (result === 'confirmed') {
                     let formValue = this.formData.value;
-                    formValue.date = moment(formValue.date).format('YYYY-MM-DD')
+                    formValue.calendar_date = moment(formValue.calendar_date).format('YYYY-MM-DD')
                     this._service.update(formValue, this.Id).subscribe({
                         next: (resp: any) => {
                             this._router.navigate(['admin/sales/list'])
@@ -951,6 +951,12 @@ export class FormComponent implements OnInit {
             const formattedValue = new Intl.NumberFormat().format(value);
             this.formData.get('sale_price')?.setValue(formattedValue);
         }
+    }
+    
+    changeDate() {
+        let formValue = this.formData.value.calendar_date
+        this.formattedDateTime = moment(formValue.calendar_date).format('YYYY-MM-DD')
+        this._changeDetectorRef.markForCheck()
     }
 
     onInputChange(event: any) {
