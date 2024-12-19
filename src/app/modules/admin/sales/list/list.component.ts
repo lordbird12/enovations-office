@@ -100,20 +100,19 @@ export class ListComponent implements OnInit, AfterViewInit {
     loadTable(): void {
         const that = this;
         this.dtOptions = {
-            pagingType: 'full_numbers',
+            pagingType: "full_numbers",
             pageLength: 25,
             serverSide: true,
             processing: true,
             language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json',
+                url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json",
             },
             ajax: (dataTablesParameters: any, callback) => {
-                dataTablesParameters.type = 'Good';
-                that._service
-                    .getPage(dataTablesParameters)
-                    .subscribe((resp: any) => {
-                        this.dataRow = resp.data;
-                        this.pages.current_page = resp.current_page;
+                dataTablesParameters.status = null;
+                that._service.getPage(dataTablesParameters).subscribe((resp: any) => {
+                    this.dataRow = resp.data;
+                    console.log(this.dataRow)
+                    this.pages.current_page = resp.current_page;
                         this.pages.last_page = resp.last_page;
                         this.pages.per_page = resp.per_page;
                         if (resp.current_page > 1) {
@@ -129,17 +128,16 @@ export class ListComponent implements OnInit, AfterViewInit {
                             data: [],
                         });
                         this._changeDetectorRef.markForCheck();
-                    });
+                });
             },
             columns: [
-                // { data: 'action', orderable: false },
-                // { data: 'No' },
-                // { data: 'code' },
-                // { data: 'date' },
-                // { data: 'client' },
-                // { data: 'total_price' },
-                // { data: 'create_by' },
-                // { data: 'created_at' },
+                { data: 'action', orderable: false },
+                { data: 'No' },
+                { data: 'name' },
+                { data: 'picture' },
+                { data: 'create_by' },
+                { data: 'created_at' },
+
             ],
         };
     }
