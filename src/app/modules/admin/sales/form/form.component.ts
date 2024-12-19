@@ -50,9 +50,8 @@ export class FormComponent implements OnInit {
     fixedSubscriptInputWithHint: FormControl = new FormControl('', [Validators.required]);
     dynamicSubscriptInputWithHint: FormControl = new FormControl('', [Validators.required]);
     isForm: boolean = true
-    clientData: any[] = [];
+
     finanaceData: any[] = [];
-    productData: any[] = [];
 
     paymentData: any[] = [];
     claimData: any[] = [];
@@ -125,13 +124,27 @@ export class FormComponent implements OnInit {
     garageData: any[] = []
     user_login: any = JSON.parse(localStorage.getItem('user'));
 
-    productFilter = new FormControl(Object);
+    ///productFilter
+    productFilter = new FormControl('');
+    filterProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+    productData: any[] = [];
 
+    ///workstationFilter
+    workstationFilter = new FormControl('');
+    filterWorkstation: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+    workstationData: any[] = [];
 
-    ///CarFilter
-    carFilter = new FormControl('');
-    filterCar: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-    carData: any[] = [];
+    ///workstationFilter
+    accessorieFilter = new FormControl('');
+    filterAccessorie: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+    accessorieData: any[] = [];
+
+    ///workstationFilter
+    clientFilter = new FormControl('');
+    filterClient: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+    clientData: any[] = [];
+
+    user: any
     /**
      * Constructor
      */
@@ -146,91 +159,49 @@ export class FormComponent implements OnInit {
 
     ) {
 
-        this._service.getPromotion().subscribe((resp: any) => {
-            this.promotionData = resp.data
-        })
-        this._service.getUserByDepartment(2).subscribe((resp: any) => {
-            this.saleData = resp.data
-            this.filterSale.next(this.saleData.slice());
-        })
-        this._service.getUserByDepartment(1).subscribe((resp: any) => {
-            this.engineerData = resp.data
-            this.filterEngineer.next(this.engineerData.slice());
-        })
-        this._service.getFinanace().subscribe((resp: any) => {
-            this.financeData = resp.data
-            this.filterFinance.next(this.financeData.slice());
-        })
+
+        this.productData = this.activatedRoute.snapshot.data.products.data
+        this.filterProduct.next(this.productData.slice());
+
+        this.accessorieData = this.activatedRoute.snapshot.data.products.data
+        this.filterAccessorie.next(this.accessorieData.slice());
+
+        this.workstationData = this.activatedRoute.snapshot.data.products.data
+        this.filterWorkstation.next(this.workstationData.slice());
+
+        this.saleData = this.activatedRoute.snapshot.data.user.data
+        this.filterSale.next(this.saleData.slice());
+
+        this.clientData = this.activatedRoute.snapshot.data.client.data
+        this.filterClient.next(this.clientData.slice());
+
         this.formData = this._fb.group({
-            id: null,
-            date: null,
-            sale_id: null,
-            client_id: null,
-            finance_id: null,
-            finance_payment_period: null,
-            finance_other: null,
-            sale_price: 0,
-            finance_price: 0,
-            down_price: 0,
-            sale_type: null,
-            tax_and_plo: 0,
-            type: null,
-            finance_fee: 0,
-            assemble_fee: 0,
-            gps_fee: 0,
-            insurance_level: null,
-            insurance_price: 0,
-            total_price: 0,
-            first_payment: 0,
-            discount: 0,
-            other_price: 0,
-            final_price: 0,
-            remark: null,
-            interview: null,
+            calendar_date: null,
+            request_purpose: null,
+            user_id: null,
             product_id: null,
-            engineer_id: null,
-            customer_name: null,
-            phone: null,
-            idcard: null,
-            address: null,
-            brand_id: null,
-            brand_model_id: null,
-            promotion_lists: this._fb.array([]),
-            repairs: this._fb.array([]),
-            promotion_id: null,
-
-            text_1: 'ราคาขาย',
-            text_2: 'ยอดจัดไฟแนนซ์',
-            text_3: 'เงินดาวน์',
-            text_4: 'ค่าโอนภาษี พรบ. (ถ้า Free ใส่ 0)',
-            text_5: 'ค่าจัดไฟแนนซ์ (ถ้า Free ใส่ 0)',
-            text_6: 'ค่าบรรจุประกอบการ (ถ้า Free ใส่ 0)',
-            text_7: 'ค่าติด GPS (ถ้า Free ใส่ 0)',
-            text_8: 'ค่าประกัน ประมาณ',
+            accessorie_id: null,
+            function_qualifications: null,
+            work_station_id: null,
+            additional_equipment: null,
+            meeting_details: null,
+            current_machine_model: null,
+            current_work_station: null,
+            current_usage_problem: null,
+            competitor_model: null,
+            competitor_transducer: null,
+            customer_feedback: null,
+            client_id: null,
+            customer_type: null,
+            province: null,
+            department: null,
+            floor: null,
+            kol_doctor: null,
+            additional_info: null,
+            status: null,
+            create_by: null,
+            update_by: null,
         });
-
-        this._service.getClient().subscribe((resp: any) => {
-            this.clientData = resp.data
-        });
-        // this._service.getFinanace(.subscribe((resp: any) => {
-        //     this.finanaceData = resp.data
-        // });
-
-        this._service.getBrand().subscribe((resp: any) => {
-            this.brandData = resp.data
-            this.filterBrand.next(this.brandData.slice());
-        });
-        this._service.getGarage().subscribe((resp: any) => {
-            this.garageData = resp.data
-        });
-        this._service.getCar().subscribe((resp: any) => {
-            this.carData = resp.data
-            this.filterCar.next(this.carData.slice());
-        });
-
-
-
-
     }
 
     addPromotion() {
@@ -241,13 +212,12 @@ export class FormComponent implements OnInit {
 
         if (this._router.url !== '/admin/sales/form') {
             this.activatedRoute.params.subscribe(params => {
-
                 this.isForm = false;
                 const id = params.id;
                 this.Id = id
                 this._service.getById(id).subscribe((resp: any) => {
                     this.itemData = resp.data;
-                    const currentDateTime = DateTime.fromISO(this.itemData.date)
+                    const currentDateTime = DateTime.fromISO(this.itemData?.date)
                     this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy')
                     this.saleFilter.setValue(this.itemData.sale?.name)
                     this.financeFilter.setValue(this.itemData.finance?.name)
@@ -256,21 +226,7 @@ export class FormComponent implements OnInit {
                         this.brandModelData = resp.data
                         this.filterBrandModel.next(this.brandModelData.slice());
                     });
-                    this._service.getBrand().subscribe((resp: any) => {
-                        this.brandData = resp.data
-                        let value = this.brandData.find(item => item.id === +this.itemData.orders?.brand?.id)
-                        this.brandFilter.setValue(value.name)
-                        this.selectBrand(value);
-                        this._changeDetectorRef.markForCheck();
-                    });
-                    this._service.getCar().subscribe((resp: any) => {
-                        this.carData = resp.data
-                        let value = this.carData.find(item => item.id === +this.itemData.orders?.product_id)
-                        this.carFilter.setValue(value.license_plate + ',' +value.name)
-                        this.selectProduct(value);
-                        this._changeDetectorRef.markForCheck();
-                    });
-
+                 
                     this.formData.patchValue({
                         ...this.itemData,
                     });
@@ -320,8 +276,8 @@ export class FormComponent implements OnInit {
             const currentDateTime = DateTime.now();
             this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy');
             this.formData.patchValue({
-                sale_id: this.user_login?.id,
-                date: currentDateTime.toFormat('yyyy-MM-dd')
+                user_id: this.user_login?.id,
+                calendar_date: currentDateTime.toFormat('yyyy-MM-dd')
             })
             this.saleFilter.setValue(this.user_login?.name)
 
@@ -336,32 +292,26 @@ export class FormComponent implements OnInit {
             .subscribe(() => {
                 this._filterSale();
             });
-        this.financeFilter.valueChanges
-            .pipe(takeUntil(this._onDestroy))
-            .subscribe(() => {
-                this._filterSale();
-            });
-        this.engineerFilter.valueChanges
-            .pipe(takeUntil(this._onDestroy))
-            .subscribe(() => {
-                this._filterEngineer();
-            });
 
-        this.brandFilter.valueChanges
-            .pipe(takeUntil(this._onDestroy))
-            .subscribe(() => {
-                this._filterBrand();
-            });
-
-        this.brandModelFilter.valueChanges
-            .pipe(takeUntil(this._onDestroy))
-            .subscribe(() => {
-                this._filterBrandModel();
-            });
-        this.carFilter.valueChanges
+        this.productFilter.valueChanges
             .pipe(takeUntil(this._onDestroy))
             .subscribe(() => {
                 this._filterCar();
+            });
+        this.accessorieFilter.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+                this._filterAccessrie();
+            });
+        this.workstationFilter.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+                this._filterWorkStation();
+            });
+        this.clientFilter.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+                this._filterWorkStation();
             });
         this.formData.valueChanges.pipe(distinctUntilChanged())
             .subscribe(() => this.calculateTotal());
@@ -471,27 +421,79 @@ export class FormComponent implements OnInit {
     }
 
     protected _filterCar() {
-        if (!this.carData) {
+        if (!this.productData) {
             return;
         }
-        let search = this.carFilter.value;
+        let search = this.productFilter.value;
         if (!search) {
-            this.filterCar.next(this.carData.slice());
+            this.filterProduct.next(this.productData.slice());
             return;
         } else {
             search = search.toString().toLowerCase();
         }
-        this.filterCar.next(
-            this.carData.filter(item => 
-                item.name.toLowerCase().includes(search) ||
-                item.license_plate.toLowerCase().includes(search)
+        this.filterProduct.next(
+            this.productData.filter(item =>
+                item.name.toLowerCase().includes(search)
             )
         );
     }
 
+    protected _filterAccessrie() {
+        if (!this.accessorieData) {
+            return;
+        }
+        let search = this.accessorieFilter.value;
+        if (!search) {
+            this.filterAccessorie.next(this.accessorieData.slice());
+            return;
+        } else {
+            search = search.toString().toLowerCase();
+        }
+        this.filterAccessorie.next(
+            this.accessorieData.filter(item =>
+                item.name.toLowerCase().includes(search)
+            )
+        );
+    }
+
+    protected _filterWorkStation() {
+        if (!this.workstationData) {
+            return;
+        }
+        let search = this.workstationFilter.value;
+        if (!search) {
+            this.filterWorkstation.next(this.workstationData.slice());
+            return;
+        } else {
+            search = search.toString().toLowerCase();
+        }
+        this.filterWorkstation.next(
+            this.workstationData.filter(item =>
+                item.name.toLowerCase().includes(search) ||
+                item.serial_no.toLowerCase().includes(search)
+            )
+        );
+    }
+
+    protected _filterClient() {
+        if (!this.clientData) {
+            return;
+        }
+        let search = this.clientFilter.value;
+        if (!search) {
+            this.filterClient.next(this.clientData.slice());
+            return;
+        } else {
+            search = search.toString().toLowerCase();
+        }
+        this.filterClient.next(
+            this.clientData.filter(item =>
+                item.name.toLowerCase().includes(search)
+            )
+        );
+    }
 
     protected _filterSale() {
-
         if (!this.saleData) {
             return;
         }
@@ -587,7 +589,7 @@ export class FormComponent implements OnInit {
         const selectedData = this.saleData.find(item => item.name === _value);
         if (selectedData) {
             this.formData.patchValue({
-                sale_id: selectedData.id,
+                user_id: selectedData.id,
             });
             this.saleFilter.setValue(selectedData?.name)
         } else {
@@ -599,103 +601,118 @@ export class FormComponent implements OnInit {
             return;
         }
     }
-    onSelectEngineer(event: any, type: any) {
-        if (!event) {
-            if (this.engineerFilter.invalid) {
 
-                this.engineerFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
+    onSelectProduct(event: any, type: any) {
+        if (!event) {
+            if (this.productFilter.invalid) {
+
+                this.productFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
             }
-            console.log('No Engineer');
+            console.log('No sale');
             return;
         }
         const _value = event;
-        const selectedData = this.engineerData.find(item => item.name === _value);
+        const selectedData = this.productData.find(item => item.name === _value);
         if (selectedData) {
             this.formData.patchValue({
-                engineer_id: selectedData.id,
+                product_id: selectedData.id,
             });
-            this.engineerFilter.setValue(selectedData?.name)
+            let data = selectedData.name + ' ' + '[' + selectedData?.serial_no + ']'
+            this.productFilter.setValue(data)
         } else {
-            if (this.engineerFilter.invalid) {
+            if (this.productFilter.invalid) {
 
-                this.engineerFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
+                this.productFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
             }
-            console.log('No Engineer');
-            return;
-        }
-    }
-    onSelectFinance(event: any, type: any) {
-        if (!event) {
-
-            console.log('No Finance');
-            return;
-        }
-        const _value = event;
-        const selectedData = this.financeData.find(item => item.name === _value);
-        if (selectedData) {
-            this.formData.patchValue({
-                finance_id: selectedData.id,
-            });
-            this.financeFilter.setValue(selectedData?.name)
-        } else {
-
-            console.log('No Finance');
+            console.log('No sale');
             return;
         }
     }
 
-    onSelectBrand(event: any, type: any) {
+    onSelectWorkStation(event: any, type: any) {
         if (!event) {
-            if (this.brandFilter.invalid) {
+            if (this.workstationFilter.invalid) {
 
-                this.brandFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
+                this.workstationFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
             }
-            console.log('No Brand');
+            console.log('No sale');
             return;
         }
         const _value = event;
-        const selectedData = this.brandData.find(item => item.name === _value);
+        const selectedData = this.workstationData.find(item => item.name === _value);
         if (selectedData) {
             this.formData.patchValue({
-                brand_id: selectedData.id,
+                work_station_id: selectedData.id,
             });
-            this.brandFilter.setValue(selectedData?.name)
-            this.selectBrand(selectedData.id)
+            let data = selectedData.name + ' ' + '[' + selectedData?.serial_no + ']'
+            this.workstationFilter.setValue(data)
         } else {
-            if (this.brandFilter.invalid) {
-                this.brandFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
+            if (this.workstationFilter.invalid) {
+
+                this.workstationFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
             }
-            console.log('No Brand');
+            console.log('No sale');
             return;
         }
     }
 
-    onSelectBrandModel(event: any, type: any) {
+    onSelectAccessorie(event: any, type: any) {
         if (!event) {
-            if (this.brandModelFilter.invalid) {
+            if (this.accessorieFilter.invalid) {
 
-                this.brandModelFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
+                this.accessorieFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
             }
-            console.log('No Brand Model');
+            console.log('No sale');
             return;
         }
         const _value = event;
-        const selectedData = this.brandModelData.find(item => item.name === _value);
+        const selectedData = this.accessorieData.find(item => item.name === _value);
         if (selectedData) {
             this.formData.patchValue({
-                brand_model_id: selectedData.id,
+                accessorie_id: selectedData.id,
             });
-            this.brandModelFilter.setValue(selectedData?.name)
-            // this.selectBrandModel(selectedData.id)
+            let data = selectedData.name + ' ' + '[' + selectedData?.serial_no + ']'
+            this.accessorieFilter.setValue(data)
         } else {
-            if (this.brandModelFilter.invalid) {
+            if (this.accessorieFilter.invalid) {
 
-                this.brandModelFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
+                this.accessorieFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
             }
-            console.log('No Brand Model');
+            console.log('No sale');
             return;
         }
     }
+
+    onSelectClient(event: any, type: any) {
+        if (!event) {
+            if (this.clientFilter.invalid) {
+
+                this.clientFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
+            }
+            console.log('No sale');
+            return;
+        }
+        const _value = event;
+        const selectedData = this.clientData.find(item => item.name === _value);
+        if (selectedData) {
+            this.formData.patchValue({
+                client_id: selectedData.id,
+            });
+            let data = selectedData.name
+            this.clientFilter.setValue(data)
+        } else {
+            if (this.clientFilter.invalid) {
+
+                this.clientFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
+            }
+            console.log('No sale');
+            return;
+        }
+    }
+
+
+
+
 
     getFormFieldHelpersAsString(): string {
         return this.formFieldHelpers.join(' ');
@@ -707,9 +724,7 @@ export class FormComponent implements OnInit {
 
     selectProduct(item: any): void {
         this.formData.patchValue({
-            product_id: item.id,
-            sale_price: item.sale_price,
-            brand_model_id: item.brand_model_id
+
         })
         let data = {
             brand_model: item.brand?.name + '/' + item.brand_model?.name,
@@ -733,48 +748,12 @@ export class FormComponent implements OnInit {
         }
         this.image = item._images
         this.productSelected = data
-        this.carFilter.setValue(item.license_plate + ',' +item.name)
+        this.productFilter.setValue(item.license_plate + ',' + item.name)
         this._changeDetectorRef.markForCheck();
 
     }
 
-    selectBrand(item: any): void {
 
-        this._service.getBrandModel(item).subscribe((resp: any) => {
-            this.brandModelData = resp.data
-            this.filterBrandModel.next(this.brandModelData.slice());
-        });
-    }
-
-    selectBrandModel(item: any): void {
-        this._service.getProduct(item).subscribe((resp: any) => {
-            this.productData = resp.data
-            if (!this.productData || (Array.isArray(this.productData) && this.productData.length === 0)) {
-                this._fuseConfirmationService.open({
-                    "title": "ไม่มีข้อมูลรถในรุ่นนี้",
-                    "message": 'กรุณาเลือกรุ่นอื่น',
-                    "icon": {
-                        "show": true,
-                        "name": "heroicons_outline:exclamation-circle",
-                        "color": "warning"
-                    },
-                    "actions": {
-                        "confirm": {
-                            "show": false,
-                            "label": "ยืนยัน",
-                            "color": "primary"
-                        },
-                        "cancel": {
-                            "show": false,
-                            "label": "ยกเลิก",
-
-                        }
-                    },
-                    "dismissible": true
-                });
-            }
-        });
-    }
 
     onSubmit(): void {
         if (this.isForm === true) {
@@ -803,7 +782,7 @@ export class FormComponent implements OnInit {
             dialogRef.afterClosed().subscribe((result => {
                 if (result === 'confirmed') {
                     let formValue = this.formData.value;
-                    formValue.date = moment(formValue.date).format('YYYY-MM-DD')
+                    formValue.calendar_date = moment(formValue.calendar_date).format('YYYY-MM-DD')
                     this._service.create(formValue).subscribe({
                         next: (resp: any) => {
                             this._router.navigate(['admin/sales/list'])
