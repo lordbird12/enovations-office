@@ -22,8 +22,8 @@
                 <ng-template #eventContent let-arg>
                     <div>
                       <b>{{ arg.event.title }}</b><br>
-                      <span>Start: {{ arg.event.start?.toLocaleDateString() }}</span><br>
-                      <span *ngIf="arg.event.end">End: {{ arg.event.end?.toLocaleDateString() }}</span>
+                      <!-- <span>Start: {{ arg.event.start?.toLocaleDateString() }}</span><br>
+                      <span *ngIf="arg.event.end">End: {{ arg.event.end?.toLocaleDateString() }}</span> -->
                     </div>
                   </ng-template>
               </full-calendar>

@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import { CalendarOptions } from '@fullcalendar/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import { DateTime } from 'luxon';
 @Component({
     selector: 'calendar',
     templateUrl: './list.component.html',
@@ -80,15 +81,17 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
           console.log(resp);
           
           const events = resp.map((item) => ({
-            title: '11111',
+            title: 'Meeting',
             start: item.start_date, 
-            end: item.end_date 
+            end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate() // เพิ่ม 1 วันให้ end_date
           }));
+          
           this.calendarOptions = {
             events: events
           };
-          // console.log(this.calendarOptions);
-          this._changeDetectorRef.markForCheck()
+          
+          // ทำให้ Angular ตรวจสอบการเปลี่ยนแปลง
+          this._changeDetectorRef.markForCheck();
         })
 
     }
