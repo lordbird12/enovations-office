@@ -126,7 +126,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
         this.category = this._activatedRoute.snapshot.data.category.data
         this.area = this._activatedRoute.snapshot.data.area.data
         this.brand = this._activatedRoute.snapshot.data.brand.data
-        // this.machineModel = this._activatedRoute.snapshot.data.machineModel.data
+        this.machineModel = this._activatedRoute.snapshot.data.machineModel.data
         
         
         this.formData = this._formBuilder.group({

@@ -107,7 +107,6 @@
                             <button mat-icon-button color="accent" (click)="editElement(item)">
                                 <mat-icon>edit</mat-icon>
                             </button>
-
                             <button mat-icon-button color="accent" (click)="deleteElement(item.id)">
                                 <mat-icon>delete</mat-icon>
                             </button>
@@ -126,8 +125,6 @@
                         <td>{{ item.code ? item.code : "-" }}</td>
                         <td>{{ item.name ? item.name: "-"}}</td>
                         <td>{{ item.detail ? item.detail : "-" }}</td>
-                
-              
                     </tr>
                 </tbody>
                 <tbody *ngIf="dataRow?.length == 0">

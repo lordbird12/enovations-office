@@ -74,7 +74,6 @@
                         <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                             <mat-label>Model</mat-label>
                             <mat-select [formControlName]="'machine_model_id'">
-
                                 <mat-option *ngFor="let item of machineModel" [value]="item.id">
                                     {{item.name}}
                                 </mat-option>

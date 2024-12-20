@@ -36,14 +36,12 @@
                     <tr>
                         <th class="w-[100px]">จัดการ</th>
                         <th class="w-[10px]">ลำดับ</th>
-                        <th>ชื่อเครื่อง</th>
-                        <th>Model</th>
-                        <th>Serial No.</th>
-                        <th>ประเภท</th>
+                        <th>Document No.</th>
+                        <th>วัตถุประสงค์</th>
                         <th>ผู้จอง</th>
                         <th>ลูกค้า</th>
-                        <th>วันที่ใช้</th>
-                        <th>วันที่สร้าง</th>
+                        <th>วันที่ยืม</th>
+                        <th>วันคืน</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="dataRow?.length != 0">
@@ -57,14 +55,12 @@
                             </button>
                         </td>
                         <td>{{ pages.begin + (i + 1) }}</td>
-                        <td>{{ item.product ? item.product?.name : "-" }}</td>
-                        <td>{{ item.machine ? item.machine?.name : "-" }}</td>
-                        <td>{{ item.product ? item.product?.serial_no : "-" }}</td>
+                        <td>{{ item.code ?? '-'}}</td>
                         <td>{{ item.request_purpose ? item.request_purpose : "-" }}</td>
                         <td>{{ item.user ? item.user?.name : "-" }}</td>
                         <td>{{ item.client ? item.client?.name : "-" }}</td>
-                        <td>{{ item.calendar_date !== null ? (item.calendar_date | date : "dd-MM-yy"): "-"}}</td>
-                        <td>{{ item.created_at !== null ? (item.created_at | date : "dd-MM-yy, HH:mm"): "-"}}</td>
+                        <td>{{ item.start_date !== null ? (item.start_date | date : "dd-MM-yyyy"): "-"}}</td>
+                        <td>{{ item.end_date !== null ? (item.end_date | date : "dd-MM-yyyy"): "-"}}</td>
                     </tr>
                 </tbody>
                 <tbody *ngIf="dataRow?.length == 0">

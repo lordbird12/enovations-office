@@ -175,4 +175,9 @@ export class ListComponent implements OnInit, AfterViewInit {
             }
         });
     }
+
+    joinSringModel(machine_models: any) {
+        const result = machine_models.map(model => model.name).join(',');
+        return result;
+    }
 }
