@@ -117,7 +117,7 @@ export class PageService {
     getById(data: any): Observable<any> {
         return this._httpClient
             .get(
-                environment.baseURL + '/api/get_order_by_user_id/' + data.id,
+                environment.baseURL + '/api/get_order_by_user_id/' + data,
                 
             )
             .pipe(

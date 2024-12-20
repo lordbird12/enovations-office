@@ -199,10 +199,8 @@ export class ListComponent implements OnInit, AfterViewInit {
                 dataTablesParameters.type = this.form.value.type;
                 dataTablesParameters.status = this.form.value.status;
                 dataTablesParameters.category_product_id = this.form.value.category_product_id;
-                dataTablesParameters.supplier_id = this.form.value.supplier_id;
                 dataTablesParameters.brand_id = this.form.value.brand_id;
-                dataTablesParameters.companie_id = this.form.value.companie_id;
-                dataTablesParameters.area_id = this.form.value.area_id;
+             
                 that._service
                     .getPage(dataTablesParameters)
                     .subscribe((resp: any) => {

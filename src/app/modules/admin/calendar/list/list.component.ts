@@ -90,6 +90,29 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    console.log(this.user);
+    
+    if(this.user?.position_id === "1") {
+      this._service.getById(this.user?.id).subscribe((resp:any) => {
+        const events = resp.map((item) => ({
+          
+          id: item.id,
+          title: this.getNamesFromMachineModels(item.machine_models),
+          start: item.start_date,
+          end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate() // เพิ่ม 1 วันให้ end_date
+        
+        }));
+        console.log(events);
+        
+        this.calendarOptions = {
+          events: events,
+          eventClick: this.onEventClick.bind(this)
+        };
+        this._changeDetectorRef.markForCheck()
+      })
+    }
+
+    
 
     this.productFilter.valueChanges
       .pipe(takeUntil(this._onDestroy))
@@ -98,7 +121,12 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
       });
   }
 
-
+  getNamesFromMachineModels(ArrayValue: any)  {
+    const machineModels = ArrayValue; // ดึงค่าทั้งหมดจาก FormArray
+    const result = machineModels.map((model: any) => model.product?.name).join(',');
+    // console.log(result); // ผลลัพธ์: "aaa,bbbb,cccc"
+    return result;
+  }
         /**
      * On destroy
      */  protected _onDestroy = new Subject<void>();
@@ -160,6 +188,7 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
     if (selectedData) {
     
       const events = selectedData.books.map((item) => ({
+        id: item.order_id,
         title: selectedData.name + ' ' + '[' + selectedData?.serial_no + ']',
         start: item.start_date,
         end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate() // เพิ่ม 1 วันให้ end_date
@@ -167,7 +196,8 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
       }));
 
       this.calendarOptions = {
-        events: events
+        events: events,
+        eventClick: this.onEventClick.bind(this)
       };
       console.log(this.calendarOptions);
       let data = selectedData.name + ' ' + '[' + selectedData?.serial_no + ']'
@@ -178,6 +208,13 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
       }
       return;
     }
+  }
+
+  onEventClick(info: any): void {
+    const eventId = info.event.id; // ดึง ID ของอีเวนต์ที่คลิก
+    console.log(eventId);
+    
+    this._router.navigate(['/admin/sales/edit/' + eventId]); // นำทางไปยังหน้าที่กำหนด พร้อมพารามิเตอร์
   }
 
 }

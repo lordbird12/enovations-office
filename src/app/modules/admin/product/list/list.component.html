@@ -13,42 +13,29 @@
                     รายการสินค้า
                 </h2>
                 <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="search()">
+                        <mat-icon>search</mat-icon>
+                        &nbsp;
+                        ค้นหา
+                    </button>
                     <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()">
                         <mat-icon>person_add</mat-icon>
                         &nbsp;
                         เพิ่มสินค้า
                     </button>
+                    
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Main -->
-    <!-- <div class="grid gap-4 sm:grid-cols-1  mx-10 mt-10 ">
-        <form class="bg-card rounded-lg md:shadow px-8 pt-6 pb-8 mb-4 flex flex-col my-2" [formGroup]="form">
-            <div class="-mx-3 md:flex mb-6 w-full">
-                <div class="md:w-full px-3 mb-6 md:mb-0">
-                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                        <mat-label>บริษัท</mat-label>
-                        <mat-select [formControlName]="'companie_id'" (selectionChange)="somethingCompanie($event)">
-                            <mat-option [value]="''">
-                                <span>เลือกบริษัท</span>
-                            </mat-option>
-                            <mat-option *ngFor="let item of companie" [value]="item.id">
-                                {{item.name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div>
+    <div class="grid gap-4 sm:grid-cols-1  mx-10 mt-10 ">
+        <form class="bg-card rounded-lg md:shadow px-8 pt-2 pb-2 mb-4 flex flex-col my-2" [formGroup]="form">
             <div class="-mx-3 md:flex mb-6">
                 <div class="md:w-1/5 px-3 mb-6 md:mb-0">
                     <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                        <mat-label>หมวดสินค้า</mat-label>
+                        <mat-label>Category</mat-label>
                         <mat-select [formControlName]="'category_product_id'">
-                            <mat-option [value]="''">
-                                <span>เลือกหมวดสินค้า</span>
-                            </mat-option>
                             <mat-option *ngFor="let item of item1Data" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
@@ -58,36 +45,17 @@
 
                 <div class="md:w-1/5 px-3 mb-6 md:mb-0">
                     <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                        <mat-label>ยี่ห้อ</mat-label>
+                        <mat-label>Brand</mat-label>
                         <mat-select [formControlName]="'brand_id'">
-                            <mat-option [value]="''">
-                                <span>เลือกยี่ห้อ</span>
-                            </mat-option>
                             <mat-option *ngFor="let item of itemBrand" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-      
-            </div>
-   
-            <div class="flex flex-row mt-2 justify-end">
-                <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    <button class="px-6 ml-3 justify-start" mat-flat-button [color]="'accent'" (click)="adjustDialog()">
-                        <mat-icon svgIcon="edit_note"></mat-icon>
-                        &nbsp;
-                        ปรับปรุงรวม
-                    </button>
-                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="search()">
-                        <mat-icon>search</mat-icon>
-                        &nbsp;
-                        ค้นหา
-                    </button>
-                </div>
             </div>
         </form>
-    </div> -->
+    </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg m-10  bg-white">
         <div class="flex flex-col flex-auto p-5  sm:overflow-y-auto">
             <table datatable [dtOptions]="dtOptions" class="table row-border hover w-full bg-white whitespace-nowrap">
@@ -96,6 +64,8 @@
                         <th class="w-[50px]">จัดการ</th>
                         <th class="w-[10px]">ลำดับ</th>
                         <th class="w-[20px]">Status</th>
+                        <th class="w-[100px]">Category</th>
+                        <th class="w-[100px]">Brand</th>
                         <th class="w-[100px]">Code</th>
                         <th class="w-[100px]">Name</th>
                         <th class="w-[200px]">Detail</th>
@@ -115,13 +85,15 @@
                         <td class="flex flex-row justify-center">
                             <div *ngIf="item.book === 'Y'"
                                 class="bg-red-200 p-1 rounded-md text-red-800 font-bold w-fit">
-                               จอง
+                                จอง
                             </div>
                             <div *ngIf="item.book === 'N'"
                                 class="bg-green-200 py-1 px-2 rounded-md text-green-800 font-bold text-center w-fit">
-                               ว่าง
+                                ว่าง
                             </div>
                         </td>
+                        <td>{{ item.category ? item.category?.name : "-" }}</td>
+                        <td>{{ item.brand ? item.brand?.name : "-" }}</td>
                         <td>{{ item.code ? item.code : "-" }}</td>
                         <td>{{ item.name ? item.name: "-"}}</td>
                         <td>{{ item.detail ? item.detail : "-" }}</td>
