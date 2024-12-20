@@ -24,7 +24,7 @@
     </div>
 
     <!-- Main -->
-    <div class="grid gap-4 sm:grid-cols-1  mx-10 mt-10 ">
+    <!-- <div class="grid gap-4 sm:grid-cols-1  mx-10 mt-10 ">
         <form class="bg-card rounded-lg md:shadow px-8 pt-6 pb-8 mb-4 flex flex-col my-2" [formGroup]="form">
             <div class="-mx-3 md:flex mb-6 w-full">
                 <div class="md:w-full px-3 mb-6 md:mb-0">
@@ -55,19 +55,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <!-- <div class="md:w-1/5 px-3 mb-6 md:mb-0">
-                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                        <mat-label>ซัพพลายเอ่อ</mat-label>
-                        <mat-select [formControlName]="'supplier_id'">
-                            <mat-option [value]="''">
-                                <span>เลือกซัพพลายเอ่อ</span>
-                            </mat-option>
-                            <mat-option *ngFor="let item of itemSupplier" [value]="item.id">
-                                {{item.name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div> -->
+
                 <div class="md:w-1/5 px-3 mb-6 md:mb-0">
                     <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                         <mat-label>ยี่ห้อ</mat-label>
@@ -81,55 +69,9 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <!-- <div class="md:w-1/5 px-3 mb-6 md:mb-0">
-                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                        <mat-label>สถานะ</mat-label>
-                        <mat-select [formControlName]="'status'">
-                            <mat-option [value]="''">
-                                <span>เลือกสถานะ</span>
-                            </mat-option>
-                            <mat-option value="free">ว่าง</mat-option>
-                            <mat-option value="sold">ขาย</mat-option>
-                            <mat-option value="book">จอง</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div> -->
-                <!-- <div class="md:w-1/5 px-3 mb-6 md:mb-0">
-                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                        <mat-label>ประเภทสินค้า</mat-label>
-                        <mat-select [formControlName]="'type'">
-                            <mat-option [value]="''">
-                                <span>เลือกประเภทสินค้า</span>
-                            </mat-option>
-                            <mat-option value="First">มือหนึ่ง</mat-option>
-                            <mat-option value="Secound">มือสอง</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div> -->
+      
             </div>
-            <!-- <div class="-mx-3 md:flex mb-6">
-
-                <div class="md:w-1/5 px-3 mb-6 md:mb-0">
-                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                        <mat-label>สาขา</mat-label>
-                        <mat-select [formControlName]="'area_id'">
-                            <mat-option [value]="''">
-                                <span>เลือกสาขา</span>
-                            </mat-option>
-                            <mat-option *ngFor="let item of areas" [value]="item.id">
-                                {{item.name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </div> -->
-            <!-- <div class="flex flex-row mt-2 justify-start">
-                <button class="px-6 ml-3" mat-flat-button [color]="'accent'" (click)="adjustDialog()">
-                    <mat-icon svgIcon="edit_note"></mat-icon>
-                    &nbsp;
-                    ปรับปรุงรวม
-                </button>
-            </div> -->
+   
             <div class="flex flex-row mt-2 justify-end">
                 <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
                     <button class="px-6 ml-3 justify-start" mat-flat-button [color]="'accent'" (click)="adjustDialog()">
@@ -142,19 +84,16 @@
                         &nbsp;
                         ค้นหา
                     </button>
-                    <!-- <button class="px-6 ml-3" mat-flat-button [color]="'warn'" (click)="ClearForm()">
-                        ยกเลิก
-                    </button> -->
                 </div>
             </div>
         </form>
-    </div>
+    </div> -->
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg m-10  bg-white">
         <div class="flex flex-col flex-auto p-5  sm:overflow-y-auto">
             <table datatable [dtOptions]="dtOptions" class="table row-border hover w-full bg-white whitespace-nowrap">
                 <thead>
                     <tr>
-                        <th class="w-[100px]">จัดการ</th>
+                        <th class="w-[50px]">จัดการ</th>
                         <th class="w-[10px]">ลำดับ</th>
                         <th class="w-[20px]">Status</th>
                         <th class="w-[100px]">Code</th>
