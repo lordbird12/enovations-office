@@ -318,23 +318,43 @@
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>ประเภทโรงพยาบาล</mat-label>
-                                <mat-select [formControlName]="'customer_type'" placeholder="ระบุวัตถุประสงค์">
+                                <mat-select [formControlName]="'customer_type'" placeholder="">
                                     <mat-option *ngFor="let item of customerType" [value]="item">
                                         {{item}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <div class="w-full px-3 mb-6 md:mb-0">
+                        <!-- <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>จังหวัด</mat-label>
                                 <input matInput placeholder="จังหวัด" [formControlName]="'province'">
                             </mat-form-field>
-                        </div>
+                        </div> -->
                         <div class="w-full px-3 mb-6 md:mb-0">
+                            <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                                <mat-label>จังหวัด</mat-label>
+                                <mat-select [formControlName]="'province'" placeholder="">
+                                    <mat-option *ngFor="let item of provinces" [value]="item">
+                                        {{item}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <!-- <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>แผนก</mat-label>
                                 <input matInput placeholder="แผนก" [formControlName]="'department'">
+                            </mat-form-field>
+                        </div> -->
+                        <div class="w-full px-3 mb-6 md:mb-0">
+                            <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                                <mat-label>แผนก</mat-label>
+                                <mat-select [formControlName]="'department'" placeholder="">
+                                    <mat-option *ngFor="let item of departments" [value]="item">
+                                        {{item}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </div>
                         <div class="w-full px-3 mb-6 md:mb-0">
