@@ -92,13 +92,8 @@ export class FormComponent implements OnInit {
         name: '',
         email: '',
         idcard: '',
-        company: '',
         phone: '',
-        phone2: '',
-        address : '',
-        age: '',
-        gender: '',
-        type: '',
+        address: ''
     })
   }
 
