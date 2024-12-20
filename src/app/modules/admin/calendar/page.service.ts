@@ -126,4 +126,17 @@ export class PageService {
                 })
             );
     }
+
+    getAllProduct(): Observable<any> {
+        return this._httpClient
+            .get(
+                environment.baseURL + '/api/get_product_all',
+                
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
 }
