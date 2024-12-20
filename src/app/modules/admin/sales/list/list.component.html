@@ -59,8 +59,8 @@
                         <td>{{ item.request_purpose ? item.request_purpose : "-" }}</td>
                         <td>{{ item.user ? item.user?.name : "-" }}</td>
                         <td>{{ item.client ? item.client?.name : "-" }}</td>
-                        <td>{{ item.start_date !== null ? (item.start_date | date : "dd-MM-yyyy"): "-"}}</td>
-                        <td>{{ item.end_date !== null ? (item.end_date | date : "dd-MM-yyyy"): "-"}}</td>
+                        <td class="text-center">{{ item.start_date !== null ? (item.start_date | date : "dd-MM-yyyy"): "-"}}</td>
+                        <td class="text-center">{{ item.end_date !== null ? (item.end_date | date : "dd-MM-yyyy"): "-"}}</td>
                     </tr>
                 </tbody>
                 <tbody *ngIf="dataRow?.length == 0">
