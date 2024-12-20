@@ -1038,6 +1038,22 @@ export class FormComponent implements OnInit {
             this.tdData = this.productData
         }
     }
+
+      openDialogApprove(): void {
+            this.dialog
+                .open(ClaimDialogComponent, {
+                    maxHeight: '90vh',
+                    width: '700px',
+                    data: {
+                        order: this.itemData
+                    },
+                })
+                .afterClosed()
+                .subscribe(() => {
+                    // Go up twice because card routes are setup like this; "card/CARD_ID"
+                    // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
+                });
+        }
 }
 
 

@@ -62,13 +62,16 @@ export class ListComponent implements OnInit, AfterViewInit {
     positions: any[];
     // public dataRow: any[];
     dataRow: any[] = [];
+    user: any
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     constructor(
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
         private _router: Router
-    ) {}
+    ) {
+        this.user = JSON.parse(localStorage.getItem('user'))
+    }
 
     ngOnInit() {
         this.loadTable();
@@ -160,6 +163,8 @@ export class ListComponent implements OnInit, AfterViewInit {
                 // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
             });
     }
+
+  
 
     downloadReport(item: any) {
         const dialogRef = this.dialog.open(FormReportComponent, {

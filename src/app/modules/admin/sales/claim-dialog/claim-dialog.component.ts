@@ -18,6 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-claim-dialog',
@@ -50,50 +51,44 @@ export class ClaimDialogComponent implements OnInit {
     flashMessage: 'success' | 'error' | null = null;
     form: FormGroup;
     order: any;
-    taxType: any[] = [
+    user: any;
+    status: any[] = [
         {
-            id: 1,
-            name: 'สินค้ามีภาษี',
+            name : 'รออนุมัติ',
+            value : 'Ordered'
         },
         {
-            id: 2,
-            name: 'สินค้าไม่มีภาษี',
-        },
-    ];
-    uniType: any[] = [
-        {
-            id: 1,
-            name: 'แท่ง',
+            name : 'อนุมัติ',
+            value : 'Confirm'
         },
         {
-            id: 2,
-            name: 'ชิ้น',
+            name : 'ไม่อนุมัติ',
+            value : 'Reject'
         },
         {
-            id: 3,
-            name: 'กิโลกรัม',
+            name : 'เสร็จสิ้น',
+            value : 'Finish'
         },
-        {
-            id: 4,
-            name: 'กล่อง',
-        },
-    ];
+    ]
     constructor(private dialogRef: MatDialogRef<ClaimDialogComponent>,
         @Inject(MAT_DIALOG_DATA) private data: any,
         private formBuilder: FormBuilder,
         private _fuseConfirmationService: FuseConfirmationService,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _service: PageService
-    ) { }
+        private _service: PageService,
+        private _router: Router
+    ) { 
+        this.user = JSON.parse(localStorage.getItem('user'))
+
+    }
 
     ngOnInit(): void {
         // สร้าง Reactive Form
         this.form = this.formBuilder.group({
-            product_id: '',
-            date: '',
-            service_fee: '',
-            price: '',
+            id: this.data?.order?.id,
+            status: this.data?.order?.status,
             remark: '',
+            approve: this.user?.username
 
         });
         this._service.getById(this.data.data).subscribe((resp: any) => {
@@ -144,8 +139,8 @@ export class ClaimDialogComponent implements OnInit {
         }
         // Open the confirmation dialog
         const confirmation = this._fuseConfirmationService.open({
-            "title": "เพิ่มข้อมูล",
-            "message": "คุณต้องการเพิ่มข้อมูลใช่หรือไม่ ",
+            "title": "เปลี่ยนสถานะข้อมูล",
+            "message": "คุณต้องการเปลี่ยนสถานะใช่หรือไม่ ",
             "icon": {
                 "show": false,
                 "name": "heroicons_outline:exclamation",
@@ -169,11 +164,11 @@ export class ClaimDialogComponent implements OnInit {
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
                 let formValue = this.form.value;
-                formValue.date = moment(formValue.date).format('YYYY-MM-DD')
-                this._service.claim(formValue).subscribe({
+                this._service.udpateStatus(formValue).subscribe({
                     next: (resp: any) => {
                         this.showFlashMessage('success');
                         this.dialogRef.close(resp);
+                        this._router.navigate(['admin/sales/list'])
                     },
                     error: (err: any) => {
                         this.form.enable();
