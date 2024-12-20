@@ -104,6 +104,10 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     companie: any;
     Id: any
     itemData: any
+    category: any
+    area: any
+    brand: any
+    machineModel: any
     /**
      * Constructor
      */
@@ -119,61 +123,28 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     ) {
 
         this.Id = this._activatedRoute.snapshot.paramMap.get('id');
-
+        this.category = this._activatedRoute.snapshot.data.category.data
+        this.area = this._activatedRoute.snapshot.data.area.data
+        this.brand = this._activatedRoute.snapshot.data.brand.data
+        // this.machineModel = this._activatedRoute.snapshot.data.machineModel.data
+        
+        
         this.formData = this._formBuilder.group({
             id: null,
             category_product_id: ['', Validators.required],
-            pr_no: [''],
             name: [''],
+            code: [''],
             detail: [''],
-            tank_no: [''],
-            engine_no: [''],
-            license_plate: [''],
-            sale_price: [''],
-            cost: [''],
-            type: [''],
-            year: [''],
-            supplier_id: [''],
             brand_id: [''],
-            brand_model_id: [''],
-            cc_id: [''],
-            color_id: [''],
-            image: [''],
+            machine_model_id: [''],
             images: [''],
-            companie_id: null,
             area_id: [''],
-            mile: [''],
-            front_tire: [''],
-            back_tire: [''],
-            sub_category_product_id: null,
-            vat_status: 0,
-            province: ''
+            status: '',
+            book: '',
+            qty: '',
+
         });
-        this.formData2 = this._formBuilder.group({
-            category_product_id: ['', Validators.required],
-            pr_no: [''],
-            name: [''],
-            detail: [''],
-            tank_no: [''],
-            engine_no: [''],
-            license_plate: [''],
-            sale_price: [''],
-            cost: [''],
-            type: [''],
-            year: [''],
-            supplier_id: [''],
-            brand_id: [''],
-            brand_model_id: [''],
-            cc_id: [''],
-            color_id: [''],
-            front_tire: [''],
-            back_tire: [''],
-            image: [''],
-            images: [''],
-            sub_category_product_id: '',
-            vat_status: 0,
-            province: '',
-        });
+    
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -181,63 +152,18 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     // -----------------------------------------------------------------------------------------------------
 
     async ngOnInit(): Promise<void> {
-        // this.getCategories();
-        // this.getSuppliers();
-        // this.getBrand();
-        // this.getCompanie();
-        // this.getCC();
-        // this.getColor();
-        this.getSubCategories()
-        let response = await lastValueFrom(
-            forkJoin({
-                category: this._Service.getCategories(),
-                supplie: this._Service.getSuppliers(),
-                brand: this._Service.getBrand(),
-                companie: this._Service.getCompanie(),
-                cc: this._Service.getCC(),
-                color: this._Service.getColor()
-            })
-        )
-        this.item1Data = response.category.data;
-        this.itemSupplier = response.supplie.data;
-        this.itemBrand = response.brand.data;
-        this.companie = response.companie.data;
-        this.itemCC = response.cc.data;
-        this.itemColor = response.color.data;
-
         if (this.Id) {
-
-
-
             this._Service.getById(this.Id).subscribe((resp: any) => {
                 this.itemData = resp.data
-                const item = this.companie.find(item => item.id === +this.itemData.area?.companie_id);
-                const brand = this.itemBrand.find(item => item.id === +this.itemData.area?.companie_id);
-                if (item)
-                    this.areas = item.areas;
                 // console.log(this.itemData);
-                this._Service.getBrandModel(+this.itemData.brand_id).subscribe((resp) => {
-                    this.itemBrandModel = resp.data;
-                    this.formData.patchValue({
-                        ...this.itemData,
-                        category_product_id: +this.itemData.category_product_id,
-                        supplier_id: +this.itemData.supplier_id,
-                        area_id: +this.itemData.area_id,
-                        brand_id: +this.itemData.brand_id,
-                        brand_model_id: +this.itemData.brand_model_id,
-                        cc_id: +this.itemData.cc_id,
-                        companie_id: +this.itemData?.companie_id,
-                        color_id: +this.itemData.color_id,
-                        image: [''],
-                        images: [],
-                    })
-
-                    this.formData2.patchValue({
-                        ...this.itemData,
-                        image: [''],
-                        images: [''],
-                    })
-                });
+                this.formData.patchValue({
+                    ...this.itemData,
+                    category_product_id: +this.itemData.category_product_id,
+                    area_id: +this.itemData.area_id,
+                    brand_id: +this.itemData.brand_id,
+                    machine_model_id: +this.itemData.machine_model_id,
+                    images: [],
+                })
 
             })
         }

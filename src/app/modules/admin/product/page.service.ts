@@ -139,6 +139,15 @@ export class Service {
                 })
             );
     }
+    getMachineModel(): Observable<any> {
+        return this._httpClient
+            .get<any>(environment.baseURL + '/api/get_machine_model')
+            .pipe(
+                tap((data) => {
+                    this._data.next(data);
+                })
+            );
+    }
 
     getCompanie(): Observable<any> {
         return this._httpClient

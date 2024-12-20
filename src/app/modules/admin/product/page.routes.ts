@@ -4,6 +4,8 @@ import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { EditComponent } from './edit/edit.component';
 import { ListDialogComponent } from './list-dailog/list.component';
+import { Service } from './page.service';
+import { inject } from '@angular/core';
 
 export default [
     // {
@@ -53,7 +55,11 @@ export default [
                 path     : 'form',
                 component: FormComponent,
                 resolve  : {
-                    // brands    : () => inject(InventoryService).getBrands(),
+                    
+                    category    : () => inject(Service).getCategories(),
+                    area    : () => inject(Service).getAreas(),
+                    brand    : () => inject(Service).getBrand(),
+                    // machineModel    : () => inject(Service).getMachineModel(),
                     // categories: () => inject(InventoryService).getCategories(),
                     // products  : () => inject(InventoryService).getProducts(),
                     // tags      : () => inject(InventoryService).getTags(),
@@ -70,11 +76,10 @@ export default [
                 path     : 'edit/:id',
                 component: FormComponent,
                 resolve  : {
-                    // brands    : () => inject(InventoryService).getBrands(),
-                    // categories: () => inject(InventoryService).getCategories(),
-                    // products  : () => inject(InventoryService).getProducts(),
-                    // tags      : () => inject(InventoryService).getTags(),
-                    // vendors   : () => inject(InventoryService).getVendors(),
+                    category    : () => inject(Service).getCategories(),
+                    area    : () => inject(Service).getAreas(),
+                    brand    : () => inject(Service).getBrand(),
+                    // machineModel    : () => inject(Service).getMachineModel(),
                 },
             },
         ],
