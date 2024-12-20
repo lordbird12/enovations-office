@@ -75,6 +75,11 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
   productFilter = new FormControl('');
   filterProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productData: any[] = [];
+
+  ///sale_user
+  saleFilter = new FormControl('');
+  filterSale: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  saleData: any[] = [];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   constructor(
     private dialog: MatDialog,
@@ -86,24 +91,24 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
     this.user = JSON.parse(localStorage.getItem('user'))
     this.productData = this._activated.snapshot.data.allProduct
     this.filterProduct.next(this.productData.slice());
-
+    this.saleData = this._activated.snapshot.data.user.data
+    this.filterSale.next(this.saleData.slice());
   }
 
   ngOnInit() {
     console.log(this.user);
-    
-    if(this.user?.position_id === "1") {
-      this._service.getById(this.user?.id).subscribe((resp:any) => {
+
+    if (this.user?.position_id === "1") {
+      this._service.getById(this.user?.id).subscribe((resp: any) => {
         const events = resp.map((item) => ({
-          
+
           id: item.id,
           title: this.getNamesFromMachineModels(item.machine_models),
           start: item.start_date,
           end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate() // เพิ่ม 1 วันให้ end_date
-        
+
         }));
-        console.log(events);
-        
+
         this.calendarOptions = {
           events: events,
           eventClick: this.onEventClick.bind(this)
@@ -112,16 +117,21 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
       })
     }
 
-    
+
 
     this.productFilter.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
-        this._filterSale();
+        this._filterProduct();
+      });
+      this.saleFilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+          this._filterSale();
       });
   }
 
-  getNamesFromMachineModels(ArrayValue: any)  {
+  getNamesFromMachineModels(ArrayValue: any) {
     const machineModels = ArrayValue; // ดึงค่าทั้งหมดจาก FormArray
     const result = machineModels.map((model: any) => model.product?.name).join(',');
     // console.log(result); // ผลลัพธ์: "aaa,bbbb,cccc"
@@ -135,21 +145,72 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
     this._changeDetectorRef.detectChanges();
   }
 
-  protected _filterSale() {
+  protected _filterProduct() {
     if (!this.productData) {
-        return;
+      return;
     }
     let search = this.productFilter.value;
     if (!search) {
-        this.filterProduct.next(this.productData.slice());
-        return;
+      this.filterProduct.next(this.productData.slice());
+      return;
     } else {
-        search = search.toLowerCase();
+      search = search.toLowerCase();
     }
     this.filterProduct.next(
-        this.productData.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+      this.productData.filter(item => item.name.toLowerCase().indexOf(search) > -1)
     );
-}
+  }
+  protected _filterSale() {
+    if (!this.saleData) {
+      return;
+    }
+    let search = this.saleFilter.value;
+    if (!search) {
+      this.filterSale.next(this.saleData.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterSale.next(
+      this.saleData.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  onSelectSale(event: any, type: any) {
+    if (!event) {
+      if (this.saleFilter.invalid) {
+        this.saleFilter.markAsTouched();
+      }
+      return;
+    }
+    const _value = event;
+    const selectedData = this.saleData.find(item => item.name === _value);
+    if (selectedData) {
+      this._service.getById(selectedData.id).subscribe((resp: any) => {
+        const events = resp.map((item) => ({
+
+          id: item.id,
+          title: this.getNamesFromMachineModels(item.machine_models),
+          start: item.start_date,
+          end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate() // เพิ่ม 1 วันให้ end_date
+
+        }));
+
+        this.calendarOptions = {
+          events: events,
+          eventClick: this.onEventClick.bind(this)
+        };
+        this._changeDetectorRef.markForCheck()
+      })
+      this.saleFilter.setValue(selectedData?.name)
+    } else {
+      if (this.saleFilter.invalid) {
+
+        this.saleFilter.markAsTouched(); // กำหนดสถานะ touched เพื่อแสดง mat-error
+      }
+      return;
+    }
+  }
 
 
 
@@ -186,13 +247,13 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
     const _value = event;
     const selectedData = this.productData.find(item => item.name === _value);
     if (selectedData) {
-    
+
       const events = selectedData.books.map((item) => ({
         id: item.order_id,
         title: selectedData.name + ' ' + '[' + selectedData?.serial_no + ']',
         start: item.start_date,
         end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate() // เพิ่ม 1 วันให้ end_date
-      
+
       }));
 
       this.calendarOptions = {
@@ -213,7 +274,7 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
   onEventClick(info: any): void {
     const eventId = info.event.id; // ดึง ID ของอีเวนต์ที่คลิก
     console.log(eventId);
-    
+
     this._router.navigate(['/admin/sales/edit/' + eventId]); // นำทางไปยังหน้าที่กำหนด พร้อมพารามิเตอร์
   }
 

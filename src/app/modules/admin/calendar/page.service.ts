@@ -89,6 +89,15 @@ export class PageService {
                 })
             );
     }
+    getUser(): Observable<any> {
+        return this._httpClient
+            .get<any>(environment.baseURL + '/api/get_user')
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
     /**
      * Get products
      *

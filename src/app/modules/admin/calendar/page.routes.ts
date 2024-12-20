@@ -18,6 +18,7 @@ export default [
                 component: CalendarOrderComponent,
                 resolve  : {
                     allProduct    : () => inject(PageService).getAllProduct(),
+                    user: () => inject(PageService).getUser(),
                     // categories: () => inject(InventoryService).getCategories(),
                     // products  : () => inject(InventoryService).getProducts(),
                     // tags      : () => inject(InventoryService).getTags(),
