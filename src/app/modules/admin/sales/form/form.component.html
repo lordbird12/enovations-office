@@ -98,13 +98,13 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div class="w-full px-3 mb-6 md:mb-0">
+                        <!-- <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>รุ่นเครื่อง</mat-label>
                                 <input matInput placeholder="รุ่นเครื่อง" [formControl]="productFilter"
                                     (click)="openDialogProduct('prod')" readonly="">
                             </mat-form-field>
-                        </div>
+                        </div> -->
                         <!-- <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field class="w-full">
                                 <mat-label>รุ่นเครื่อง</mat-label>
@@ -121,14 +121,67 @@
                                 </mat-error>
                             </mat-form-field>
                         </div> -->
-                        <div class="w-full px-3 mb-6 md:mb-0"
+                        <!-- <div class="w-full px-3 mb-6 md:mb-0">
+                            <mat-form-field class="w-full" [ngClass]="formFieldHelpers">
+                                <mat-label>รุ่นเครื่อง</mat-label>
+                                <input matInput [formControl]="productFilter" [matAutocomplete]="productAutoComplete"
+                                    placeholder="ค้นหา รุ่นเครื่อง" />
+                                <mat-autocomplete #productAutoComplete="matAutocomplete">
+                                    <mat-option *ngFor="let item of filterProduct | async" [value]="item.name"
+                                        (click)="$event.stopPropagation()">
+                                        <mat-checkbox [checked]="isSelected(item)"
+                                            (change)="onCheckboxChange($event, item)">
+                                            {{ item.name }} [{{ item.serial_no }}]
+                                        </mat-checkbox>
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="saleFilter.hasError('required') && saleFilter.touched">
+                                    กรุณาเลือก
+                                </mat-error>
+                            </mat-form-field>
+                        </div> -->
+                        <div class="w-full px-3 mb-6 md:mb-0">
+                            <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                                <mat-label>รุ่นเครื่อง</mat-label>
+                                <mat-select [formControlName]="'memberIds'" multiple (selectionChange)="selectionMemberChanged($event.value)">
+                                    <div class="px-3 pb-1 w-full">
+                                        <input class="px-3 py-2 border-[1px] w-full rounded-[8px]" (input)="searchMemberChange($event)" placeholder="Search"/>
+                                    </div>
+                                    <mat-option [disabled]="true" value="">เลือกเครื่อง</mat-option>
+                                    <mat-option value="all">เลือกเครื่องทั้งหมด</mat-option>
+                                    <mat-option *ngFor="let item of memberData" [value]="item.id">
+                                        {{item.name}} [Booking Status : {{item.book}}]
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error class="text-xs">กรุณาเลือกอย่างน้อย 1 ตัวเลือก</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="w-full px-3 mb-6 md:mb-0">
+                            <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                                <mat-label>หัวตรวจ</mat-label>
+                                <mat-select [formControlName]="'tds'" multiple (selectionChange)="selectionTDChanged($event.value)">
+                                    <div class="px-3 pb-1 w-full">
+                                        <input class="px-3 py-2 border-[1px] w-full rounded-[8px]" (input)="searchTDChange($event)" placeholder="Search"/>
+                                    </div>
+                                    <mat-option [disabled]="true" value="">เลือกหัวตรวจ</mat-option>
+                                    <mat-option value="all">เลือกหัวตรวจทั้งหมด</mat-option>
+                                    <mat-option *ngFor="let item of tdData" [value]="item.id">
+                                        {{item.name}} [Booking Status : {{item.book}}]
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error class="text-xs">กรุณาเลือกอย่างน้อย 1 ตัวเลือก</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- <div class="w-full px-3 mb-6 md:mb-0"
                             *ngIf="this.type === 'Echocardiogram' || this.type === 'Ultrasound Imaging'">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>หัวตรวจ</mat-label>
                                 <input matInput placeholder="หัวตรวจ" [formControl]="accessorieFilter"
                                     (click)="openDialogProduct('acc')" readonly="">
                             </mat-form-field>
-                        </div>
+                        </div> -->
                         <!-- <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field class="w-full">
                                 <mat-label>หัวตรวจ</mat-label>
