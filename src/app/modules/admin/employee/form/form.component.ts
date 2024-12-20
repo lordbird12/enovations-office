@@ -102,6 +102,7 @@ export class FormComponent implements OnInit {
             user_no: [],
             ot: 0,
             salary: 0,
+            id:null
         });
 
         this.addForm2 = this.formBuilder.group({
@@ -143,6 +144,7 @@ export class FormComponent implements OnInit {
                     // permission_id: this.itemData.permission_id,
                     department_id: +this.itemData.department_id,
                     position_id: +this.itemData.position_id,
+                    image: ''
    
                 })
                 this.addForm2.patchValue({
@@ -219,44 +221,88 @@ export class FormComponent implements OnInit {
         // Subscribe to the confirmation dialog closed action
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
-                const formData = new FormData();
-                Object.entries(this.addForm.value).forEach(
-                    ([key, value]: any[]) => {
-                        formData.append(key, value);
-                    }
-                );
-                this._service.create(formData).subscribe({
-                    next: (resp: any) => {
-                        this.showFlashMessage('success');
-
-                        this._router.navigate(['admin/employee/list'])
-
-                    },
-                    error: (err: any) => {
-                        this.addForm.enable();
-                        this._fuseConfirmationService.open({
-                            title: 'กรุณาระบุข้อมูล',
-                            message: err.error.message,
-                            icon: {
-                                show: true,
-                                name: 'heroicons_outline:exclamation',
-                                color: 'warning',
-                            },
-                            actions: {
-                                confirm: {
-                                    show: false,
-                                    label: 'ยืนยัน',
-                                    color: 'primary',
+                if(this.Id) {
+                    let formvalue = this.addForm.value 
+                    delete formvalue.password
+                    const formData = new FormData();
+                    Object.entries(this.addForm.value).forEach(
+                        ([key, value]: any[]) => {
+                            formData.append(key, value);
+                        }
+                    );
+                    this._service.update(formData).subscribe({
+                        next: (resp: any) => {
+                            this.showFlashMessage('success');
+    
+                            this._router.navigate(['admin/employee/list'])
+    
+                        },
+                        error: (err: any) => {
+                            this.addForm.enable();
+                            this._fuseConfirmationService.open({
+                                title: 'กรุณาระบุข้อมูล',
+                                message: err.error.message,
+                                icon: {
+                                    show: true,
+                                    name: 'heroicons_outline:exclamation',
+                                    color: 'warning',
                                 },
-                                cancel: {
-                                    show: false,
-                                    label: 'ยกเลิก',
+                                actions: {
+                                    confirm: {
+                                        show: false,
+                                        label: 'ยืนยัน',
+                                        color: 'primary',
+                                    },
+                                    cancel: {
+                                        show: false,
+                                        label: 'ยกเลิก',
+                                    },
                                 },
-                            },
-                            dismissible: true,
-                        });
-                    },
-                });
+                                dismissible: true,
+                            });
+                        },
+                    });
+                } else {
+                    const formData = new FormData();
+                    Object.entries(this.addForm.value).forEach(
+                        ([key, value]: any[]) => {
+                            formData.append(key, value);
+                        }
+                    );
+                    this._service.create(formData).subscribe({
+                        next: (resp: any) => {
+                            this.showFlashMessage('success');
+    
+                            this._router.navigate(['admin/employee/list'])
+    
+                        },
+                        error: (err: any) => {
+                            this.addForm.enable();
+                            this._fuseConfirmationService.open({
+                                title: 'กรุณาระบุข้อมูล',
+                                message: err.error.message,
+                                icon: {
+                                    show: true,
+                                    name: 'heroicons_outline:exclamation',
+                                    color: 'warning',
+                                },
+                                actions: {
+                                    confirm: {
+                                        show: false,
+                                        label: 'ยืนยัน',
+                                        color: 'primary',
+                                    },
+                                    cancel: {
+                                        show: false,
+                                        label: 'ยกเลิก',
+                                    },
+                                },
+                                dismissible: true,
+                            });
+                        },
+                    });
+                }
+              
             }
         });
         // แสดง Snackbar ข้อความ "complete"
