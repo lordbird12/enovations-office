@@ -163,8 +163,7 @@ export class FormComponent implements OnInit {
         this.type = this.activatedRoute.snapshot.data.type
         this.pageType = this.activatedRoute.snapshot.data.page_type
 
-        const productvalue = this.activatedRoute.snapshot.data.products.data
-        this.productData = productvalue.filter(item => item.book === 'N')
+        this.productData = this.activatedRoute.snapshot.data.products.data
         this.memberData = this.productData
         this.tdData = this.productData
         this.filterProduct.next(this.productData.slice());
@@ -224,10 +223,8 @@ export class FormComponent implements OnInit {
                 this.Id = id
                 this._service.getById(id).subscribe((resp: any) => {
                     this.itemData = resp.data;
-                    // const currentDateTime = DateTime.fromISO(this.itemData?.date)
-                    // this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy'
-
-
+                    const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
+                    const tDs = this.itemData.transducers.map(model => Number(model.product_id));
                     this.saleFilter.setValue(this.itemData.user?.name)
                     this.clientFilter.setValue(this.itemData.client?.name)
                     this.productFilter.setValue(this.itemData.product?.name)
@@ -235,9 +232,12 @@ export class FormComponent implements OnInit {
                     this.workstationFilter.setValue(this.itemData.product?.name)
                     this.formData.patchValue({
                         ...this.itemData,
+                        memberIds: memberIds,
+                        tds: tDs
                     });
-
-
+                   
+                    console.log(this.formData.value);
+                    
                     this._changeDetectorRef.markForCheck();
 
                 });
@@ -248,7 +248,7 @@ export class FormComponent implements OnInit {
             this.formData.patchValue({
 
             })
-            this.saleFilter.setValue(this.user_login?.name)
+            // this.saleFilter.setValue(this.user_login?.name)
         }
         this.saleFilter.valueChanges
             .pipe(takeUntil(this._onDestroy))
