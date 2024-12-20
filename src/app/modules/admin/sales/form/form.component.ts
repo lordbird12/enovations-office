@@ -801,6 +801,8 @@ export class FormComponent implements OnInit {
                 }
             }))
         } else {
+            this.addToMachineModels()
+            this.addToTransducers()
             const dialogRef = this._fuseConfirmationService.open({
                 "title": "บันทึกข้อมูล",
                 "message": "คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?",
