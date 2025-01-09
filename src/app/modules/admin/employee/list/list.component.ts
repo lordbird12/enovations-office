@@ -303,4 +303,9 @@ export class ListComponent implements OnInit, AfterViewInit {
     cancelCheck() {
         this.setAll(false);
     }
+
+    onImageError(event: Event) {
+        const target = event.target as HTMLImageElement;
+        target.src = "assets/images/no_image.png"; // Set your default image path here
+    }
 }

@@ -330,6 +330,11 @@ export const appRoutes: Route[] = [
                         loadChildren: () =>
                             import('app/modules/admin/calendar/page.routes'),
                     },
+                    {
+                        path: 'team',
+                        loadChildren: () =>
+                            import('app/modules/admin/team/page.routes'),
+                    },
                 ],
             },
         ],
