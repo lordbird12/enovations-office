@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { PageService } from '../page.service';
@@ -64,6 +64,9 @@ export class EditDialogComponent implements OnInit {
 color: ThemePalette = 'primary';
 checked = false;
 disabled = false;
+product: any[] = [
+];
+
 isInputDisabled: boolean = true;
     constructor(private dialogRef: MatDialogRef<EditDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -76,7 +79,12 @@ isInputDisabled: boolean = true;
             id: [],
             name: [],
             detail: [],
+            products: this.formBuilder.array([]),
         });
+        this._service.get_category_product().subscribe((resp: any) => {
+            this.product = Array.isArray(resp) ? resp : resp.data || [];
+        })
+
      }
 
     ngOnInit(): void {
@@ -85,6 +93,29 @@ isInputDisabled: boolean = true;
         })
 
     }
+
+    // ฟังก์ชันสำหรับการเพิ่ม factory จาก checkbox
+        addProducts(id: number) {
+            const products = this.editForm.get('products') as FormArray;
+    
+            // ตรวจสอบว่า factoryId มีอยู่ใน FormArray หรือไม่
+            const index = products.value.findIndex((value: any) => value.product_id === id);
+    
+            if (index === -1) {
+                const value = this.formBuilder.group({
+                    product_id: id,
+                });
+                products.push(value);
+            } else {
+                // ถ้ามีอยู่แล้วให้ลบออก
+                products.removeAt(index);
+            }
+        }
+    
+        isFactoryChecked(product_id: number): boolean {
+            const productsFormArray = this.editForm.get('products') as FormArray;
+            return productsFormArray.value.some((value: any) => value.product_id === product_id);
+        }
 
     onSaveClick(): void {
         this.flashMessage = null;
