@@ -99,6 +99,16 @@ export class PageService {
                 })
             );
     }
+
+    get_category_product(): Observable<any> {
+        return this._httpClient
+            .get<any>(environment.baseURL + '/api/get_category_product')
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
     /**
      * Get products
      *

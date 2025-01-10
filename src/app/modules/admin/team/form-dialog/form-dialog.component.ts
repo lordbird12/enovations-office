@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
@@ -44,11 +44,13 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
         CommonModule,
     ],
 })
-export class FormDialogComponent implements OnInit{
+export class FormDialogComponent implements OnInit {
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     addForm: FormGroup;
     isLoading: boolean = false;
     positions: any[];
+    product: any[] = [
+    ];
     flashMessage: 'success' | 'error' | null = null;
     constructor(private dialogRef: MatDialogRef<FormDialogComponent>,
         @Inject(MAT_DIALOG_DATA) private data: any,
@@ -57,18 +59,44 @@ export class FormDialogComponent implements OnInit{
         private _fuseConfirmationService: FuseConfirmationService,
         private _changeDetectorRef: ChangeDetectorRef
     ) {
-        this._service.getPosition().subscribe((resp: any)=>{
-            this.positions = resp.data
+        this._service.get_category_product().subscribe((resp: any) => {
+            this.product = Array.isArray(resp) ? resp : resp.data || [];
         })
     }
 
     ngOnInit(): void {
         this.addForm = this.formBuilder.group({
             name: [],
+            detail: [],
+            products: this.formBuilder.array([]),
         });
+
+
 
     }
 
+    // ฟังก์ชันสำหรับการเพิ่ม factory จาก checkbox
+    addProducts(id: number) {
+        const products = this.addForm.get('products') as FormArray;
+
+        // ตรวจสอบว่า factoryId มีอยู่ใน FormArray หรือไม่
+        const index = products.value.findIndex((value: any) => value.product_id === id);
+
+        if (index === -1) {
+            const value = this.formBuilder.group({
+                product_id: id,
+            });
+            products.push(value);
+        } else {
+            // ถ้ามีอยู่แล้วให้ลบออก
+            products.removeAt(index);
+        }
+    }
+
+    isFactoryChecked(product_id: number): boolean {
+        const productsFormArray = this.addForm.get('products') as FormArray;
+        return productsFormArray.value.some((value: any) => value.product_id === product_id);
+    }
 
 
     onSaveClick(): void {

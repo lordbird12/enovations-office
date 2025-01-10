@@ -70,9 +70,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         this.loadTable();
-        this._service.getPosition().subscribe((resp: any) => {
-            this.positions = resp.data
-        })
+       
     }
 
     ngAfterViewInit(): void {
@@ -97,7 +95,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
     addElement() {
         const dialogRef = this.dialog.open(FormDialogComponent, {
-            width: '500px', // กำหนดความกว้างของ Dialog
+            width: '650px', // กำหนดความกว้างของ Dialog
 
         });
 

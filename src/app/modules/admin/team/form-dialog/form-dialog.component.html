@@ -3,6 +3,7 @@
     <div mat-dialog-content class="max-h-96 overflow-y-auto md:max-h-180">
         <form [formGroup]="addForm">
             <div class="flex-auto">
+                <!-- ชื่อทีม -->
                 <div class="flex flex-col mx-3 md:flex mb-6">
                     <div class="md:w-full px-3">
                         <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
@@ -10,6 +11,47 @@
                             <input matInput [placeholder]="'กรุณาระบุชื่อทีม'" formControlName="name">
                         </mat-form-field>
                     </div>
+                </div>
+                <!-- รายละเอียด -->
+                <div class="flex flex-col mx-3 md:flex mb-6">
+                    <div class="md:w-full px-3">
+                        <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                            <mat-label>รายละเอียด</mat-label>
+                            <textarea matInput [placeholder]="'กรุณาระบุรายละเอียด'" formControlName="detail"
+                                rows="4"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+                <div class="flex flex-col mx-3 md:flex mb-6">
+                    <div class="md:w-full px-3">
+                        <label class="block text-md font-medium text-gray-700">ประเภทสินค้า</label>
+                        <div class="grid grid-cols-2">
+                            <div class="inline-flex items-center " *ngFor="let item of product;">
+                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                    [for]="'product' + item.id">
+                                    <input type="checkbox"
+                                        class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
+                                        [id]="'product' + item.id" (change)="addProducts(item.id)" />
+                                    <span
+                                        class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
+                                            fill="currentColor" stroke="currentColor" stroke-width="1">
+                                            <path fill-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                </label>
+                                <label class="mt-px font-light text-gray-700 cursor-pointer select-none"
+                                    htmlFor="check">
+                                    {{item.name}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </form>
