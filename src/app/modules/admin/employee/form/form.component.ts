@@ -74,11 +74,17 @@ export class FormComponent implements OnInit {
     positions: any[];
     departments: any[];
     permissions: any[];
+    teams: any[];
     flashMessage: 'success' | 'error' | null = null;
     selectedFile: File = null;
     Id: any;
     itemData: any;
     url_image: string;
+    teamPositions = [
+        { value: 'Boss', label: 'หัวหน้าทีม' },
+        { value: 'User', label: 'เซล' },
+        { value: 'Approve', label: 'ผู้มีสิทธิอนุมัติ' }
+      ];
     constructor(
         private formBuilder: FormBuilder,
         private _service: PageService,
@@ -100,8 +106,8 @@ export class FormComponent implements OnInit {
             phone: null,
             image: null,
             user_no: [],
-            ot: 0,
-            salary: 0,
+            team_id: [],
+            team_role: [],
             id:null
         });
 
@@ -116,8 +122,8 @@ export class FormComponent implements OnInit {
             phone: null,
             image: null,
             user_no: [],
-            ot: 0,
-            salary: 0,
+            team_id: [],
+            team_role: [],
         });
     }
 
@@ -128,12 +134,13 @@ export class FormComponent implements OnInit {
                 permissions: this._service.getPermission(),
                 departments: this._service.getDepartment(),
                 positions: this._service.getPosition(),
+                teams: this._service.getTeam(),
             })
         )
             this.permissions = response.permissions.data;
             this.departments = response.departments.data;
             this.positions = response.positions.data;
-            // this.loadTable();
+            this.teams = response.teams.data;
         if(this.Id) {
             
             this._service.getById(this.Id).subscribe((resp: any)=>{
@@ -149,8 +156,6 @@ export class FormComponent implements OnInit {
                 })
                 this.addForm2.patchValue({
                     ...this.itemData,
-                    ot: this.itemData.ot ? +this.itemData.ot : 0,
-                    salary: this.itemData.salary ? +this.itemData.salary : 0
                 })
                 this.url_image = this.itemData.image
             })

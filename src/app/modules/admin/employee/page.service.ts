@@ -90,6 +90,15 @@ export class PageService {
                 })
             );
     }
+    getTeam(): Observable<any> {
+        return this._httpClient
+            .get<any>(environment.baseURL + '/api/get_team')
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
     getPermission(): Observable<any> {
         return this._httpClient
             .get<any>(environment.baseURL + '/api/get_permission')

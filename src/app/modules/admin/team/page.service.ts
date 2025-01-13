@@ -32,7 +32,7 @@ export class PageService {
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient) {}
+    constructor(private _httpClient: HttpClient) { }
 
     httpOptionsFormdata = {
         headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
@@ -70,6 +70,14 @@ export class PageService {
         return this._httpClient.delete<any>(
             environment.baseURL + '/api/team/' + id,
             { headers: this.httpOptionsFormdata.headers }
+        );
+    }
+
+    deleteTeam(id: any): Observable<any> {
+        return this._httpClient.get(environment.baseURL + '/api/delete_team/' + id).pipe(
+            switchMap((response: any) => {
+                return of(response.data);
+            })
         );
     }
 
@@ -124,6 +132,20 @@ export class PageService {
         return this._httpClient
             .post(
                 environment.baseURL + '/api/team_page',
+                dataTablesParameters,
+                this.httpOptionsFormdata
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
+
+    getTeamPage(dataTablesParameters: any): Observable<DataTablesResponse> {
+        return this._httpClient
+            .post(
+                environment.baseURL + '/api/team_member_page',
                 dataTablesParameters,
                 this.httpOptionsFormdata
             )

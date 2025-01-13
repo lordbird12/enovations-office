@@ -22,6 +22,7 @@ import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { TeamDialogComponent } from '../team-dialog/team-dialog.component';
 
 @Component({
     selector: 'list',
@@ -77,6 +78,21 @@ export class ListComponent implements OnInit, AfterViewInit {
         this._changeDetectorRef.detectChanges();
     }
 
+    // เพิ่มเมธอด editElement(element) และ deleteElement(element)
+    teamElement(element: any) {
+        const dialogRef = this.dialog.open(TeamDialogComponent, {
+            width: '850px', // กำหนดความกว้างของ Dialog
+            data: {
+                data: element,
+            } // ส่งข้อมูลเริ่มต้นไปยัง Dialog
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.rerender()
+            }
+        });
+    }
 
     // เพิ่มเมธอด editElement(element) และ deleteElement(element)
     editElement(element: any) {

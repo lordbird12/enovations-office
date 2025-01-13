@@ -1,0 +1,52 @@
+<div class="md:max-w-full mx-auto">
+    <h1 mat-dialog-title class="text-xl font-semibold mb-4 ml-5">สมาชิกในทีม</h1>
+    <div mat-dialog-content class="max-h-96 overflow-y-auto md:max-h-180">
+        <div class="flex flex-col flex-auto p-5  sm:overflow-y-auto">
+            <table datatable [dtOptions]="dtOptions" class="table row-border hover w-full bg-white whitespace-nowrap">
+                <thead>
+                    <tr>
+                        <th class="w-[100px]">จัดการ</th>
+                        <th class="w-[10px]">ลำดับ</th>
+                        <th class="text-left">รหัส</th>
+                        <th class="text-left">ชื่อ</th>
+                        <th class="text-left">ตำแหน่งทีม</th>
+                        <th>สร้างโดย</th>
+                        <th>วันที่สร้าง</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="dataRow?.length != 0">
+                    <tr *ngFor="let item of dataRow; let i = index">
+                        <td>
+                            <button mat-icon-button color="accent" (click)="editElement(item)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="accent" (click)="deleteTeam(item.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                        <td>{{ pages.begin + (i + 1) }}</td>
+                        <td>{{ item.user_no ? item.user_no : "-" }}</td>
+                        <td>{{ item.name ? item.name : "-" }}</td>
+                        <td>{{ item.team_role ? item.team_role : "-" }}</td>
+      
+                        <td class="text-center">{{ item.create_by ? item.create_by : "-" }}</td>
+                        <td>{{ item.created_at ?? '' }}</td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="dataRow?.length == 0">
+                    <tr>
+                        <td colspan="6" class="no-data-available text-center">ไม่มีข้อมูล !</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div mat-dialog-actions class="flex justify-end mt-4">
+        <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="onSaveClick()">
+            ตกลง
+        </button>
+        <button class="px-6 ml-3" mat-flat-button [color]="'warn'" (click)="onCancelClick()">
+            ยกเลิก
+        </button>
+    </div>
+</div>
