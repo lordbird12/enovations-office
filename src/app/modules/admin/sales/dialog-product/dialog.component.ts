@@ -59,6 +59,7 @@ export class DialogAddProductComponent implements OnInit {
   filterProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productData: any[] = [];
   itemData: any;
+  itemData1: any;
 
   constructor(
     private fb: FormBuilder,
@@ -118,6 +119,8 @@ export class DialogAddProductComponent implements OnInit {
   createTransducerGroup(transducer: any): FormGroup {
     return this.fb.group({
       id: [transducer.id],
+      machine_model_id: transducer?.machine_model?.id,
+      machine_name: transducer?.machine_model?.name,
       products: this.fb.array(transducer.products.map(prod => this.createProductGroup(prod)))
     });
   }
@@ -144,17 +147,31 @@ export class DialogAddProductComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  addProduct(machineModelIndex: number): void {
-    const machineModel = this.machineModelsArray.at(machineModelIndex);
-    this.itemData = this.productData.find((resp:any) => resp.id ===  machineModel.value.machine_model_id) 
-    console.log(this.itemData.products);
-    this.filterProduct.next(this.itemData.products.slice());
-    const productsArray = machineModel.get('products') as FormArray;
-    let formValue = this.fb.group({
-      product_id: '',
-      product_name: ''
-    })
-    productsArray.push(this.createProductGroup(formValue));
+  addProduct(machineModelIndex: number, type: any): void {
+    if(type=== 'machine_model') {
+      const machineModel = this.machineModelsArray.at(machineModelIndex);
+      this.itemData = this.productData.find((resp:any) => resp.id ===  machineModel.value.machine_model_id) 
+      console.log(this.itemData.products);
+      this.filterProduct.next(this.itemData.products.slice());
+      const productsArray = machineModel.get('products') as FormArray;
+      let formValue = this.fb.group({
+        product_id: '',
+        product_name: ''
+      })
+      productsArray.push(this.createProductGroup(formValue));
+    } else {
+      const machineModel = this.transducersArray.at(machineModelIndex);
+      this.itemData1 = this.productData.find((resp:any) => resp.id ===  machineModel.value.machine_model_id) 
+      console.log(this.itemData.products);
+      this.filterProduct.next(this.itemData.products.slice());
+      const productsArray = machineModel.get('products') as FormArray;
+      let formValue = this.fb.group({
+        product_id: '',
+        product_name: ''
+      })
+      productsArray.push(this.createProductGroup(formValue));
+    }
+
   }
 
   addTra(index: number): void {
@@ -167,10 +184,18 @@ export class DialogAddProductComponent implements OnInit {
     productsArray.push(formValue);
   }
 
-  removeProduct(machineModelIndex: number, productIndex: number): void {
-    const machineModel = this.machineModelsArray.at(machineModelIndex);
-    const productsArray = machineModel.get('products') as FormArray;
-    productsArray.removeAt(productIndex);
+  removeProduct(machineModelIndex: number, productIndex: number , type: string): void {
+    if (type === 'machine_model') {
+      const machineModel = this.machineModelsArray.at(machineModelIndex);
+      const productsArray = machineModel.get('products') as FormArray;
+      productsArray.removeAt(productIndex);
+  
+    } else {
+      const machineModel = this.transducersArray.at(machineModelIndex);
+      const productsArray = machineModel.get('products') as FormArray;
+      productsArray.removeAt(productIndex);
+  
+    }
 
   }
 

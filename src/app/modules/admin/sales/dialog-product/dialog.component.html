@@ -30,7 +30,7 @@
         <div *ngFor="let model of machineModelsArray.controls; let i = index" [formGroupName]="i"
             class="border p-4 rounded-lg shadow-sm">
             <h4 class="text-md font-semibold">Machine Model: {{ model.value.machine_name }}</h4>
-            <button mat-mini-fab color="primary" (click)="addProduct(i)" class="mb-2">
+            <button mat-mini-fab color="primary" (click)="addProduct(i, 'machine_model')" class="mb-2">
                 <mat-icon>add</mat-icon>
             </button>
             <div formArrayName="products" class="space-y-2">
@@ -44,7 +44,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field class="w-full md:w-9/12 " [ngClass]="formFieldHelpers">
+                    <!-- <mat-form-field class="w-full md:w-9/12 " [ngClass]="formFieldHelpers">
                         <mat-label>ค้นหาเครื่อง</mat-label>
                         <input matInput [formControl]="productFilter[j]" [matAutocomplete]="transducer"
                             placeholder="ค้นหาหัวตรวจ" />
@@ -54,8 +54,46 @@
                                 <span>{{item.name}}</span> [<span>{{item.serial_no}}</span>]
                             </mat-option>
                         </mat-autocomplete>
+                    </mat-form-field> -->
+                    <button mat-icon-button color="warn" (click)="removeProduct(i, j, 'machine_model')" class="justify-self-end">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+          
+            </div>
+        </div>
+    </div>
+    <h3 class="text-lg font-medium">Transducer</h3>
+    <div formArrayName="machine_models" class="space-y-4">
+        <div *ngFor="let model of transducersArray.controls; let i = index" [formGroupName]="i"
+            class="border p-4 rounded-lg shadow-sm">
+            <h4 class="text-md font-semibold">Machine Model: {{ model.value.machine_name }}</h4>
+            <button mat-mini-fab color="primary" (click)="addProduct(i, 'transducer')" class="mb-2">
+                <mat-icon>add</mat-icon>
+            </button>
+            <div formArrayName="products" class="space-y-2">
+                <div *ngFor="let product of model.get('products').controls; let j = index" [formGroupName]="j"
+                    class="grid grid-cols-2 gap-4 items-center">
+                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                        <mat-label>สินค้า</mat-label>
+                        <mat-select [formControlName]="'product_id'">
+                            <mat-option *ngFor="let item of itemData1?.products;" [value]="item.id">
+                               [SN : {{item.serial_no}}] name: {{item.name}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
-                    <button mat-icon-button color="warn" (click)="removeProduct(i, j)" class="justify-self-end">
+                    <!-- <mat-form-field class="w-full md:w-9/12 " [ngClass]="formFieldHelpers">
+                        <mat-label>ค้นหาเครื่อง</mat-label>
+                        <input matInput [formControl]="productFilter[j]" [matAutocomplete]="transducer"
+                            placeholder="ค้นหาหัวตรวจ" />
+                        <mat-autocomplete #transducer="matAutocomplete"
+                            (optionSelected)="onSelectMachineModel($event, 'transducer')">
+                            <mat-option *ngFor="let item of filterProduct | async" [value]="item.name">
+                                <span>{{item.name}}</span> [<span>{{item.serial_no}}</span>]
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field> -->
+                    <button mat-icon-button color="warn" (click)="removeProduct(i, j, 'transducer')" class="justify-self-end">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>
