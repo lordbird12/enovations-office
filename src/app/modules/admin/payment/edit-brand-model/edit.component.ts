@@ -27,7 +27,7 @@ import { FormDialogCCComponent } from '../form-dialog-cc/form-dialog.component';
 import { FormDialogColorComponent } from '../form-dialog-color/form-dialog.component';
 
 @Component({
-  selector: 'edit-brand-model',
+  selector: 'edit-payment-model',
   templateUrl: './edit.component.html',
   encapsulation: ViewEncapsulation.None,
   standalone: true,

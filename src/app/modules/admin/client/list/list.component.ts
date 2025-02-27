@@ -38,7 +38,7 @@ import { AssetType, DataPosition, PositionPagination } from '../page.types';
 import { Service } from '../page.service';
 import { MatTableDataSource } from '@angular/material/table';
 @Component({
-    selector: 'list',
+    selector: 'list-client',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss'],
     // encapsulation: ViewEncapsulation.None,

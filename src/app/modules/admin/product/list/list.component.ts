@@ -32,7 +32,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { CompanyDialogComponent } from '../adjust-dialog/dailog.component';
 
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-product',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

@@ -24,7 +24,7 @@ import { Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
-    selector: 'list',
+    selector: 'list-promotion',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

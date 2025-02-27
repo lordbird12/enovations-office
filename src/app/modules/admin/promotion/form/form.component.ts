@@ -23,7 +23,7 @@ interface Discount {
     amount: number
 }
 @Component({
-    selector: 'form-employee',
+    selector: 'form-promotion',
     templateUrl: './form.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

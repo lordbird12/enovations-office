@@ -33,7 +33,7 @@ import { CarouselComponent } from '../image-slide/carousel.component';
 import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 @Component({
-    selector: 'form-product',
+    selector: 'form-product-sales',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss'],
     encapsulation: ViewEncapsulation.None,

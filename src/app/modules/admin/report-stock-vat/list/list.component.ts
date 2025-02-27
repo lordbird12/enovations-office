@@ -29,7 +29,7 @@ import { Router } from '@angular/router';
 import { PictureComponent } from '../../picture/picture.component';
 
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-report-stock-vat',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

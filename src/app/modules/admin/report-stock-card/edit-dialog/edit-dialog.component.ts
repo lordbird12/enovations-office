@@ -20,7 +20,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import moment from 'moment';
 
 @Component({
-    selector: 'app-edit-dialog',
+    selector: 'app-edit-dialog-report-stock-card',
     templateUrl: './edit-dialog.component.html',
     styleUrls: ['./edit-dialog.component.scss'],
     encapsulation: ViewEncapsulation.None,

@@ -31,7 +31,7 @@ import { Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-employee',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

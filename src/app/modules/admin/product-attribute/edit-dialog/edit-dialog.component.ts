@@ -20,7 +20,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-edit-dialog',
+    selector: 'app-edit-dialog-product-attribute',
     templateUrl: './edit-dialog.component.html',
     styleUrls: ['./edit-dialog.component.scss'],
     encapsulation: ViewEncapsulation.None,

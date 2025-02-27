@@ -27,7 +27,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ReplaySubject, Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'form-employee',
+  selector: 'form-broker',
   templateUrl: './form.component.html',
   encapsulation: ViewEncapsulation.None,
   standalone: true,

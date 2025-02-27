@@ -33,7 +33,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'form-employee',
+    selector: 'form-payroll',
     templateUrl: './form.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

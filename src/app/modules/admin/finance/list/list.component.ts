@@ -27,7 +27,7 @@ import { forkJoin } from 'rxjs';
 
 
 @Component({
-    selector: 'list',
+    selector: 'list-finance',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

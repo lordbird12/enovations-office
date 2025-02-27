@@ -24,7 +24,7 @@ import { PictureComponent } from '../../picture/picture.component';
 
 
 @Component({
-    selector: 'list',
+    selector: 'list-companie',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

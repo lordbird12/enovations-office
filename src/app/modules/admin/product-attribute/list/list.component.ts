@@ -30,7 +30,7 @@ import { PictureComponent } from '../../picture/picture.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-product-attribute',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

@@ -21,7 +21,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatCardModule} from '@angular/material/card';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 @Component({
-    selector: 'app-edit-dialog',
+    selector: 'app-edit-dialog-time',
     templateUrl: './edit-dialog.component.html',
     styleUrls: ['./edit-dialog.component.scss'],
     encapsulation: ViewEncapsulation.None,

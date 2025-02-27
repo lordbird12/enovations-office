@@ -26,7 +26,7 @@ import { FormDialogComponent } from '../form-dialog/form-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
-  selector: 'form-employee',
+  selector: 'form-customers',
   templateUrl: './form.component.html',
   encapsulation: ViewEncapsulation.None,
   standalone: true,

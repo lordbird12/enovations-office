@@ -25,7 +25,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormDialogComponent } from '../../brand-model/form-dialog/form-dialog.component';
 
 @Component({
-  selector: 'edit-brand',
+  selector: 'edit-cleam',
   templateUrl: './edit.component.html',
   encapsulation: ViewEncapsulation.None,
   standalone: true,

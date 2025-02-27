@@ -31,7 +31,7 @@ import { FormReportComponent } from '../../product/form-report/form-report.compo
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-sales',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

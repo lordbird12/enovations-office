@@ -35,7 +35,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { forkJoin, lastValueFrom } from 'rxjs';
 
 @Component({
-    selector: 'form-product',
+    selector: 'form-product-spare-part',
     templateUrl: './form.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

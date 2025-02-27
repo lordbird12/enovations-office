@@ -30,7 +30,7 @@ import { Router } from '@angular/router';
 import { PictureComponent } from '../../picture/picture.component';
 
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-spare-part',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

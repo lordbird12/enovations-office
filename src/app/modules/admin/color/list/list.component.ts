@@ -23,7 +23,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'list',
+    selector: 'list-color',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

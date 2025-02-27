@@ -24,7 +24,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { createFileFromBlob } from 'app/shared/helper';
 
 @Component({
-    selector: 'app-form-report',
+    selector: 'app-form-report-sparepart',
     templateUrl: './form-report.component.html',
     styleUrls: ['./form-report.component.scss'],
     encapsulation: ViewEncapsulation.None,

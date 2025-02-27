@@ -40,7 +40,7 @@ import { Router } from '@angular/router';
 import { environment } from 'environments/environment.development';
 
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-payroll',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

@@ -39,7 +39,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-time',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

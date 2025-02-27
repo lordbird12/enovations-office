@@ -40,7 +40,7 @@ import { MenuService } from '../menu.service';
 // import { ImportOSMComponent } from '../card/import-osm/import-osm.component';
 
 @Component({
-    selector: 'list',
+    selector: 'list-menu',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss'],
     animations: fuseAnimations,

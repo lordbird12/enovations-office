@@ -20,7 +20,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
 @Component({
-    selector: 'app-form-dialog',
+    selector: 'app-form-dialog-payment-cc',
     templateUrl: './form-dialog.component.html',
     styleUrls: ['./form-dialog.component.scss'],
     encapsulation: ViewEncapsulation.None,

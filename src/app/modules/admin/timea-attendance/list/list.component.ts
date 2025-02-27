@@ -31,7 +31,7 @@ import moment from 'moment';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-timea-attendance',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

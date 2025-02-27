@@ -15,7 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-    selector       : 'form-product',
+    selector       : 'form-product-purchase',
     templateUrl    : './form.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone   : true,

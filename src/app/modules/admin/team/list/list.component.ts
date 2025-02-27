@@ -25,7 +25,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { TeamDialogComponent } from '../team-dialog/team-dialog.component';
 
 @Component({
-    selector: 'list',
+    selector: 'list-team',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

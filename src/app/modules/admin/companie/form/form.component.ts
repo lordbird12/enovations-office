@@ -25,7 +25,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
 
 @Component({
-  selector: 'form-employee',
+  selector: 'form-companie',
   templateUrl: './form.component.html',
   encapsulation: ViewEncapsulation.None,
   standalone: true,

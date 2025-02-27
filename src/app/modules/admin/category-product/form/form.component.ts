@@ -15,7 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-    selector       : 'form-employee',
+    selector       : 'form-category-product',
     templateUrl    : './form.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone   : true,

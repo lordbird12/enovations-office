@@ -32,7 +32,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
-    selector: 'employee-list',
+    selector: 'employee-list-spare-part',
     templateUrl: './list.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,

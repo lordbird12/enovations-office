@@ -6,7 +6,7 @@ import {
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-    selector: 'page',
+    selector: 'page-permission',
     templateUrl: './page.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,

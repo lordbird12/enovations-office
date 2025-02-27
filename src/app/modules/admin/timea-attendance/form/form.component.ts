@@ -23,7 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PictureComponent } from '../picture/picture.component';
 import { environment } from 'environments/environment.development';
 @Component({
-    selector: 'form-product',
+    selector: 'form-product-time-attendance',
     templateUrl: './form.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,
