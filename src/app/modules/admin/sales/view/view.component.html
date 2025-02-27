@@ -7,7 +7,7 @@
         </h2>
         <div class="flex flex-row gap-2">
             <button class="px-6 ml-3 bg-green-700" mat-flat-button
-                color="primary" (click)="openDialogApprove()">จัดการเครื่อง</button>
+                color="primary" (click)="openDialogAddProduct()">จัดการเครื่อง</button>
             <button  class="px-6 ml-3 bg-green-700" mat-flat-button
                 color="primary" (click)="openDialogApprove()">อนุมัติ</button>
             <button class="px-6" mat-flat-button color="primary" (click)="onEdit(formData.value.id)">แก้ไข</button>
@@ -62,19 +62,19 @@
             <table class="w-full border mt-2 bg-white shadow-sm">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="border p-2 w-2/6">รุ่นเครื่อง</th>
+                        <th class="border p-2 text-left w-2/6">รุ่นเครื่อง</th>
                         <th class="border p-2 w-1/6">จำนวน</th>
-                        <th class="border p-2 w-3/6">สินค้า</th>
+                        <th class="border p-2 w-3/6 text-left">สินค้า</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let machine of itemData.machine_models">
-                        <td class="border p-2">{{ machine.machine_model.name ?? '-' }}</td>
-                        <td class="border p-2 text-center">{{ machine.qty }}</td>
+                    <tr *ngFor="let machine of itemData?.machine_models">
+                        <td class="border p-2">{{ machine?.machine_model?.name ?? '-' }}</td>
+                        <td class="border p-2 text-center">{{ machine?.qty }}</td>
                         <td class="border p-2">
                             <ul>
-                                <li *ngFor="let product of machine.products">{{ product.product.name ?? '-' }} (SN: {{
-                                    product.product.sn ?? '-' }})</li>
+                                <li *ngFor="let product of machine?.products">{{ product?.product?.name ?? '-' }} (SN: {{
+                                    product?.product?.sn ?? '-' }})</li>
                             </ul>
                         </td>
                     </tr>
@@ -88,19 +88,19 @@
             <table class="w-full border mt-2 bg-white shadow-sm">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="border p-2 w-2/6">รุ่นหัวตรวจ</th>
+                        <th class="border p-2 w-2/6 text-left">รุ่นหัวตรวจ</th>
                         <th class="border p-2 w-1/6">จำนวน</th>
-                        <th class="border p-2 w-3/6">สินค้า</th>
+                        <th class="border p-2 w-3/6 text-left">สินค้า</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let transducer of itemData.transducers">
-                        <td class="border p-2">{{ transducer.machine_model.name ?? '' }}</td>
-                        <td class="border p-2 text-center">{{ transducer.qty }}</td>
+                    <tr *ngFor="let transducer of itemData?.transducers">
+                        <td class="border p-2">{{ transducer?.machine_model.name ?? '' }}</td>
+                        <td class="border p-2 text-center">{{ transducer?.qty }}</td>
                         <td class="border p-2">
                             <ul>
-                                <li *ngFor="let product of transducer.products">{{ product.product.name ?? '-' }} (SN: {{
-                                    product.product.sn ?? '-' }})</li>
+                                <li *ngFor="let product of transducer?.products">{{ product?.product?.name ?? '-' }} (SN: {{
+                                    product?.product?.sn ?? '-' }})</li>
                             </ul>
                         </td>
                     </tr>

@@ -32,6 +32,7 @@ import { CustomerDialogComponent } from '../customer-dialog/customer-dialog.comp
 import { CarouselComponent } from '../image-slide/carousel.component';
 import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DialogAddProductComponent } from '../dialog-product/dialog.component';
 @Component({
     selector: 'view-product-sales',
     templateUrl: './view.component.html',
@@ -293,6 +294,7 @@ export class ViewOrderComponent implements OnInit {
         this.filterClient.next(this.clientData.slice());
 
         this.formData = this._fb.group({
+            id:null,
             calendar_date: null,
             budget: 0,
             request_purpose: null,
@@ -1110,6 +1112,21 @@ export class ViewOrderComponent implements OnInit {
     openDialogApprove(): void {
         this.dialog
             .open(ClaimDialogComponent, {
+                maxHeight: '90vh',
+                width: '700px',
+                data: {
+                    order: this.itemData
+                },
+            })
+            .afterClosed()
+            .subscribe(() => {
+                // Go up twice because card routes are setup like this; "card/CARD_ID"
+                // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
+            });
+    }
+    openDialogAddProduct(): void {
+        this.dialog
+            .open(DialogAddProductComponent, {
                 maxHeight: '90vh',
                 width: '700px',
                 data: {

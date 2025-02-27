@@ -55,13 +55,8 @@
                             </button>
                             <mat-menu #menu="matMenu">
                                 <button mat-menu-item color="accent" (click)="editElement(item)">
-                                    <mat-icon>edit</mat-icon>
-                                    <span>แก้ไข</span>
-                                </button>
-                                <button mat-menu-item color="accent" (click)="editElement(item)"
-                                    *ngIf="this.user?.position_id === 2 && this.user?.department_id === item.user?.department_id">
-                                    <mat-icon svgIcon="heroicons_solid:check-circle"></mat-icon>
-                                    <span>เปลี่ยนสถานะ</span>
+                                    <mat-icon svgIcon="heroicons_solid:eye"></mat-icon>
+                                    <span>รายละเอียด</span>
                                 </button>
                                 <button mat-menu-item color="accent" (click)="delete(item.id)">
                                     <mat-icon>delete</mat-icon>

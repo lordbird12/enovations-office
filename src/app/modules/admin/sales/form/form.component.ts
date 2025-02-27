@@ -344,20 +344,38 @@ export class FormComponent implements OnInit {
                 this.Id = id
                 this._service.getById(id).subscribe((resp: any) => {
                     this.itemData = resp.data;
-                    const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
-                    const tDs = this.itemData.transducers.map(model => Number(model.product_id));
-                    this.saleFilter.setValue(this.itemData.user?.name)
+                    // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
+                    // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
+                    // this.saleFilter.setValue(this.itemData.user?.name)
                     this.clientFilter.setValue(this.itemData.client?.name)
                     this.productFilter.setValue(this.itemData.product?.name)
                     this.accessorieFilter.setValue(this.itemData.product?.name)
                     this.workstationFilter.setValue(this.itemData.product?.name)
                     this.formData.patchValue({
                         ...this.itemData,
-                        memberIds: memberIds,
-                        tds: tDs
+                        
                     });
+                    for (let index = 0; index < this.itemData.machine_models.length; index++) {
+                        const element = this.itemData.machine_models[index];
+                        this.machine_models.push(this._fb.group({
+                            id: element.id,
+                            machine_model_id: element.machine_model_id,
+                            machine_model_name: element.machine_model.name,
+                            qty: element.qty
+                        }))
+                        
+                    }
 
-                    console.log(this.formData.value);
+                    for (let index = 0; index < this.itemData.transducers.length; index++) {
+                        const element = this.itemData.transducers[index];
+                        this.transducers.push(this._fb.group({
+                            id: element.id,
+                            machine_model_id: element.machine_model_id,
+                            machine_model_name: element.machine_model.name,
+                            qty: element.qty
+                        }))
+                        
+                    }
 
                     this._changeDetectorRef.markForCheck();
 
@@ -931,8 +949,6 @@ export class FormComponent implements OnInit {
                 }
             }))
         } else {
-            this.addToMachineModels()
-            this.addToTransducers()
             const dialogRef = this._fuseConfirmationService.open({
                 "title": "บันทึกข้อมูล",
                 "message": "คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?",

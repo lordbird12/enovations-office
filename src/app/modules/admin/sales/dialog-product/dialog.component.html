@@ -1,0 +1,69 @@
+<h2 mat-dialog-title class="text-xl font-semibold">เพิ่มสินค้า</h2>
+<mat-dialog-content [formGroup]="form" class="space-y-6 p-4 w-full max-w-lg mx-auto md:max-w-2xl">
+    <!-- Users Section -->
+    <h3 class="text-lg font-medium">Users</h3>
+    <button mat-mini-fab color="primary" (click)="addUser()" class="mb-2">
+        <mat-icon>add</mat-icon>
+    </button>
+    <div formArrayName="users" class="space-y-4">
+        <div *ngFor="let user of usersArray.controls; let i = index" [formGroupName]="i"
+            class="grid grid-cols-2 gap-4 items-center">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>User ID</mat-label>
+                <input matInput formControlName="user_id" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Start Date</mat-label>
+                <input matInput formControlName="start_date" type="date" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>End Date</mat-label>
+                <input matInput formControlName="end_date" type="date" />
+            </mat-form-field>
+            <button mat-icon-button color="warn" (click)="removeUser(i)" class="justify-self-end">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+    <h3 class="text-lg font-medium">Machine Models</h3>
+    <div formArrayName="machine_models" class="space-y-4">
+        <div *ngFor="let model of machineModelsArray.controls; let i = index" [formGroupName]="i"
+            class="border p-4 rounded-lg shadow-sm">
+            <h4 class="text-md font-semibold">Machine Model: {{ model.value.machine_name }}</h4>
+            <button mat-mini-fab color="primary" (click)="addProduct(i)" class="mb-2">
+                <mat-icon>add</mat-icon>
+            </button>
+            <div formArrayName="products" class="space-y-2">
+                <div *ngFor="let product of model.get('products').controls; let j = index" [formGroupName]="j"
+                    class="grid grid-cols-2 gap-4 items-center">
+                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                        <mat-label>สินค้า</mat-label>
+                        <mat-select [formControlName]="'product_id'">
+                            <mat-option *ngFor="let item of itemData?.products;" [value]="item.id">
+                               [SN : {{item.serial_no}}] name: {{item.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="w-full md:w-9/12 " [ngClass]="formFieldHelpers">
+                        <mat-label>ค้นหาเครื่อง</mat-label>
+                        <input matInput [formControl]="productFilter[j]" [matAutocomplete]="transducer"
+                            placeholder="ค้นหาหัวตรวจ" />
+                        <mat-autocomplete #transducer="matAutocomplete"
+                            (optionSelected)="onSelectMachineModel($event, 'transducer')">
+                            <mat-option *ngFor="let item of filterProduct | async" [value]="item.name">
+                                <span>{{item.name}}</span> [<span>{{item.serial_no}}</span>]
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <button mat-icon-button color="warn" (click)="removeProduct(i, j)" class="justify-self-end">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+          
+            </div>
+        </div>
+    </div>
+    <mat-dialog-actions align="end" class="p-4 flex justify-end gap-4">
+        <button mat-button (click)="closeDialog()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="saveData()">Save</button>
+    </mat-dialog-actions>
