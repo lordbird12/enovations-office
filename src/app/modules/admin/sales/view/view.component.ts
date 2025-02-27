@@ -33,9 +33,9 @@ import { CarouselComponent } from '../image-slide/carousel.component';
 import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 @Component({
-    selector: 'form-product-sales',
-    templateUrl: './form.component.html',
-    styleUrls: ['./form.component.scss'],
+    selector: 'view-product-sales',
+    templateUrl: './view.component.html',
+    styleUrls: ['./view.component.scss'],
     encapsulation: ViewEncapsulation.None,
     standalone: true,
     imports: [
@@ -60,7 +60,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
     ],
 })
-export class FormComponent implements OnInit {
+export class ViewOrderComponent implements OnInit {
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     fixedSubscriptInput: FormControl = new FormControl('', [Validators.required]);
     dynamicSubscriptInput: FormControl = new FormControl('', [Validators.required]);
@@ -188,7 +188,6 @@ export class FormComponent implements OnInit {
         'Yasothon'
     ];
 
-
     finanaceData: any[] = [];
 
     paymentData: any[] = [];
@@ -247,11 +246,6 @@ export class FormComponent implements OnInit {
     filterWorkstation: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
     workstationData: any[] = [];
 
-
-    machineModelFilter = new FormControl('');
-    filterMachineModel: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-    mcData: any[] = [];
-
     ///workstationFilter
     accessorieFilter = new FormControl('');
     filterAccessorie: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -298,9 +292,6 @@ export class FormComponent implements OnInit {
         this.clientData = this.activatedRoute.snapshot.data.client.data
         this.filterClient.next(this.clientData.slice());
 
-        this.mcData = this.activatedRoute.snapshot.data.machine_model.data
-        this.filterMachineModel.next(this.mcData.slice());
-
         this.formData = this._fb.group({
             calendar_date: null,
             budget: 0,
@@ -344,8 +335,8 @@ export class FormComponent implements OnInit {
                 this.Id = id
                 this._service.getById(id).subscribe((resp: any) => {
                     this.itemData = resp.data;
-                    const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
-                    const tDs = this.itemData.transducers.map(model => Number(model.product_id));
+                    // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
+                    // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
                     this.saleFilter.setValue(this.itemData.user?.name)
                     this.clientFilter.setValue(this.itemData.client?.name)
                     this.productFilter.setValue(this.itemData.product?.name)
@@ -353,8 +344,8 @@ export class FormComponent implements OnInit {
                     this.workstationFilter.setValue(this.itemData.product?.name)
                     this.formData.patchValue({
                         ...this.itemData,
-                        memberIds: memberIds,
-                        tds: tDs
+                        // memberIds: memberIds,
+                        // tds: tDs
                     });
 
                     console.log(this.formData.value);
@@ -382,7 +373,9 @@ export class FormComponent implements OnInit {
                 ]
             };
 
-
+            this.setMachineModels(mockData.machine_models);
+            this.setTransducers(mockData.transducers);
+            // this.saleFilter.setValue(this.user_login?.name)
         }
         this.saleFilter.valueChanges
             .pipe(takeUntil(this._onDestroy))
@@ -409,69 +402,64 @@ export class FormComponent implements OnInit {
             .subscribe(() => {
                 this._filterWorkStation();
             });
-        this.machineModelFilter.valueChanges
-            .pipe(takeUntil(this._onDestroy))
-            .subscribe(() => {
-                this._filterMachineModel();
-            });
     }
 
-    // Getter for FormArray
-    get machineModels(): FormArray {
-        return this.formData.get('machine_models') as FormArray;
-    }
+      // Getter for FormArray
+  get machineModels(): FormArray {
+    return this.formData.get('machine_models') as FormArray;
+  }
 
-    get transducers(): FormArray {
-        return this.formData.get('transducers') as FormArray;
-    }
+  get transducers(): FormArray {
+    return this.formData.get('transducers') as FormArray;
+  }
 
-    // Set machine models
-    setMachineModels(models: any[]) {
-        this.machineModels.clear();
-        models.forEach(model => {
-            this.machineModels.push(this._fb.group({
-                machine_model_id: [model.machine_model_id, Validators.required],
-                qty: [model.qty, [Validators.required, Validators.min(1)]]
-            }));
-        });
-    }
+  // Set machine models
+  setMachineModels(models: any[]) {
+    this.machineModels.clear();
+    models.forEach(model => {
+      this.machineModels.push(this._fb.group({
+        machine_model_id: [model.machine_model_id, Validators.required],
+        qty: [model.qty, [Validators.required, Validators.min(1)]]
+      }));
+    });
+  }
 
-    // Set transducers
-    setTransducers(transducers: any[]) {
-        this.transducers.clear();
-        transducers.forEach(transducer => {
-            this.transducers.push(this._fb.group({
-                machine_model_id: [transducer.machine_model_id, Validators.required],
-                qty: [transducer.qty, [Validators.required, Validators.min(1)]]
-            }));
-        });
-    }
+  // Set transducers
+  setTransducers(transducers: any[]) {
+    this.transducers.clear();
+    transducers.forEach(transducer => {
+      this.transducers.push(this._fb.group({
+        machine_model_id: [transducer.machine_model_id, Validators.required],
+        qty: [transducer.qty, [Validators.required, Validators.min(1)]]
+      }));
+    });
+  }
 
-    // Add new machine model
-    addMachineModel() {
-        this.machineModels.push(this._fb.group({
-            machine_model_id: ['', Validators.required],
-            qty: [1, [Validators.required, Validators.min(1)]]
-        }));
-    }
+  // Add new machine model
+  addMachineModel() {
+    this.machineModels.push(this._fb.group({
+      machine_model_id: ['', Validators.required],
+      qty: [1, [Validators.required, Validators.min(1)]]
+    }));
+  }
 
-    // Remove machine model
-    removeMachineModel(index: number) {
-        this.machineModels.removeAt(index);
-    }
+  // Remove machine model
+  removeMachineModel(index: number) {
+    this.machineModels.removeAt(index);
+  }
 
-    // Add new transducer
-    addTransducer() {
-        this.transducers.push(this._fb.group({
-            machine_model_id: ['', Validators.required],
-            qty: [1, [Validators.required, Validators.min(1)]]
-        }));
-    }
+  // Add new transducer
+  addTransducer() {
+    this.transducers.push(this._fb.group({
+      machine_model_id: ['', Validators.required],
+      qty: [1, [Validators.required, Validators.min(1)]]
+    }));
+  }
 
-    // Remove transducer
-    removeTransducer(index: number) {
-        this.transducers.removeAt(index);
-    }
+  // Remove transducer
+  removeTransducer(index: number) {
+    this.transducers.removeAt(index);
+  }
 
 
         /**
@@ -591,24 +579,6 @@ export class FormComponent implements OnInit {
             this.workstationData.filter(item =>
                 item.name.toLowerCase().includes(search) ||
                 item.serial_no.toLowerCase().includes(search)
-            )
-        );
-    }
-
-    protected _filterMachineModel() {
-        if (!this.mcData) {
-            return;
-        }
-        let search = this.machineModelFilter.value;
-        if (!search) {
-            this.filterMachineModel.next(this.mcData.slice());
-            return;
-        } else {
-            search = search.toString().toLowerCase();
-        }
-        this.filterMachineModel.next(
-            this.mcData.filter(item =>
-                item.name.toLowerCase().includes(search)
             )
         );
     }
@@ -822,44 +792,6 @@ export class FormComponent implements OnInit {
         }
     }
 
-    onSelectMachineModel(event: any,type: any) {
-        console.log(type);
-        
-        const selectedName = event.option.value;
-        const selected = this.mcData.find(item => item.name === selectedName);
-
-        if (selected) {
-            const existingItem = this.machine_models.controls.find(
-                (control) => control.get('machine_model_id')?.value === selected.id
-            );
-            if (existingItem) {
-                alert('เลือกเครื่องซ้ำ')
-                this.machineModelFilter.setValue(null); // ล้างค่าในช่อง input
-            } else {
-                if (type === 'machine_models') {
-                    
-                    let item = this._fb.group({
-                        machine_model_id: selected.id,
-                        machine_model_name: selected.name,
-                        qty: 1,
-                    });
-                    this.machine_models.push(item)
-                    this.machineModelFilter.setValue(null); // ล้างค่าในช่อง input
-                } else {
-                    let item = this._fb.group({
-                        machine_model_id: selected.id,
-                        machine_model_name: selected.name,
-                        qty: 1,
-                    });
-                    this.transducers.push(item)
-                    this.machineModelFilter.setValue(null); // ล้างค่าในช่อง input
-                }
-            }
-
-
-        }
-    }
-
     getFormFieldHelpersAsString(): string {
         return this.formFieldHelpers.join(' ');
     }
@@ -869,7 +801,10 @@ export class FormComponent implements OnInit {
     }
 
     onSubmit(): void {
+
         if (this.isForm === true) {
+            this.addToMachineModels()
+            this.addToTransducers()
             const dialogRef = this._fuseConfirmationService.open({
                 "title": "บันทึกข้อมูล",
                 "message": "คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?",
@@ -893,7 +828,10 @@ export class FormComponent implements OnInit {
             })
             dialogRef.afterClosed().subscribe((result => {
                 if (result === 'confirmed') {
+                    // this.removeAllItems('machine_models')
+                    // this.removeAllItems('transducers')
                     let formValue = this.formData.value;
+
                     formValue.start_date = DateTime.fromISO(this.formData.value.start_date).toFormat('yyyy-MM-dd')
                     formValue.end_date = DateTime.fromISO(this.formData.value.end_date).toFormat('yyyy-MM-dd')
 
@@ -1183,6 +1121,10 @@ export class FormComponent implements OnInit {
                 // Go up twice because card routes are setup like this; "card/CARD_ID"
                 // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
             });
+    }
+
+    onEdit(element: any) {
+        this._router.navigate(['admin/sales/edit/' + element]);
     }
 }
 

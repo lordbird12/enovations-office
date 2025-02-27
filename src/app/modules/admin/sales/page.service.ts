@@ -295,6 +295,15 @@ export class PageService {
                 })
             );
     }
+    getMachineModelAll(): Observable<any> {
+        return this._httpClient
+            .get<any>(environment.baseURL + '/api/get_machine_model_all')
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
 
     getUser(): Observable<any> {
         return this._httpClient

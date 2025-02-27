@@ -1,0 +1,111 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row items-center justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+            {{ type ? 'รายละเอียดใบจอง ' + type : 'รายละเอียดการจอง' }}
+        </h2>
+        <div class="flex flex-row gap-2">
+            <button class="px-6 ml-3 bg-green-700" mat-flat-button
+                color="primary" (click)="openDialogApprove()">จัดการเครื่อง</button>
+            <button  class="px-6 ml-3 bg-green-700" mat-flat-button
+                color="primary" (click)="openDialogApprove()">อนุมัติ</button>
+            <button class="px-6" mat-flat-button color="primary" (click)="onEdit(formData.value.id)">แก้ไข</button>
+            <button class="px-6" mat-flat-button color="accent" (click)="onBack()">ย้อนกลับ</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
+            <!-- ข้อมูลการจอง -->
+            <div class="bg-card p-6 rounded-lg shadow  space-y-2">
+                <h3 class="text-xl font-bold text-gray-500">ข้อมูลการจอง</h3>
+                <p><strong>วันที่จอง:</strong> {{ formData.value.start_date }} - {{ formData.value.end_date }}</p>
+                <p><strong>วัตถุประสงค์:</strong> {{ formData.value.request_purpose ?? '-' }}</p>
+                <p *ngIf="formData.value.request_purpose === 'Demo'"><strong>งบประมาณ:</strong> {{ formData.value.budget
+                    }}</p>
+                <p><strong>Function Qualifications:</strong> {{ formData.value.function_qualifications }}</p>
+                <p><strong>อุปกรณ์เพิ่มเติม:</strong> {{ formData.value.additional_equipment }}</p>
+                <p><strong>วัน เวลา สถานที่นัดหมาย:</strong> {{ formData.value.meeting_details }}</p>
+                <p><strong>สถานะ:</strong> <span
+                        class="bg-green-50 rounded-md text-sm px-2 mb-2 mx-2 py-1 text-green-400 font-semibold">{{formData.value.status}}</span>
+                </p>
+            </div>
+             <!-- ข้อมูลโรงพยาบาล -->
+             <div class="bg-card p-6 rounded-lg shadow space-y-2">
+                <h3 class="text-xl font-bold text-gray-500">ข้อมูลการใช้เครื่องปัจจุบันของโรงพยาบาล</h3>
+                <p><strong>ชื่อโรงพยาบาล:</strong> {{ formData.value.client_name }}</p>
+                <p><strong>ประเภทโรงพยาบาล:</strong> {{ formData.value.customer_type }}</p>
+                <p><strong>จังหวัด:</strong> {{ formData.value.province }}</p>
+                <h3 class="text-xl font-bold text-gray-500">ข้อมูลการเครื่องคู่แข่งที่นำเสนอ</h3>
+                <p><strong>แผนก:</strong> {{ formData.value.department }}</p>
+                <p><strong>ชั้น:</strong> {{ formData.value.floor }}</p>
+                <p><strong>แพทย์ KOL:</strong> {{ formData.value.kol_doctor }}</p>
+            </div>
+
+            <!-- ข้อมูลโรงพยาบาล -->
+            <div class="bg-card p-6 rounded-lg shadow space-y-2">
+                <h3 class="text-xl font-bold text-gray-500">ข้อมูลโรงพยาบาล</h3>
+                <p><strong>ชื่อโรงพยาบาล:</strong> {{ formData.value.client_name }}</p>
+                <p><strong>ประเภทโรงพยาบาล:</strong> {{ formData.value.customer_type }}</p>
+                <p><strong>จังหวัด:</strong> {{ formData.value.province }}</p>
+                <p><strong>แผนก:</strong> {{ formData.value.department }}</p>
+                <p><strong>ชั้น:</strong> {{ formData.value.floor }}</p>
+                <p><strong>แพทย์ KOL:</strong> {{ formData.value.kol_doctor }}</p>
+            </div>
+        </div>
+
+        <!-- ตารางแสดงรายการเครื่องที่ต้องการ -->
+        <div class="mt-6">
+            <h3 class="text-xl font-bold text-gray-500">รายการเครื่องที่ต้องการ</h3>
+            <table class="w-full border mt-2 bg-white shadow-sm">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border p-2 w-2/6">รุ่นเครื่อง</th>
+                        <th class="border p-2 w-1/6">จำนวน</th>
+                        <th class="border p-2 w-3/6">สินค้า</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let machine of itemData.machine_models">
+                        <td class="border p-2">{{ machine.machine_model.name ?? '-' }}</td>
+                        <td class="border p-2 text-center">{{ machine.qty }}</td>
+                        <td class="border p-2">
+                            <ul>
+                                <li *ngFor="let product of machine.products">{{ product.product.name ?? '-' }} (SN: {{
+                                    product.product.sn ?? '-' }})</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ตารางแสดงรายการหัวตรวจที่ต้องการ -->
+        <div class="mt-6">
+            <h3 class="text-xl font-bold text-gray-500">รายการหัวตรวจที่ต้องการ</h3>
+            <table class="w-full border mt-2 bg-white shadow-sm">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border p-2 w-2/6">รุ่นหัวตรวจ</th>
+                        <th class="border p-2 w-1/6">จำนวน</th>
+                        <th class="border p-2 w-3/6">สินค้า</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let transducer of itemData.transducers">
+                        <td class="border p-2">{{ transducer.machine_model.name ?? '' }}</td>
+                        <td class="border p-2 text-center">{{ transducer.qty }}</td>
+                        <td class="border p-2">
+                            <ul>
+                                <li *ngFor="let product of transducer.products">{{ product.product.name ?? '-' }} (SN: {{
+                                    product.product.sn ?? '-' }})</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

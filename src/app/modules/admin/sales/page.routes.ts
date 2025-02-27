@@ -4,6 +4,7 @@ import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { PageService } from './page.service';
 import { inject } from '@angular/core';
+import { ViewOrderComponent } from './view/view.component';
 
 export default [
     // {
@@ -39,6 +40,24 @@ export default [
                     products    : () => inject(PageService).getProductEno(),
                     user: () => inject(PageService).getUser(),
                     client: () => inject(PageService).getClient(),
+                    machine_model: () => inject(PageService).getMachineModelAll(), 
+                    // products  : () => inject(InventoryService).getProducts(),
+                    // tags      : () => inject(InventoryService).getTags(),
+                    // vendors   : () => inject(InventoryService).getVendors(),
+                },
+                data: {
+                    page_type: 'NEW',
+                    type: 'Echocardiogram'
+                }   
+            },
+            {
+                path     : 'view/echocardiogram',
+                component: FormComponent,
+                resolve  : {
+                    products    : () => inject(PageService).getProductEno(),
+                    user: () => inject(PageService).getUser(),
+                    client: () => inject(PageService).getClient(),
+                    machine_model: () => inject(PageService).getMachineModelAll(), 
                     // products  : () => inject(InventoryService).getProducts(),
                     // tags      : () => inject(InventoryService).getTags(),
                     // vendors   : () => inject(InventoryService).getVendors(),
@@ -55,6 +74,7 @@ export default [
                     products    : () => inject(PageService).getProductEno(),
                     user: () => inject(PageService).getUser(),
                     client: () => inject(PageService).getClient(),
+                    machine_model: () => inject(PageService).getMachineModelAll(), 
                     // products  : () => inject(InventoryService).getProducts(),
                     // tags      : () => inject(InventoryService).getTags(),
                     // vendors   : () => inject(InventoryService).getVendors(),
@@ -71,6 +91,7 @@ export default [
                     products    : () => inject(PageService).getProductEno(),
                     user: () => inject(PageService).getUser(),
                     client: () => inject(PageService).getClient(),
+                    machine_model: () => inject(PageService).getMachineModelAll(), 
                     // products  : () => inject(InventoryService).getProducts(),
                     // tags      : () => inject(InventoryService).getTags(),
                     // vendors   : () => inject(InventoryService).getVendors(),
@@ -87,6 +108,7 @@ export default [
                     products    : () => inject(PageService).getProductEno(),
                     user: () => inject(PageService).getUser(),
                     client: () => inject(PageService).getClient(),
+                    machine_model: () => inject(PageService).getMachineModelAll(), 
                     // products  : () => inject(InventoryService).getProducts(),
                     // tags      : () => inject(InventoryService).getTags(),
                     // vendors   : () => inject(InventoryService).getVendors(),
@@ -103,6 +125,25 @@ export default [
                     products    : () => inject(PageService).getProductEno(),
                     user: () => inject(PageService).getUser(),
                     client: () => inject(PageService).getClient(),
+                    machine_model: () => inject(PageService).getMachineModelAll(),
+                    // brands    : () => inject(InventoryService).getBrands(),
+                    // categories: () => inject(InventoryService).getCategories(),
+                    // products  : () => inject(InventoryService).getProducts(),
+                    // tags      : () => inject(InventoryService).getTags(),
+                    // vendors   : () => inject(InventoryService).getVendors(),
+                },
+                data : {
+                    page_type: 'EDIT'
+                }
+            },
+            {
+                path     : 'view/:id',
+                component: ViewOrderComponent,
+                resolve  : {
+                    products    : () => inject(PageService).getProductEno(),
+                    user: () => inject(PageService).getUser(),
+                    client: () => inject(PageService).getClient(),
+                    machine_model: () => inject(PageService).getMachineModelAll(), 
                     // brands    : () => inject(InventoryService).getBrands(),
                     // categories: () => inject(InventoryService).getCategories(),
                     // products  : () => inject(InventoryService).getProducts(),
