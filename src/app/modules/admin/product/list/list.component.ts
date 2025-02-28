@@ -67,6 +67,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     itemSupplier: any
     item1Data: any
     itemBrand: any;
+    itemMC: any;
     companie: any;
     // public dataRow: any[];
     dataRow: any[] = [];
@@ -83,6 +84,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             category_product_id: '',
             supplier_id: '',
             brand_id: '',
+            machine_model_id: '',
             type: '',
             status: '',
             companie_id: '',
@@ -109,6 +111,15 @@ export class ListComponent implements OnInit, AfterViewInit {
 
     }
 
+    getMachineModel(): void {
+        this._service.getMachineModel().subscribe((resp) => {
+            this.itemMC = resp.data;
+        });
+
+        
+
+    }
+
     getCompanie(): void {
         this._service.getCompanie().subscribe((resp) => {
             this.companie = resp.data;
@@ -125,8 +136,9 @@ export class ListComponent implements OnInit, AfterViewInit {
         this.loadTable();
         this.getCategories();
         this.getBrand();
-        this.getSuppliers();
+        // this.getSuppliers();
         this.getCompanie();
+        this.getMachineModel();
     }
 
     ngAfterViewInit(): void {
@@ -139,6 +151,19 @@ export class ListComponent implements OnInit, AfterViewInit {
 
     search() {
         this.rerender()
+    }
+    reset() {
+        this.form.reset()
+        this.form.patchValue({
+            category_product_id: '',
+            supplier_id: '',
+            brand_id: '',
+            machine_model_id: '',
+            type: '',
+            status: '',
+            companie_id: '',
+            area_id: '',
+        })
     }
 
     rerender(): void {
@@ -200,6 +225,7 @@ export class ListComponent implements OnInit, AfterViewInit {
                 dataTablesParameters.status = this.form.value.status;
                 dataTablesParameters.category_product_id = this.form.value.category_product_id;
                 dataTablesParameters.brand_id = this.form.value.brand_id;
+                dataTablesParameters.machine_model_id = this.form.value.machine_model_id;
              
                 that._service
                     .getPage(dataTablesParameters)

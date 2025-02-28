@@ -139,6 +139,7 @@ export class Service {
                 })
             );
     }
+  
     getMachineModel(): Observable<any> {
         return this._httpClient
             .get<any>(environment.baseURL + '/api/get_machine_model_all')

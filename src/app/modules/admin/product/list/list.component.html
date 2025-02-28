@@ -18,6 +18,9 @@
                         &nbsp;
                         ค้นหา
                     </button>
+                    <button class="px-6 ml-3" mat-flat-button [color]="'accent'" (click)="reset()">
+                        ล้าง
+                    </button>
                     <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()">
                         <mat-icon>person_add</mat-icon>
                         &nbsp;
@@ -48,6 +51,16 @@
                         <mat-label>Brand</mat-label>
                         <mat-select [formControlName]="'brand_id'">
                             <mat-option *ngFor="let item of itemBrand" [value]="item.id">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="md:w-1/5 px-3 mb-6 md:mb-0">
+                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                        <mat-label>Machine Model</mat-label>
+                        <mat-select [formControlName]="'machine_model_id'">
+                            <mat-option *ngFor="let item of itemMC" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
                         </mat-select>
