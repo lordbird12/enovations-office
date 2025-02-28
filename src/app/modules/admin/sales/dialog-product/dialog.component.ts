@@ -79,10 +79,11 @@ export class DialogAddProductComponent implements OnInit {
       this.saleData = resp.data
       this.filterSale.next(this.saleData.slice());
     })
-    this._service.getMachineModelAll().subscribe((resp: any) => {
-      this.productData = resp.data
-      // this.filterProduct.next(this.productData.slice());
-    })
+    // this._service.getMachineModelAll().subscribe((resp: any) => {
+    //   this.productData = resp.data
+      
+    //   // this.filterProduct.next(this.productData.slice());
+    // })
 
     this.form = this.fb.group({
       order_id: [data.order.id],
@@ -97,7 +98,6 @@ export class DialogAddProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.productFilter.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
@@ -165,7 +165,7 @@ export class DialogAddProductComponent implements OnInit {
   createUserGroup(user: any): FormGroup {
     return this.fb.group({
       user_id: [user?.user_id],
-      name: [],
+      name: user?.user?.name,
       start_date: [user?.start_date],
       end_date: [user?.end_date]
     });
@@ -210,8 +210,13 @@ export class DialogAddProductComponent implements OnInit {
   }
 
   createProductGroup(product: any): FormGroup {
+    console.log(this.data, 'data');
+    
+    this.itemData = this.data.product.find((resp: any) => resp.id === product.machine_model_id)
+    console.log(this.itemData, 'itemData');
+    
     return this.fb.group({
-      product_id: [product.product_id]
+      product_id: +product.product_id
     });
   }
 
@@ -244,7 +249,7 @@ export class DialogAddProductComponent implements OnInit {
       productsArray.push(this.createProductGroup(formValue));
     } else {
       const machineModel = this.transducersArray.at(machineModelIndex);
-      this.itemData1 = this.productData.find((resp: any) => resp.id === machineModel.value.machine_model_id)
+      this.itemData1 = this.data.product.find((resp: any) => resp.id === machineModel.value.machine_model_id)
       this.filterProduct1.next(this.itemData?.products.slice());
       const productsArray = machineModel.get('products') as FormArray;
       let formValue = this.fb.group({

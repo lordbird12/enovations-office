@@ -144,6 +144,7 @@ export default [
                     user: () => inject(PageService).getUser(),
                     client: () => inject(PageService).getClient(),
                     machine_model: () => inject(PageService).getMachineModelAll(), 
+                    winLose: () => inject(PageService).getWinLose(), 
                     // brands    : () => inject(InventoryService).getBrands(),
                     // categories: () => inject(InventoryService).getCategories(),
                     // products  : () => inject(InventoryService).getProducts(),

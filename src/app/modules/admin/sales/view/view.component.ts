@@ -33,6 +33,7 @@ import { CarouselComponent } from '../image-slide/carousel.component';
 import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DialogAddProductComponent } from '../dialog-product/dialog.component';
+import { DialogReturnProductComponent } from '../dialog-product-return/dialog.component';
 @Component({
     selector: 'view-product-sales',
     templateUrl: './view.component.html',
@@ -68,7 +69,7 @@ export class ViewOrderComponent implements OnInit {
     fixedSubscriptInputWithHint: FormControl = new FormControl('', [Validators.required]);
     dynamicSubscriptInputWithHint: FormControl = new FormControl('', [Validators.required]);
     isForm: boolean = true
-
+    winLose: any
     purpose: string[] = [
         'Demo', 'Install', 'Post', 'Sale', 'Present', 'Booth', 'Workshop'
     ];
@@ -275,11 +276,11 @@ export class ViewOrderComponent implements OnInit {
 
         this.type = this.activatedRoute.snapshot.data.type
         this.pageType = this.activatedRoute.snapshot.data.page_type
-
-        this.productData = this.activatedRoute.snapshot.data.products.data
-        this.memberData = this.productData
-        this.tdData = this.productData
-        this.filterProduct.next(this.productData.slice());
+      
+        // this.productData = this.activatedRoute.snapshot.data.products.data
+        // this.memberData = this.productData
+        // this.tdData = this.productData
+        // this.filterProduct.next(this.productData.slice());
 
         this.accessorieData = this.activatedRoute.snapshot.data.products.data
         this.filterAccessorie.next(this.accessorieData.slice());
@@ -355,6 +356,12 @@ export class ViewOrderComponent implements OnInit {
                     this._changeDetectorRef.markForCheck();
 
                 });
+
+                const win_lose = this.activatedRoute.snapshot.data.winLose.data
+                this.winLose = win_lose.filter((resp: any)=> resp.order_id === +this.Id)
+                console.log(this.Id);
+                console.log(this.winLose);
+                
             });
         } else {
             const currentDateTime = DateTime.now();
@@ -1125,13 +1132,17 @@ export class ViewOrderComponent implements OnInit {
             });
     }
     openDialogAddProduct(): void {
-        this.dialog
+        this._service.getMachineModelAll().subscribe((resp: any) => {
+            const machine_model = resp.data
+           
+            this.dialog
             .open(DialogAddProductComponent, {
                 maxHeight: '100vh',
                 width: '80vh',
                 maxWidth: '100vh',
                 data: {
-                    order: this.itemData
+                    order: this.itemData,
+                    product:  machine_model
                 },
             })
             .afterClosed()
@@ -1163,6 +1174,52 @@ export class ViewOrderComponent implements OnInit {
                 }
                
             });
+            // this.filterProduct.next(this.productData.slice());
+          })
+      
+    }
+
+    openDialogReturnProduct(formValue: any): void {
+        this.dialog
+        .open(DialogReturnProductComponent, {
+            maxHeight: '100vh',
+            width: '80vh',
+            maxWidth: '100vh',
+            data: {
+                order: this.itemData,
+                product: formValue,
+            },
+        })
+        .afterClosed()
+        .subscribe((item) => {
+            if (item) {
+                this._service.getById(this.Id).subscribe((resp: any) => {
+                    this.itemData = resp.data;
+                    // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
+                    // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
+                    this.saleFilter.setValue(this.itemData.user?.name)
+                    this.clientFilter.setValue(this.itemData.client?.name)
+                    this.productFilter.setValue(this.itemData.product?.name)
+                    this.accessorieFilter.setValue(this.itemData.product?.name)
+                    this.workstationFilter.setValue(this.itemData.product?.name)
+                    this.formData.patchValue({
+                        ...this.itemData,
+                        // memberIds: memberIds,
+                        // tds: tDs
+                    });
+
+                    // console.log(this.formData.value);
+
+                    this._changeDetectorRef.markForCheck();
+
+                });
+            } else {
+                console.log('no data');
+                
+            }
+           
+        });
+      
     }
 
     onEdit(element: any) {

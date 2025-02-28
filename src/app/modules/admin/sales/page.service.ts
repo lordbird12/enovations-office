@@ -64,6 +64,16 @@ export class PageService {
                 })
             );
     }
+
+    updateReturnProduct(data: FormData): Observable<any> {
+        return this._httpClient
+            .post<any>(environment.baseURL + '/api/return', data)
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
     payment_period(data: FormData): Observable<any> {
         return this._httpClient
             .post<any>(environment.baseURL + '/api/payment_period', data)
@@ -131,6 +141,15 @@ export class PageService {
     getPermission(): Observable<any> {
         return this._httpClient
             .get<any>(environment.baseURL + '/api/get_permission')
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
+    getWinLose(): Observable<any> {
+        return this._httpClient
+            .get<any>(environment.baseURL + '/api/get_win_lost')
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -323,6 +342,20 @@ export class PageService {
                 })
             );
     }
+
+    uploadImg(img: FormData): Observable<any> {
+            return this._httpClient
+                .post(
+                    environment.baseURL + '/api/upload_images',
+                    img,
+                    this.httpOptionsFormdata
+                )
+                .pipe(
+                    switchMap((response: any) => {
+                        return of(response.data);
+                    })
+                );
+        }
 
 
 }

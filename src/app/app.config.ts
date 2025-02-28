@@ -11,11 +11,13 @@ import { provideIcons } from 'app/core/icons/icons.provider';
 import { provideTransloco } from 'app/core/transloco/transloco.provider';
 import { mockApiServices } from 'app/mock-api';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideAnimations(),
         provideHttpClient(),
+        provideToastr(),
         provideEnvironmentNgxMask(),
         provideRouter(appRoutes,
             withPreloading(PreloadAllModules),
