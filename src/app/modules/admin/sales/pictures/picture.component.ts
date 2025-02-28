@@ -53,6 +53,7 @@ import { debounceTime, map, Observable, of, Subject, switchMap, takeUntil } from
 export class PicturesComponent implements OnInit, OnDestroy {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     imgSelected: any[] = [];
+    fallbackImages: string[] = []; // อาร์เรย์เก็บภาพสำรองสำหรับแต่ละภาพ
     /**
      * Constructor
      */
@@ -74,8 +75,9 @@ export class PicturesComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.imgSelected = this._data.imgSelected;
         console.log(this.imgSelected);
-
-
+        
+        // กำหนด fallbackImages ให้มีค่าตรงกับ imgSelected (เริ่มต้นใช้ path เดิม)
+        this.fallbackImages = [...this.imgSelected];
 
     }
 
@@ -88,13 +90,9 @@ export class PicturesComponent implements OnInit, OnDestroy {
         this._unsubscribeAll.complete();
     }
 
-    defaultImage = "assets/images/no-image.jpg"; // รูปเริ่มต้นที่จะแสดงแทนรูปที่โหลดไม่สำเร็จ
-
-    onImageError(event: Event) {
-        const target = event.target as HTMLImageElement;
-        target.src = this.defaultImage; // เปลี่ยนเป็นรูป default ทันทีที่เกิด error (เช่น 404)
+    onImageError(index: number) {
+        this.fallbackImages[index] = "assets/images/no-image.jpg"; // เปลี่ยนเป็นภาพ default เฉพาะ index ที่ผิดพลาด
     }
-
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------

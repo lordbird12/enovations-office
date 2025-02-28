@@ -68,6 +68,7 @@ import { PicturesComponent } from '../pictures/picture.component';
     ],
 })
 export class ViewOrderComponent implements OnInit {
+    user: any;
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     fixedSubscriptInput: FormControl = new FormControl('', [Validators.required]);
     dynamicSubscriptInput: FormControl = new FormControl('', [Validators.required]);
@@ -262,8 +263,6 @@ export class ViewOrderComponent implements OnInit {
     clientFilter = new FormControl('');
     filterClient: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
     clientData: any[] = [];
-
-    user: any
     pageType: any
     /**
      * Constructor
@@ -278,7 +277,7 @@ export class ViewOrderComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
 
     ) {
-
+        this.user = JSON.parse(localStorage.getItem('user'))
         this.type = this.activatedRoute.snapshot.data.type
         this.pageType = this.activatedRoute.snapshot.data.page_type
 

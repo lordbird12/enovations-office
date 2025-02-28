@@ -1,9 +1,15 @@
-<div class="flex flex-wrap gap-2" [ngClass]="{'grid grid-cols-1': imgSelected?.length === 1, 'grid grid-cols-2': imgSelected?.length === 2,'grid grid-cols-3': imgSelected?.length >= 3
+<div class="grid grid-cols-1 gap-2" [ngClass]="{
+    'grid grid-cols-1': imgSelected?.length === 1,
+    'grid grid-cols-2': imgSelected?.length === 2,
+    'grid grid-cols-3': imgSelected?.length >= 3
   }">
-    <img *ngFor="let img of imgSelected" [src]="img" class="w-full object-cover rounded-lg"
-      [ngClass]="{
-        'h-auto': imgSelected.length === 1,
-        'h-60': imgSelected.length > 1
-      }" />
+    <img *ngFor="let img of fallbackImages; let i = index" 
+         [src]="img" 
+         class="w-full object-cover rounded-lg"
+         (error)="onImageError(i)"
+         [ngClass]="{
+           'h-auto': imgSelected.length === 1,
+           'h-60': imgSelected.length > 1
+         }" />
   </div>
   
