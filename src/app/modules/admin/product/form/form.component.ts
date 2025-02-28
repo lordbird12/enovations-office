@@ -136,6 +136,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
             code: [''],
             detail: [''],
             brand_id: [''],
+            serial_no: [''],
             machine_model_id: [''],
             images: [''],
             area_id: [''],
