@@ -98,7 +98,7 @@ export class DialogReturnProductComponent implements OnInit {
       product_id: this.data.product.product_id,
       machine_model_id: this.data.product.machine_model_id,
       remark: '',
-      images: ['']
+      images: this.fb.array([])
     })
     this.productsArray.push(formProduct)
     
@@ -116,38 +116,74 @@ export class DialogReturnProductComponent implements OnInit {
   filesPC: { [key: number]: File } = {}; // แยกไฟล์แต่ละแถว
 
   async onSelectsPC(event: { addedFiles: File[] }, i: number): Promise<void> {
-      if (!event.addedFiles.length) return;
+    if (!event.addedFiles.length) return;
 
-      const file = event.addedFiles[0];
+    const file = event.addedFiles[0];
 
-      // ตรวจสอบว่าไฟล์เป็นรูปภาพหรือไม่
-      if (!file.type.startsWith('image/')) {
-          alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
-          return;
-      }
+    // ตรวจสอบว่าไฟล์เป็นรูปภาพหรือไม่
+    if (!file.type.startsWith('image/')) {
+        alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+        return;
+    }
+
+    this.filesPC[i] = file; // ผูกไฟล์เฉพาะ index นี้
+    const formData1 = new FormData();
+    formData1.append('image', file);
+    formData1.append('path', 'asset');
+
+    try {
+        // อัปโหลดรูปภาพและรับ URL
+        const im = await lastValueFrom(this._service.uploadImg(formData1));
+
+        if (!im) {
+            console.error("Invalid image response:", im);
+            return;
+        }
+
+        console.log("Uploaded Image URL:", im); // สมมติว่า API ส่ง path กลับมาเป็น im.path
+
+        // เข้าถึง FormArray 'products'
+        const productCollections = this.form.get('products') as FormArray;
+        if (!productCollections) {
+            console.error("Products FormArray not found");
+            return;
+        }
+
+        const productGroup = productCollections.at(i) as FormGroup; // ดึง FormGroup ตาม index
+        if (!productGroup) {
+            console.error("Product FormGroup not found at index", i);
+            return;
+        }
+
+        // เข้าถึง FormArray 'images' ใน FormGroup
+        let imagesArray = productGroup.get('images') as FormArray;
+        if (!imagesArray) {
+            console.error("Images FormArray not found in FormGroup, creating one.");
+            imagesArray = this.fb.array([]);
+            productGroup.setControl('images', imagesArray); // สร้างใหม่ถ้าไม่มี
+        }
+
+        imagesArray.push(this.fb.control(im)); // ✅ ใช้ push() กับ FormArray โดยตรง
+
+        // แสดงค่า Form เพื่อ debug
+        console.log("Updated Form Value:", this.form.value);
+
+        // แปลงไฟล์เป็น URL เพื่อแสดงใน img
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+            // this.imageUrls[i] = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        this._changeDetectorRef.markForCheck();
+
+    } catch (error) {
+        console.error("Upload failed", error);
+    }
+}
 
 
-      this.filesPC[i] = file; // ผูกไฟล์เฉพาะ index นี้
-      const formData1 = new FormData();
-      formData1.append('image', file);
-      formData1.append('path', 'asset');
-      // this.imageErrors[i] = false; // รีเซ็ตค่า error เป็น false
-      const im = await lastValueFrom(this._service.uploadImg(formData1));
-    
-      console.log(im);
-      // อัปเดตค่าเข้า FormArray ตาม index
-      const productCollections = this.form.get('products') as FormArray;
-      productCollections.at(i).patchValue({
-          image: [im.data[0].path],
-      });
-      // แปลงไฟล์เป็น URL เพื่อแสดงใน img
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-          // this.imageUrls[i] = e.target.result;
-      };
-      reader.readAsDataURL(file);
-      this._changeDetectorRef.markForCheck();
-  }
+
 
   saveData(): void {
     const dialogRef = this._fuseConfirmationService.open({

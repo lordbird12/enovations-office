@@ -34,6 +34,9 @@ import { ProductDialogComponent } from '../product-dialog/product-dialog.compone
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DialogAddProductComponent } from '../dialog-product/dialog.component';
 import { DialogReturnProductComponent } from '../dialog-product-return/dialog.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { PicturesComponent } from '../pictures/picture.component';
 @Component({
     selector: 'view-product-sales',
     templateUrl: './view.component.html',
@@ -58,7 +61,9 @@ import { DialogReturnProductComponent } from '../dialog-product-return/dialog.co
         MatChipsModule,
         MatDatepickerModule,
         MatCheckboxModule,
-        MatChipsModule
+        MatChipsModule,
+        MatMenuModule,
+        MatDividerModule
 
     ],
 })
@@ -276,7 +281,7 @@ export class ViewOrderComponent implements OnInit {
 
         this.type = this.activatedRoute.snapshot.data.type
         this.pageType = this.activatedRoute.snapshot.data.page_type
-      
+
         // this.productData = this.activatedRoute.snapshot.data.products.data
         // this.memberData = this.productData
         // this.tdData = this.productData
@@ -295,7 +300,7 @@ export class ViewOrderComponent implements OnInit {
         this.filterClient.next(this.clientData.slice());
 
         this.formData = this._fb.group({
-            id:null,
+            id: null,
             calendar_date: null,
             budget: 0,
             request_purpose: null,
@@ -358,10 +363,10 @@ export class ViewOrderComponent implements OnInit {
                 });
 
                 const win_lose = this.activatedRoute.snapshot.data.winLose.data
-                this.winLose = win_lose.filter((resp: any)=> resp.order_id === +this.Id)
+                this.winLose = win_lose.filter((resp: any) => resp.order_id === +this.Id)
                 console.log(this.Id);
                 console.log(this.winLose);
-                
+
             });
         } else {
             const currentDateTime = DateTime.now();
@@ -413,62 +418,62 @@ export class ViewOrderComponent implements OnInit {
             });
     }
 
-      // Getter for FormArray
-  get machineModels(): FormArray {
-    return this.formData.get('machine_models') as FormArray;
-  }
+    // Getter for FormArray
+    get machineModels(): FormArray {
+        return this.formData.get('machine_models') as FormArray;
+    }
 
-  get transducers(): FormArray {
-    return this.formData.get('transducers') as FormArray;
-  }
+    get transducers(): FormArray {
+        return this.formData.get('transducers') as FormArray;
+    }
 
-  // Set machine models
-  setMachineModels(models: any[]) {
-    this.machineModels.clear();
-    models.forEach(model => {
-      this.machineModels.push(this._fb.group({
-        machine_model_id: [model.machine_model_id, Validators.required],
-        qty: [model.qty, [Validators.required, Validators.min(1)]]
-      }));
-    });
-  }
+    // Set machine models
+    setMachineModels(models: any[]) {
+        this.machineModels.clear();
+        models.forEach(model => {
+            this.machineModels.push(this._fb.group({
+                machine_model_id: [model.machine_model_id, Validators.required],
+                qty: [model.qty, [Validators.required, Validators.min(1)]]
+            }));
+        });
+    }
 
-  // Set transducers
-  setTransducers(transducers: any[]) {
-    this.transducers.clear();
-    transducers.forEach(transducer => {
-      this.transducers.push(this._fb.group({
-        machine_model_id: [transducer.machine_model_id, Validators.required],
-        qty: [transducer.qty, [Validators.required, Validators.min(1)]]
-      }));
-    });
-  }
+    // Set transducers
+    setTransducers(transducers: any[]) {
+        this.transducers.clear();
+        transducers.forEach(transducer => {
+            this.transducers.push(this._fb.group({
+                machine_model_id: [transducer.machine_model_id, Validators.required],
+                qty: [transducer.qty, [Validators.required, Validators.min(1)]]
+            }));
+        });
+    }
 
-  // Add new machine model
-  addMachineModel() {
-    this.machineModels.push(this._fb.group({
-      machine_model_id: ['', Validators.required],
-      qty: [1, [Validators.required, Validators.min(1)]]
-    }));
-  }
+    // Add new machine model
+    addMachineModel() {
+        this.machineModels.push(this._fb.group({
+            machine_model_id: ['', Validators.required],
+            qty: [1, [Validators.required, Validators.min(1)]]
+        }));
+    }
 
-  // Remove machine model
-  removeMachineModel(index: number) {
-    this.machineModels.removeAt(index);
-  }
+    // Remove machine model
+    removeMachineModel(index: number) {
+        this.machineModels.removeAt(index);
+    }
 
-  // Add new transducer
-  addTransducer() {
-    this.transducers.push(this._fb.group({
-      machine_model_id: ['', Validators.required],
-      qty: [1, [Validators.required, Validators.min(1)]]
-    }));
-  }
+    // Add new transducer
+    addTransducer() {
+        this.transducers.push(this._fb.group({
+            machine_model_id: ['', Validators.required],
+            qty: [1, [Validators.required, Validators.min(1)]]
+        }));
+    }
 
-  // Remove transducer
-  removeTransducer(index: number) {
-    this.transducers.removeAt(index);
-  }
+    // Remove transducer
+    removeTransducer(index: number) {
+        this.transducers.removeAt(index);
+    }
 
 
         /**
@@ -1134,15 +1139,60 @@ export class ViewOrderComponent implements OnInit {
     openDialogAddProduct(): void {
         this._service.getMachineModelAll().subscribe((resp: any) => {
             const machine_model = resp.data
-           
+
             this.dialog
-            .open(DialogAddProductComponent, {
+                .open(DialogAddProductComponent, {
+                    maxHeight: '100vh',
+                    width: '80vh',
+                    maxWidth: '100vh',
+                    data: {
+                        order: this.itemData,
+                        product: machine_model
+                    },
+                })
+                .afterClosed()
+                .subscribe((item) => {
+                    if (item) {
+                        this._service.getById(this.Id).subscribe((resp: any) => {
+                            this.itemData = resp.data;
+                            // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
+                            // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
+                            this.saleFilter.setValue(this.itemData.user?.name)
+                            this.clientFilter.setValue(this.itemData.client?.name)
+                            this.productFilter.setValue(this.itemData.product?.name)
+                            this.accessorieFilter.setValue(this.itemData.product?.name)
+                            this.workstationFilter.setValue(this.itemData.product?.name)
+                            this.formData.patchValue({
+                                ...this.itemData,
+                                // memberIds: memberIds,
+                                // tds: tDs
+                            });
+
+                            // console.log(this.formData.value);
+
+                            this._changeDetectorRef.markForCheck();
+
+                        });
+                    } else {
+                        console.log('no data');
+
+                    }
+
+                });
+            // this.filterProduct.next(this.productData.slice());
+        })
+
+    }
+
+    openDialogReturnProduct(formValue: any): void {
+        this.dialog
+            .open(DialogReturnProductComponent, {
                 maxHeight: '100vh',
                 width: '80vh',
                 maxWidth: '100vh',
                 data: {
                     order: this.itemData,
-                    product:  machine_model
+                    product: formValue,
                 },
             })
             .afterClosed()
@@ -1162,69 +1212,43 @@ export class ViewOrderComponent implements OnInit {
                             // memberIds: memberIds,
                             // tds: tDs
                         });
-    
+
                         // console.log(this.formData.value);
-    
+
                         this._changeDetectorRef.markForCheck();
-    
+
                     });
                 } else {
                     console.log('no data');
-                    
+
                 }
-               
+
             });
-            // this.filterProduct.next(this.productData.slice());
-          })
-      
-    }
 
-    openDialogReturnProduct(formValue: any): void {
-        this.dialog
-        .open(DialogReturnProductComponent, {
-            maxHeight: '100vh',
-            width: '80vh',
-            maxWidth: '100vh',
-            data: {
-                order: this.itemData,
-                product: formValue,
-            },
-        })
-        .afterClosed()
-        .subscribe((item) => {
-            if (item) {
-                this._service.getById(this.Id).subscribe((resp: any) => {
-                    this.itemData = resp.data;
-                    // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
-                    // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
-                    this.saleFilter.setValue(this.itemData.user?.name)
-                    this.clientFilter.setValue(this.itemData.client?.name)
-                    this.productFilter.setValue(this.itemData.product?.name)
-                    this.accessorieFilter.setValue(this.itemData.product?.name)
-                    this.workstationFilter.setValue(this.itemData.product?.name)
-                    this.formData.patchValue({
-                        ...this.itemData,
-                        // memberIds: memberIds,
-                        // tds: tDs
-                    });
-
-                    // console.log(this.formData.value);
-
-                    this._changeDetectorRef.markForCheck();
-
-                });
-            } else {
-                console.log('no data');
-                
-            }
-           
-        });
-      
     }
 
     onEdit(element: any) {
         this._router.navigate(['admin/sales/edit/' + element]);
     }
+
+
+    showPicture(imgObject: any): void {
+        console.log(imgObject);
+        const imagePaths = imgObject?.return_products?.images.map(item => item.image);
+        this.dialog
+            .open(PicturesComponent, {
+                autoFocus: false,
+                data: {
+                    imgSelected: imagePaths,
+                },
+            })
+            .afterClosed()
+            .subscribe(() => {
+                // Go up twice because card routes are setup like this; "card/CARD_ID"
+                // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
+            });
+    }
+
 }
 
 
