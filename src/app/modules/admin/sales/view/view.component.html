@@ -6,10 +6,10 @@
             {{ type ? 'รายละเอียดใบจอง ' + type : 'รายละเอียดการจอง' }}
         </h2>
         <div class="flex flex-row gap-2">
-            <button class="px-6 ml-3 bg-green-700" mat-flat-button
-                color="primary" (click)="openDialogAddProduct()">จัดการเครื่อง</button>
-            <button  class="px-6 ml-3 bg-green-700" mat-flat-button
-                color="primary" (click)="openDialogApprove()">อนุมัติ</button>
+            <button class="px-6 bg-yellow-500" mat-flat-button
+                color="primary" (click)="openDialogAddProduct()" *ngIf="formData.value.status !== 'Ordered'">จัดการเครื่อง</button>
+            <button  class="px-6 bg-green-700" mat-flat-button
+                color="primary" (click)="openDialogApprove()" >Update Status</button>
             <button class="px-6" mat-flat-button color="primary" (click)="onEdit(formData.value.id)">แก้ไข</button>
             <button class="px-6" mat-flat-button color="accent" (click)="onBack()">ย้อนกลับ</button>
         </div>

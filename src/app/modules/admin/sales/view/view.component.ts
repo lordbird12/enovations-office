@@ -1127,16 +1127,41 @@ export class ViewOrderComponent implements OnInit {
     openDialogAddProduct(): void {
         this.dialog
             .open(DialogAddProductComponent, {
-                maxHeight: '90vh',
-                width: '700px',
+                maxHeight: '100vh',
+                width: '80vh',
+                maxWidth: '100vh',
                 data: {
                     order: this.itemData
                 },
             })
             .afterClosed()
-            .subscribe(() => {
-                // Go up twice because card routes are setup like this; "card/CARD_ID"
-                // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
+            .subscribe((item) => {
+                if (item) {
+                    this._service.getById(this.Id).subscribe((resp: any) => {
+                        this.itemData = resp.data;
+                        // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
+                        // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
+                        this.saleFilter.setValue(this.itemData.user?.name)
+                        this.clientFilter.setValue(this.itemData.client?.name)
+                        this.productFilter.setValue(this.itemData.product?.name)
+                        this.accessorieFilter.setValue(this.itemData.product?.name)
+                        this.workstationFilter.setValue(this.itemData.product?.name)
+                        this.formData.patchValue({
+                            ...this.itemData,
+                            // memberIds: memberIds,
+                            // tds: tDs
+                        });
+    
+                        // console.log(this.formData.value);
+    
+                        this._changeDetectorRef.markForCheck();
+    
+                    });
+                } else {
+                    console.log('no data');
+                    
+                }
+               
             });
     }
 
