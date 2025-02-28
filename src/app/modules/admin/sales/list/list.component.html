@@ -84,13 +84,17 @@
                             </div>
                             <div *ngIf="item.status === 'Confirm'"
                                 class="bg-green-200 p-1 rounded-md text-green-800 font-bold text-center">
-                                ยืนยัน
+                                อนุมัติ
                             </div>
                             <div *ngIf="item.status === 'Approve'"
                                 class="bg-green-200 p-1 rounded-md text-green-800 font-bold text-center">
-                                อนุมัติ
+                                รอรับของ
                             </div>
                             <div *ngIf="item.status === 'Finish'"
+                                class="bg-blue-200 p-1 rounded-md text-blue-800 font-bold text-center">
+                                รอคืน
+                            </div>
+                            <div *ngIf="item.status === 'Returned'"
                                 class="bg-blue-200 p-1 rounded-md text-blue-800 font-bold text-center">
                                 เสร็จสิ้น
                             </div>

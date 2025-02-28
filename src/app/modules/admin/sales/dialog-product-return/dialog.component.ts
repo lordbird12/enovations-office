@@ -126,10 +126,10 @@ export class DialogReturnProductComponent implements OnInit {
           return;
       }
 
-   
+
       this.filesPC[i] = file; // ผูกไฟล์เฉพาะ index นี้
       const formData1 = new FormData();
-      formData1.append('file', file);
+      formData1.append('image', file);
       formData1.append('path', 'asset');
       // this.imageErrors[i] = false; // รีเซ็ตค่า error เป็น false
       const im = await lastValueFrom(this._service.uploadImg(formData1));
@@ -138,7 +138,7 @@ export class DialogReturnProductComponent implements OnInit {
       // อัปเดตค่าเข้า FormArray ตาม index
       const productCollections = this.form.get('products') as FormArray;
       productCollections.at(i).patchValue({
-          image: im.data[0].path,
+          image: [im.data[0].path],
       });
       // แปลงไฟล์เป็น URL เพื่อแสดงใน img
       const reader = new FileReader();

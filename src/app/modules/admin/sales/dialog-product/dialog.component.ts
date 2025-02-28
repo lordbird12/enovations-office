@@ -79,11 +79,11 @@ export class DialogAddProductComponent implements OnInit {
       this.saleData = resp.data
       this.filterSale.next(this.saleData.slice());
     })
-    // this._service.getMachineModelAll().subscribe((resp: any) => {
-    //   this.productData = resp.data
+    this._service.getMachineModelAll().subscribe((resp: any) => {
+      this.productData = resp.data
       
-    //   // this.filterProduct.next(this.productData.slice());
-    // })
+      // this.filterProduct.next(this.productData.slice());
+    })
 
     this.form = this.fb.group({
       order_id: [data.order.id],
@@ -193,8 +193,7 @@ export class DialogAddProductComponent implements OnInit {
 
   createMachineModelGroup(model: any): FormGroup {
     return this.fb.group({
-      id: [model.id],
-      machine_model_id: model?.machine_model?.id,
+      id: model?.machine_model?.id,
       machine_name: model?.machine_model?.name,
       products: this.fb.array(model.products.map(prod => this.createProductGroup(prod)))
     });
@@ -202,19 +201,13 @@ export class DialogAddProductComponent implements OnInit {
 
   createTransducerGroup(transducer: any): FormGroup {
     return this.fb.group({
-      id: [transducer.id],
-      machine_model_id: transducer?.machine_model?.id,
+      id: [transducer?.machine_model?.id],
       machine_name: transducer?.machine_model?.name,
       products: this.fb.array(transducer.products.map(prod => this.createProductGroup(prod)))
     });
   }
 
   createProductGroup(product: any): FormGroup {
-    console.log(this.data, 'data');
-    
-    this.itemData = this.data.product.find((resp: any) => resp.id === product.machine_model_id)
-    console.log(this.itemData, 'itemData');
-    
     return this.fb.group({
       product_id: +product.product_id
     });
@@ -239,8 +232,8 @@ export class DialogAddProductComponent implements OnInit {
   addProduct(machineModelIndex: number, type: any): void {
     if (type === 'machine_model') {
       const machineModel = this.machineModelsArray.at(machineModelIndex);
-      this.itemData = this.productData.find((resp: any) => resp.id === machineModel.value.machine_model_id)
-      this.filterProduct.next(this.itemData.products.slice());
+      this.itemData = this.data.product.find((resp: any) => resp.id === machineModel.value.machine_model_id)
+      // this.filterProduct.next(this.itemData?.products.slice());
       const productsArray = machineModel.get('products') as FormArray;
       let formValue = this.fb.group({
         product_id: '',
@@ -250,7 +243,7 @@ export class DialogAddProductComponent implements OnInit {
     } else {
       const machineModel = this.transducersArray.at(machineModelIndex);
       this.itemData1 = this.data.product.find((resp: any) => resp.id === machineModel.value.machine_model_id)
-      this.filterProduct1.next(this.itemData?.products.slice());
+      // this.filterProduct1.next(this.itemData?.products.slice());
       const productsArray = machineModel.get('products') as FormArray;
       let formValue = this.fb.group({
         product_id: '',
@@ -295,6 +288,7 @@ export class DialogAddProductComponent implements OnInit {
 
 
   saveData(): void {
+    
     const dialogRef = this._fuseConfirmationService.open({
       "title": "บันทึกข้อมูล",
       "message": "คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?",

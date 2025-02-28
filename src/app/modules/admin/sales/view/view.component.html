@@ -121,7 +121,11 @@
                                 {{ product?.return ?? '-' }}
                             </td>
                             <td class="border p-2 text-center">
-                                <button mat-flat-button [color]="'primary'">คืนสินค้า</button>
+                                <button mat-flat-button [color]="'primary'" *ngIf="product?.return === 'N'"
+                                (click)="openDialogReturnProduct(product)"
+                                >
+                                    คืนสินค้า
+                                </button>
                             </td>
                         </tr>
                     </tbody>

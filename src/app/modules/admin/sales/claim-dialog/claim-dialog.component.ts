@@ -66,8 +66,16 @@ export class ClaimDialogComponent implements OnInit {
             value : 'Reject'
         },
         {
-            name : 'เสร็จสิ้น',
+            name : 'รอรับสินค้า',
+            value : 'Approve'
+        },
+        {
+            name : 'รอคืนสินค้า',
             value : 'Finish'
+        },
+        {
+            name : 'คืนสินค้าสำเร็จ',
+            value : 'Returned'
         },
     ]
     constructor(private dialogRef: MatDialogRef<ClaimDialogComponent>,
