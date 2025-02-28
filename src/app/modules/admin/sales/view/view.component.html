@@ -57,55 +57,57 @@
         </div>
 
         <!-- ตารางแสดงรายการเครื่องที่ต้องการ -->
+        <div class="mt-6 bg-card rounded-md p-6">
+            <h3 class="text-xl font-bold text-gray-500">รายการเครื่องที่ต้องการ</h3>
+            <ng-container *ngFor="let machine of itemData?.machine_models">
+                <p><strong>รุ่นเครื่อง:</strong> {{ machine?.machine_model?.name ?? '-' }}</p>
+                <p><strong>จำนวน:</strong> {{ machine?.qty ?? 0 }}</p>
+                <table class="w-full border mt-2 bg-white shadow-sm mb-4">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2 text-left w-2/6">เครื่อง</th>
+                            <th class="border p-2 w-1/6">Serial No.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let product of machine?.products">
+                            <td class="border p-2">
+                                {{ product?.product?.name ?? '-' }} 
+                            </td>
+                            <td class="border p-2 text-center">
+                                {{ product?.product?.sn ?? '-' }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+        </div>
         <div class="mt-6">
             <h3 class="text-xl font-bold text-gray-500">รายการเครื่องที่ต้องการ</h3>
-            <table class="w-full border mt-2 bg-white shadow-sm">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border p-2 text-left w-2/6">รุ่นเครื่อง</th>
-                        <th class="border p-2 w-1/6">จำนวน</th>
-                        <th class="border p-2 w-3/6 text-left">สินค้า</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let machine of itemData?.machine_models">
-                        <td class="border p-2">{{ machine?.machine_model?.name ?? '-' }}</td>
-                        <td class="border p-2 text-center">{{ machine?.qty }}</td>
-                        <td class="border p-2">
-                            <ul>
-                                <li *ngFor="let product of machine?.products">{{ product?.product?.name ?? '-' }} (SN: {{
-                                    product?.product?.sn ?? '-' }})</li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <ng-container *ngFor="let machine of itemData?.transducers">
+                <p><strong>รุ่นเครื่อง:</strong> {{ machine?.machine_model?.name ?? '-' }}</p>
+                <p><strong>จำนวน:</strong> {{ machine?.qty ?? 0 }}</p>
+                <table class="w-full border mt-2 bg-white shadow-sm mb-4">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2 text-left w-2/6">เครื่อง</th>
+                            <th class="border p-2 w-1/6">Serial No.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let product of machine?.products">
+                            <td class="border p-2">
+                                {{ product?.product?.name ?? '-' }} 
+                            </td>
+                            <td class="border p-2 text-center">
+                                {{ product?.product?.sn ?? '-' }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
         </div>
 
-        <!-- ตารางแสดงรายการหัวตรวจที่ต้องการ -->
-        <div class="mt-6">
-            <h3 class="text-xl font-bold text-gray-500">รายการหัวตรวจที่ต้องการ</h3>
-            <table class="w-full border mt-2 bg-white shadow-sm">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border p-2 w-2/6 text-left">รุ่นหัวตรวจ</th>
-                        <th class="border p-2 w-1/6">จำนวน</th>
-                        <th class="border p-2 w-3/6 text-left">สินค้า</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let transducer of itemData?.transducers">
-                        <td class="border p-2">{{ transducer?.machine_model.name ?? '' }}</td>
-                        <td class="border p-2 text-center">{{ transducer?.qty }}</td>
-                        <td class="border p-2">
-                            <ul>
-                                <li *ngFor="let product of transducer?.products">{{ product?.product?.name ?? '-' }} (SN: {{
-                                    product?.product?.sn ?? '-' }})</li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+   
     </div>
 </div>
