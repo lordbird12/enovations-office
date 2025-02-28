@@ -145,6 +145,7 @@ export class FormComponent implements OnInit {
             
             this._service.getById(this.Id).subscribe((resp: any)=>{
                 this.itemData = resp.data;
+                console.log(this.itemData, 'itemData');
                 
                 this.addForm.patchValue({
                     ...this.itemData,
@@ -191,14 +192,17 @@ export class FormComponent implements OnInit {
     }
 
     onSaveClick(): void {
+
+        console.log(this.addForm.value, 'addForm');
+        
         this.flashMessage = null;
-        this.addForm.patchValue({
-            user_no: this.addForm2.value.user_no,
-            name: this.addForm2.value.name,
-            username: this.addForm2.value.username,
-            password: this.addForm2.value.password,
-            ot: this.addForm2.value.ot,
-        });
+        // this.addForm.patchValue({
+        //     user_no: this.addForm2.value.user_no,
+        //     name: this.addForm2.value.name,
+        //     username: this.addForm2.value.username,
+        //     password: this.addForm2.value.password,
+        //     ot: this.addForm2.value.ot,
+        // });
 
         // Open the confirmation dialog
         const confirmation = this._fuseConfirmationService.open({

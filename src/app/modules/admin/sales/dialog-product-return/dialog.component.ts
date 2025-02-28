@@ -129,7 +129,7 @@ export class DialogReturnProductComponent implements OnInit {
     this.filesPC[i] = file; // ผูกไฟล์เฉพาะ index นี้
     const formData1 = new FormData();
     formData1.append('image', file);
-    formData1.append('path', 'asset');
+    formData1.append('path', 'images/asset/');
 
     try {
         // อัปโหลดรูปภาพและรับ URL

@@ -102,7 +102,7 @@
                 </div>
             </form>
             <form class="bg-card rounded-2xl md:shadow overflow-hidden px-8 pt-6 pb-8 mb-4 flex flex-col my-2"
-                [formGroup]="addForm2">
+                [formGroup]="addForm">
                 <span
                     class="text-xl md:text-xl font-bold tracking-tight leading-7 sm:leading-10 truncate text-gray-500">
                     ข้อมูลการใช้งาน
@@ -128,7 +128,7 @@
                             <mat-label>ทีม</mat-label>
                             <mat-select [formControlName]="'team_id'">
                                 <mat-option *ngFor="let item of this.teams;" [value]="item.id">
-                                    {{item.name}}
+                                    {{item.name}} {{item.id}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -234,6 +234,6 @@
                 </div>
             </div> -->
         </div>
-
+        <!-- {{this.addForm.value | json}} -->
     </div>
 </div>
