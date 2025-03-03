@@ -1260,10 +1260,10 @@ export class ViewOrderComponent implements OnInit {
                         });
 
                         // console.log(this.formData.value);
-
-                        this._changeDetectorRef.markForCheck();
                         this.selectedMachineProducts = [];
                         this.selectedTransducerProducts = [];
+                        this._changeDetectorRef.markForCheck();
+
 
                     });
                 } else {
@@ -1291,6 +1291,8 @@ export class ViewOrderComponent implements OnInit {
                         this.formData.patchValue({
                             ...this.itemData,
                         });
+                        this.selectedMachineProducts = [];
+                        this.selectedTransducerProducts = [];
                         this._changeDetectorRef.markForCheck();
                     });
                 } else {

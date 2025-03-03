@@ -93,7 +93,7 @@ export class DialogReturnProductWaitApprovedComponent implements OnInit {
     this.form = this.fb.group({
       products: this.fb.array(this.data.product.map(product => this.fb.group({
         name: [product.product.name],
-        id: [product.id],
+        id: [product.return_product_id],
         status: ['approved'],
         remark: ['']
       })))
