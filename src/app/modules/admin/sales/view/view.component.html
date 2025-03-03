@@ -83,10 +83,15 @@
                     <tbody>
                         <tr *ngFor="let product of machine?.products">
                             <td class="border p-2 items-center justify-center">
+                                <!-- <mat-checkbox [(ngModel)]="product.selected"
+                                              (change)="onSelectMultipleMachineProducts($event, product)"
+                                              color="primary"
+                                              [disabled]="(product?.return_products?.status === 'approved' || (product?.return_products?.status === 'waiting_approve') && this.user?.team_role !== 'User')">
+                                </mat-checkbox> -->
                                 <mat-checkbox [(ngModel)]="product.selected"
                                               (change)="onSelectMultipleMachineProducts($event, product)"
                                               color="primary"
-                                              [disabled]="product?.return_products?.status === 'approved' || (product?.return_products?.status === 'waiting_approve' && this.user?.team_role !== 'User')">
+                                     >
                                 </mat-checkbox>
                             </td>
                             <td class="border p-2">
