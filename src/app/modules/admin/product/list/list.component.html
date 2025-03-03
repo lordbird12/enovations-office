@@ -21,7 +21,7 @@
                     <button class="px-6 ml-3" mat-flat-button [color]="'accent'" (click)="reset()">
                         ล้าง
                     </button>
-                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()">
+                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()" *ngIf="user.permission_id === '1' || user.permission_id === '3'">
                         <mat-icon>person_add</mat-icon>
                         &nbsp;
                         เพิ่มสินค้า

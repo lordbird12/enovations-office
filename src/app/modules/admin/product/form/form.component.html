@@ -167,7 +167,7 @@
                 </div>
                 <div class="flex flex-row mt-2 justify-end">
                     <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                        <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="New();">
+                        <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="New();"  *ngIf="user.permission_id === '1' || user.permission_id === '3'">
                             บันทึก
                         </button>
                         <button class="px-6 ml-3" mat-flat-button [color]="'warn'" (click)="backTo()">

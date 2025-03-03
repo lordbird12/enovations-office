@@ -6,7 +6,7 @@
             {{ type ? 'รายละเอียดใบจอง ' + type : 'รายละเอียดการจอง' }}
         </h2>
         <div class="flex flex-row flex-wrap gap-2 mt-2 md:mt-0">
-            <button class="px-6 bg-yellow-500" mat-flat-button color="primary" (click)="openDialogAddProduct()"
+            <button class="px-6 bg-yellow-500" mat-flat-button color="primary" (click)="openDialogAddProduct()" 
             *ngIf="this.user?.team_role !== 'User'">จัดการเครื่อง</button>
             <button class="px-6 bg-green-700" mat-flat-button color="primary" (click)="openDialogApprove()"
                 *ngIf="this.user?.team_role !== 'User'">Update

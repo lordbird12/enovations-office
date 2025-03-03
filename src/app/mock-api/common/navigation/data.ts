@@ -10,11 +10,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon: 'heroicons_outline:home',
         hidden: () => {
             // const storedPermission = JSON.parse(localStorage.getItem('permission'));
-            const menu = storedPermission?.find((e) => e.menu_id == 1);
-            if (menu?.view == 0) {
-                return true;
-            } else {
+            var user = JSON.parse(localStorage.getItem('user'))
+            if (user.permission_id == '1') {
                 return false;
+            } else {
+                return true;
             }
         },
         children: [
@@ -63,20 +63,23 @@ export const defaultNavigation: FuseNavigationItem[] = [
         subtitle: 'ขัอมูลเกี่ยวกับระบบ',
         type: 'group',
         icon: 'heroicons_outline:home',
+        
         children: [
-            //     {
-            //         id: 'products.warehouse',
-            //         title: 'คลังสินค้า',
-            //         type: 'basic',
-            //         icon: 'heroicons_outline:home-modern',
-            //         link: '/admin/warehouse/list',
-            //     },
             {
                 id: 'products.brand',
                 title: 'ยี่ห้อ',
                 type: 'basic',
                 icon: 'heroicons_outline:building-office-2',
                 link: '/admin/brand/list',
+                hidden: () => {
+                    // const storedPermission = JSON.parse(localStorage.getItem('permission'));
+                    var user = JSON.parse(localStorage.getItem('user'))
+                    if (user.permission_id == '1' || user.permission_id == '3') {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
             },
             {
                 id: 'products.category-product',
@@ -84,6 +87,15 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'heroicons_outline:cube',
                 link: '/admin/category-product/list',
+                hidden: () => {
+                    // const storedPermission = JSON.parse(localStorage.getItem('permission'));
+                    var user = JSON.parse(localStorage.getItem('user'))
+                    if (user.permission_id == '1' || user.permission_id == '3') {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
             },
             {
                 id: 'products.product',
@@ -91,6 +103,15 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'heroicons_outline:cube',
                 link: '/admin/product/list',
+                hidden: () => {
+                    // const storedPermission = JSON.parse(localStorage.getItem('permission'));
+                    var user = JSON.parse(localStorage.getItem('user'))
+                    if (user.permission_id == '1' || user.permission_id == '2' || user.permission_id == '3') {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
             },
            
         ],
@@ -116,7 +137,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon: 'heroicons_outline:calendar-days',
                 link: '/admin/calendar-order/list',
             },
-          
             {
                 id: 'client.list',
                 title: 'ลูกค้าโรงพยาบาล',
@@ -135,13 +155,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'group',
         icon: 'heroicons_outline:home',
         children: [
-            // {
-            //     id: 'self.employee',
-            //     title: 'แก้ไขข้อมูลส่วนตัว',
-            //     type: 'basic',
-            //     icon: 'heroicons_outline:user',
-            //     link: '/admin/employee/list',
-            // },
             {
                 id: 'admin.logout',
                 title: 'ออกจากระบบ',
