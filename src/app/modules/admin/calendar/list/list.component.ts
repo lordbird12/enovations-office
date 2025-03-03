@@ -20,7 +20,7 @@ import { PageService } from '../page.service';
 import { DataTablesModule } from 'angular-datatables';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalendarOptions } from '@fullcalendar/core';
-import { FullCalendarModule } from '@fullcalendar/angular';
+import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { DateTime } from 'luxon';
 import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -61,7 +61,7 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
   // public dataRow: any[];
   dataRow: any[] = [];
   allProduct: any[] = [];
-
+  @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin],
     initialView: 'dayGridMonth',
@@ -76,6 +76,7 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
   filterProduct: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productData: any[] = [];
 
+  prodFilter: any[] = [];
   ///sale_user
   saleFilter = new FormControl('');
   filterSale: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
@@ -124,10 +125,10 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
       .subscribe(() => {
         this._filterProduct();
       });
-      this.saleFilter.valueChanges
+    this.saleFilter.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
-          this._filterSale();
+        this._filterSale();
       });
   }
 
@@ -186,11 +187,11 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
     const _value = event;
     const selectedData = this.saleData.find(item => item.name === _value);
     if (selectedData) {
-      this._service.getById(selectedData.id).subscribe((resp: any) => {
-        const events = resp.map((item) => ({
-
-          id: item.id,
-          title: this.getNamesFromMachineModels(item.machine_models),
+      this._service.getOrderByUserCalendar(selectedData.id).subscribe((resp: any) => {
+        const events = resp.calendars.map((item) => ({
+          id: item.order_id,
+          // title: this.getNamesFromMachineModels(item.machine_models),
+          title: item.order?.code,
           start: item.start_date,
           end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate() // เพิ่ม 1 วันให้ end_date
 
@@ -200,6 +201,16 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
           events: events,
           eventClick: this.onEventClick.bind(this)
         };
+     // ถ้ามี event ใน list ให้พาไปที่ event แรก
+     if (events.length > 0) {
+      const firstEventDate = events[0].start;
+      setTimeout(() => {
+        if (this.calendarComponent) {
+          this.calendarComponent.getApi().gotoDate(firstEventDate);
+        }
+      }, 100); // รอให้ calendar โหลดก่อน
+    }
+
         this._changeDetectorRef.markForCheck()
       })
       this.saleFilter.setValue(selectedData?.name)
@@ -237,45 +248,51 @@ export class CalendarOrderComponent implements OnInit, AfterViewInit {
     // เขียนโค้ดสำหรับการลบออกองคุณ
   }
 
+  filterProductType(data: any, type: any) {
+    this.prodFilter = data.products;
+
+  }
+
   onSelectProduct(event: any, type: any) {
     if (!event) {
-      if (this.productFilter.invalid) {
-        this.productFilter.markAsTouched();
-      }
+      console.log('no event');
       return;
     }
-    const _value = event;
-    const selectedData = this.productData.find(item => item.name === _value);
-    if (selectedData) {
 
-      const events = selectedData.books.map((item) => ({
-        id: item.order_id,
-        title: selectedData.name + ' ' + '[' + selectedData?.serial_no + ']',
-        start: item.start_date,
-        end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate() // เพิ่ม 1 วันให้ end_date
+    const selectedData = this.prodFilter.find(item => item.name === event);
+    if (!selectedData)
 
-      }));
+      return;
+
+    this._service.getOrderByProductCalendar(selectedData.id).subscribe((resp: any) => {
+      if (!resp?.calendars?.length) {
+        this.calendarOptions = {
+          events: []
+        }
+        return; // ตรวจสอบว่ามีข้อมูลใน calendars หรือไม่
+      }
 
       this.calendarOptions = {
-        events: events,
-        eventClick: this.onEventClick.bind(this)
+        events: resp.calendars.map(item => ({
+          id: item.id,
+          title: `${item.code} ${resp.name} ${resp?.serial_no || ''}`,
+          start: item.start_date,
+          end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate(), // เพิ่ม 1 วันให้ end_date
+        })),
+        eventClick: this.onEventClick.bind(this),
+
       };
-      console.log(this.calendarOptions);
-      let data = selectedData.name + ' ' + '[' + selectedData?.serial_no + ']'
-      this.productFilter.setValue(data)
-    } else {
-      if (this.productFilter.invalid) {
-        this.productFilter.markAsTouched();
-      }
-      return;
-    }
+
+      this._changeDetectorRef.markForCheck();
+    });
   }
+
 
   onEventClick(info: any): void {
     const eventId = info.event.id; // ดึง ID ของอีเวนต์ที่คลิก
     console.log(eventId);
 
-    this._router.navigate(['/admin/sales/edit/' + eventId]); // นำทางไปยังหน้าที่กำหนด พร้อมพารามิเตอร์
+    this._router.navigate(['/admin/sales/view/' + eventId]); // นำทางไปยังหน้าที่กำหนด พร้อมพารามิเตอร์
   }
 
 }

@@ -34,8 +34,8 @@
         </mat-form-field>
     </div>
     <h3 class="text-xl font-medium">Machine Models</h3>
-        <div formArrayName="machine_models" class="space-y-4">
-            <div *ngFor="let model of machineModelsArray.controls; let i = index" [formGroupName]="i"
+    <div formArrayName="machine_models" class="space-y-4">
+        <div *ngFor="let model of machineModelsArray.controls; let i = index" [formGroupName]="i"
             class="border p-4 rounded-lg shadow-sm">
             <h4 class="text-lg font-semibold">Machine Model: {{ model.value.machine_name }}</h4>
             <button mat-mini-fab color="primary" (click)="addProduct(i, 'machine_model')" class="mb-2">
@@ -61,8 +61,8 @@
         </div>
     </div>
     <h3 class="text-xl font-medium">Transducer</h3>
-        <div formArrayName="transducers" class="space-y-4">
-            <div *ngFor="let model of transducersArray.controls; let i = index" [formGroupName]="i"
+    <div formArrayName="transducers" class="space-y-4">
+        <div *ngFor="let model of transducersArray.controls; let i = index" [formGroupName]="i"
             class="border p-4 rounded-lg shadow-sm">
             <h4 class="text-lg font-semibold">Machine Model: {{ model.value.machine_name }}</h4>
             <button mat-mini-fab color="primary" (click)="addProduct(i, 'transducer')" class="mb-2">
