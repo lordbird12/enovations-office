@@ -1,5 +1,5 @@
-import { CurrencyPipe, NgClass, NgFor, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { CommonModule, CurrencyPipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatRippleModule } from '@angular/material/core';
@@ -9,26 +9,34 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
+import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { ProjectService } from 'app/modules/admin/dashboards/project/project.service';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-    selector       : 'project',
-    templateUrl    : './project.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    selector: 'project',
+    templateUrl: './project.component.html',
+    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone     : true,
-    imports        : [TranslocoModule,
+    standalone: true,
+    imports: [TranslocoModule,
         MatIconModule, MatButtonModule,
         MatRippleModule, MatMenuModule,
         MatTabsModule, MatButtonToggleModule,
         NgApexchartsModule, NgFor, NgIf,
-        MatTableModule, NgClass, CurrencyPipe,
+        MatTableModule, NgClass, CurrencyPipe, DataTablesModule, CommonModule
     ],
 })
-export class ProjectComponent implements OnInit, OnDestroy
-{
+export class ProjectComponent implements OnInit, OnDestroy {
+
+    @ViewChild(DataTableDirective)
+    dtElement!: DataTableDirective;
+    isLoading: boolean = false;
+    dtOptions: DataTables.Settings = {};
+
+    showPopup = false;
+    popupData: any;
     chartGithubIssues: ApexOptions = {};
     chartTaskDistribution: ApexOptions = {};
     chartBudgetDistribution: ApexOptions = {};
@@ -36,6 +44,7 @@ export class ProjectComponent implements OnInit, OnDestroy
     chartMonthlyExpenses: ApexOptions = {};
     chartYearlyExpenses: ApexOptions = {};
     data: any;
+    dataRow: any;
     selectedProject: string = 'ACME Corp. Backend App';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -45,8 +54,8 @@ export class ProjectComponent implements OnInit, OnDestroy
     constructor(
         private _projectService: ProjectService,
         private _router: Router,
-    )
-    {
+        private _changeDetectorRef: ChangeDetectorRef
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -56,13 +65,16 @@ export class ProjectComponent implements OnInit, OnDestroy
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
+
+        // เช็คว่าถ้ากดปิดไปแล้ววันนี้จะไม่แสดงอีก
+        if (!this._projectService.hasClosedToday()) {
+            this.loadTable();
+        }
         // Get the data
         this._projectService.data$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((data) =>
-            {
+            .subscribe((data) => {
                 // Store the data
                 this.data = data;
 
@@ -74,12 +86,10 @@ export class ProjectComponent implements OnInit, OnDestroy
         window['Apex'] = {
             chart: {
                 events: {
-                    mounted: (chart: any, options?: any): void =>
-                    {
+                    mounted: (chart: any, options?: any): void => {
                         this._fixSvgFill(chart.el);
                     },
-                    updated: (chart: any, options?: any): void =>
-                    {
+                    updated: (chart: any, options?: any): void => {
                         this._fixSvgFill(chart.el);
                     },
                 },
@@ -90,8 +100,7 @@ export class ProjectComponent implements OnInit, OnDestroy
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
@@ -107,8 +116,7 @@ export class ProjectComponent implements OnInit, OnDestroy
      * @param index
      * @param item
      */
-    trackByFn(index: number, item: any): any
-    {
+    trackByFn(index: number, item: any): any {
         return item.id || index;
     }
 
@@ -126,8 +134,7 @@ export class ProjectComponent implements OnInit, OnDestroy
      * @param element
      * @private
      */
-    private _fixSvgFill(element: Element): void
-    {
+    private _fixSvgFill(element: Element): void {
         // Current URL
         const currentURL = this._router.url;
 
@@ -136,8 +143,7 @@ export class ProjectComponent implements OnInit, OnDestroy
         // 3. Insert the 'currentURL' at the front of the 'fill' attribute value
         Array.from(element.querySelectorAll('*[fill]'))
             .filter(el => el.getAttribute('fill').indexOf('url(') !== -1)
-            .forEach((el) =>
-            {
+            .forEach((el) => {
                 const attrVal = el.getAttribute('fill');
                 el.setAttribute('fill', `url(${currentURL}${attrVal.slice(attrVal.indexOf('#'))}`);
             });
@@ -148,35 +154,34 @@ export class ProjectComponent implements OnInit, OnDestroy
      *
      * @private
      */
-    private _prepareChartData(): void
-    {
+    private _prepareChartData(): void {
         // Github issues
         this.chartGithubIssues = {
-            chart      : {
+            chart: {
                 fontFamily: 'inherit',
-                foreColor : 'inherit',
-                height    : '100%',
-                type      : 'line',
-                toolbar   : {
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'line',
+                toolbar: {
                     show: false,
                 },
-                zoom      : {
+                zoom: {
                     enabled: false,
                 },
             },
-            colors     : ['#64748B', '#94A3B8'],
-            dataLabels : {
-                enabled        : true,
+            colors: ['#64748B', '#94A3B8'],
+            dataLabels: {
+                enabled: true,
                 enabledOnSeries: [0],
-                background     : {
+                background: {
                     borderWidth: 0,
                 },
             },
-            grid       : {
+            grid: {
                 borderColor: 'var(--fuse-border)',
             },
-            labels     : this.data.githubIssues.labels,
-            legend     : {
+            labels: this.data.githubIssues.labels,
+            legend: {
                 show: false,
             },
             plotOptions: {
@@ -184,42 +189,42 @@ export class ProjectComponent implements OnInit, OnDestroy
                     columnWidth: '50%',
                 },
             },
-            series     : this.data.githubIssues.series,
-            states     : {
+            series: this.data.githubIssues.series,
+            states: {
                 hover: {
                     filter: {
-                        type : 'darken',
+                        type: 'darken',
                         value: 0.75,
                     },
                 },
             },
-            stroke     : {
+            stroke: {
                 width: [3, 0],
             },
-            tooltip    : {
+            tooltip: {
                 followCursor: true,
-                theme       : 'dark',
+                theme: 'dark',
             },
-            xaxis      : {
+            xaxis: {
                 axisBorder: {
                     show: false,
                 },
-                axisTicks : {
+                axisTicks: {
                     color: 'var(--fuse-border)',
                 },
-                labels    : {
+                labels: {
                     style: {
                         colors: 'var(--fuse-text-secondary)',
                     },
                 },
-                tooltip   : {
+                tooltip: {
                     enabled: false,
                 },
             },
-            yaxis      : {
+            yaxis: {
                 labels: {
                     offsetX: -16,
-                    style  : {
+                    style: {
                         colors: 'var(--fuse-text-secondary)',
                     },
                 },
@@ -228,20 +233,20 @@ export class ProjectComponent implements OnInit, OnDestroy
 
         // Task distribution
         this.chartTaskDistribution = {
-            chart      : {
+            chart: {
                 fontFamily: 'inherit',
-                foreColor : 'inherit',
-                height    : '100%',
-                type      : 'polarArea',
-                toolbar   : {
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'polarArea',
+                toolbar: {
                     show: false,
                 },
-                zoom      : {
+                zoom: {
                     enabled: false,
                 },
             },
-            labels     : this.data.taskDistribution.labels,
-            legend     : {
+            labels: this.data.taskDistribution.labels,
+            legend: {
                 position: 'bottom',
             },
             plotOptions: {
@@ -249,36 +254,36 @@ export class ProjectComponent implements OnInit, OnDestroy
                     spokes: {
                         connectorColors: 'var(--fuse-border)',
                     },
-                    rings : {
+                    rings: {
                         strokeColor: 'var(--fuse-border)',
                     },
                 },
             },
-            series     : this.data.taskDistribution.series,
-            states     : {
+            series: this.data.taskDistribution.series,
+            states: {
                 hover: {
                     filter: {
-                        type : 'darken',
+                        type: 'darken',
                         value: 0.75,
                     },
                 },
             },
-            stroke     : {
+            stroke: {
                 width: 2,
             },
-            theme      : {
+            theme: {
                 monochrome: {
-                    enabled       : true,
-                    color         : '#93C5FD',
+                    enabled: true,
+                    color: '#93C5FD',
                     shadeIntensity: 0.75,
-                    shadeTo       : 'dark',
+                    shadeTo: 'dark',
                 },
             },
-            tooltip    : {
+            tooltip: {
                 followCursor: true,
-                theme       : 'dark',
+                theme: 'dark',
             },
-            yaxis      : {
+            yaxis: {
                 labels: {
                     style: {
                         colors: 'var(--fuse-text-secondary)',
@@ -289,95 +294,95 @@ export class ProjectComponent implements OnInit, OnDestroy
 
         // Budget distribution
         this.chartBudgetDistribution = {
-            chart      : {
+            chart: {
                 fontFamily: 'inherit',
-                foreColor : 'inherit',
-                height    : '100%',
-                type      : 'radar',
-                sparkline : {
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'radar',
+                sparkline: {
                     enabled: true,
                 },
             },
-            colors     : ['#818CF8'],
-            dataLabels : {
-                enabled   : true,
-                formatter : (val: number): string | number => `${val}%`,
+            colors: ['#818CF8'],
+            dataLabels: {
+                enabled: true,
+                formatter: (val: number): string | number => `${val}%`,
                 textAnchor: 'start',
-                style     : {
-                    fontSize  : '13px',
+                style: {
+                    fontSize: '13px',
                     fontWeight: 500,
                 },
                 background: {
                     borderWidth: 0,
-                    padding    : 4,
+                    padding: 4,
                 },
-                offsetY   : -15,
+                offsetY: -15,
             },
-            markers    : {
+            markers: {
                 strokeColors: '#818CF8',
-                strokeWidth : 4,
+                strokeWidth: 4,
             },
             plotOptions: {
                 radar: {
                     polygons: {
-                        strokeColors   : 'var(--fuse-border)',
+                        strokeColors: 'var(--fuse-border)',
                         connectorColors: 'var(--fuse-border)',
                     },
                 },
             },
-            series     : this.data.budgetDistribution.series,
-            stroke     : {
+            series: this.data.budgetDistribution.series,
+            stroke: {
                 width: 2,
             },
-            tooltip    : {
+            tooltip: {
                 theme: 'dark',
-                y    : {
+                y: {
                     formatter: (val: number): string => `${val}%`,
                 },
             },
-            xaxis      : {
-                labels    : {
-                    show : true,
+            xaxis: {
+                labels: {
+                    show: true,
                     style: {
-                        fontSize  : '12px',
+                        fontSize: '12px',
                         fontWeight: '500',
                     },
                 },
                 categories: this.data.budgetDistribution.categories,
             },
-            yaxis      : {
-                max       : (max: number): number => parseInt((max + 10).toFixed(0), 10),
+            yaxis: {
+                max: (max: number): number => parseInt((max + 10).toFixed(0), 10),
                 tickAmount: 7,
             },
         };
 
         // Weekly expenses
         this.chartWeeklyExpenses = {
-            chart  : {
+            chart: {
                 animations: {
                     enabled: false,
                 },
                 fontFamily: 'inherit',
-                foreColor : 'inherit',
-                height    : '100%',
-                type      : 'line',
-                sparkline : {
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'line',
+                sparkline: {
                     enabled: true,
                 },
             },
-            colors : ['#22D3EE'],
-            series : this.data.weeklyExpenses.series,
-            stroke : {
+            colors: ['#22D3EE'],
+            series: this.data.weeklyExpenses.series,
+            stroke: {
                 curve: 'smooth',
             },
             tooltip: {
                 theme: 'dark',
             },
-            xaxis  : {
-                type      : 'category',
+            xaxis: {
+                type: 'category',
                 categories: this.data.weeklyExpenses.labels,
             },
-            yaxis  : {
+            yaxis: {
                 labels: {
                     formatter: (val): string => `$${val}`,
                 },
@@ -386,31 +391,31 @@ export class ProjectComponent implements OnInit, OnDestroy
 
         // Monthly expenses
         this.chartMonthlyExpenses = {
-            chart  : {
+            chart: {
                 animations: {
                     enabled: false,
                 },
                 fontFamily: 'inherit',
-                foreColor : 'inherit',
-                height    : '100%',
-                type      : 'line',
-                sparkline : {
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'line',
+                sparkline: {
                     enabled: true,
                 },
             },
-            colors : ['#4ADE80'],
-            series : this.data.monthlyExpenses.series,
-            stroke : {
+            colors: ['#4ADE80'],
+            series: this.data.monthlyExpenses.series,
+            stroke: {
                 curve: 'smooth',
             },
             tooltip: {
                 theme: 'dark',
             },
-            xaxis  : {
-                type      : 'category',
+            xaxis: {
+                type: 'category',
                 categories: this.data.monthlyExpenses.labels,
             },
-            yaxis  : {
+            yaxis: {
                 labels: {
                     formatter: (val): string => `$${val}`,
                 },
@@ -419,35 +424,92 @@ export class ProjectComponent implements OnInit, OnDestroy
 
         // Yearly expenses
         this.chartYearlyExpenses = {
-            chart  : {
+            chart: {
                 animations: {
                     enabled: false,
                 },
                 fontFamily: 'inherit',
-                foreColor : 'inherit',
-                height    : '100%',
-                type      : 'line',
-                sparkline : {
+                foreColor: 'inherit',
+                height: '100%',
+                type: 'line',
+                sparkline: {
                     enabled: true,
                 },
             },
-            colors : ['#FB7185'],
-            series : this.data.yearlyExpenses.series,
-            stroke : {
+            colors: ['#FB7185'],
+            series: this.data.yearlyExpenses.series,
+            stroke: {
                 curve: 'smooth',
             },
             tooltip: {
                 theme: 'dark',
             },
-            xaxis  : {
-                type      : 'category',
+            xaxis: {
+                type: 'category',
                 categories: this.data.yearlyExpenses.labels,
             },
-            yaxis  : {
+            yaxis: {
                 labels: {
                     formatter: (val): string => `$${val}`,
                 },
             },
         };
     }
+
+    closePopup(): void {
+        this.showPopup = false;
+        this._projectService.setClosedToday();
+    }
+
+    pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0, total: 0 };
+    gotoPage: number = 1; // ตัวแปรสำหรับการไปหน้าที่กำหนด
+    loadTable(): void {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const dataTablesParameters = {
+            draw: 1, // ระบุ draw เริ่มต้น
+            status: 'Finish',
+            start: 0, // จุดเริ่มต้นของข้อมูล
+            length: 10, // จำนวนข้อมูลต่อหน้า
+            columns: [
+                { data: 'No', name: '', searchable: true, orderable: true, search: { value: '', regex: false } },
+                { data: 'user.fullname', name: '', searchable: true, orderable: true, search: { value: '', regex: false } },
+                { data: 'description', name: '', searchable: true, orderable: true, search: { value: '', regex: false } },
+                { data: 'leave_type.name', name: '', searchable: true, orderable: true, search: { value: '', regex: false } },
+                { data: 'date', name: '', searchable: true, orderable: true, search: { value: '', regex: false } },
+                { data: 'date_start', name: '', searchable: true, orderable: true, search: { value: '', regex: false } },
+                { data: 'date_end', name: '', searchable: true, orderable: true, search: { value: '', regex: false } }
+            ],
+            order: [
+                { column: 0, dir: 'desc' } // จัดเรียงตามคอลัมน์แรก
+            ],
+            search: { value: '', regex: false }, // ค่า search
+
+        };
+
+        // ส่ง API และเก็บผลลัพธ์
+        this._projectService.getOrderForWarehouse(dataTablesParameters).subscribe(
+            (resp) => {
+                if (resp.data.data.length > 0) {
+                    this.popupData = resp;
+                    this.showPopup = true;
+                }
+                this.dataRow = resp.data.data; // เก็บข้อมูลที่ได้
+                this.pages.current_page = this.dataRow.current_page;
+                this.pages.last_page = this.dataRow.last_page;
+                this.pages.per_page = this.dataRow.per_page;
+                this.pages.total = this.dataRow.total;
+                if (this.dataRow.current_page > 1) {
+                    this.pages.begin =
+                        this.dataRow.per_page * this.dataRow.current_page - 1;
+                } else {
+                    this.pages.begin = 0;
+                }
+                this._changeDetectorRef.markForCheck()
+            },
+            (error) => {
+                console.error('API Error:', error);
+            }
+        );
+    }
+    
 }

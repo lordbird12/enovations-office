@@ -148,4 +148,26 @@ export class PageService {
                 })
             );
     }
+    getOrderByUserCalendar(id: any): Observable<any> {
+        return this._httpClient
+            .get(
+                environment.baseURL + '/api/get_order_by_user_calendar/' + id,
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
+    getOrderByProductCalendar(id: any): Observable<any> {
+        return this._httpClient
+            .get(
+                environment.baseURL + '/api/get_order_by_product_calendar/' + id,
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
 }
