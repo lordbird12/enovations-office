@@ -14,17 +14,18 @@
                 </h2>
 
                 <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                        <mat-form-field mat-flat-button class="mr-4">
-                            <mat-label>สถานะ</mat-label>
-                            <mat-select [(value)]="selectedStatus" (selectionChange)="filterByStatus($event.value)">
-                                <mat-option value="">ทั้งหมด</mat-option>
-                                <mat-option value="Ordered">รออนุมัติ</mat-option>
-                                <mat-option value="Confirm">อนุมัติ</mat-option>
-                                <mat-option value="Reject">ไม่อนุมัติ</mat-option>
-                                <mat-option value="Finish">รอคืน</mat-option>
-                                <mat-option value="Returned">เสร็จสิ้น</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                    <button mat-button [matMenuTriggerFor]="menu_status" mat-flat-button [color]="'primary'" class="mr-4">
+                        สถานะ <mat-icon svgIcon="heroicons_outline:chevron-down" [color]="'primary'"></mat-icon>
+                    </button>
+
+                    <mat-menu #menu_status="matMenu">
+                        <button mat-menu-item (click)="set_status('')">ทั้งหมด</button>
+                        <button mat-menu-item (click)="set_status('Ordered')">รออนุมัติ</button>
+                        <button mat-menu-item (click)="set_status('Confirm')">อนุมัติ</button>
+                        <button mat-menu-item (click)="set_status('Reject')">ไม่อนุมัติ</button>
+                        <button mat-menu-item (click)="set_status('Finish')">รอคืน</button>
+                        <button mat-menu-item (click)="set_status('Returned')">เสร็จสิ้น</button>
+                    </mat-menu>
 
                     <button mat-button [matMenuTriggerFor]="menu" mat-flat-button [color]="'primary'">
                         <mat-icon svgIcon="heroicons_outline:plus-small" [color]="'primary'"></mat-icon>
@@ -117,7 +118,7 @@
                 </tbody>
                 <tbody *ngIf="dataRow?.length == 0">
                     <tr>
-                        <td colspan="7" class="no-data-available text-center">ไม่มีข้อมูล !</td>
+                        <td colspan="10" class="no-data-available text-center">ไม่มีข้อมูล !</td>
                     </tr>
                 </tbody>
             </table>

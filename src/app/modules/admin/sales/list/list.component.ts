@@ -190,7 +190,7 @@ export class ListComponent implements OnInit, AfterViewInit {
         return result;
     }
 
-    filterByStatus(status: string): void {
+    set_status(status: string): void {
         this.selectedStatus = status;
         this.rerender();
     }
