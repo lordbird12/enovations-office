@@ -74,6 +74,15 @@ export class PageService {
                 })
             );
     }
+    updateStatusReturn(data: any): Observable<any> {
+        return this._httpClient
+            .post<any>(environment.baseURL + '/api/update_status_return', data)
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
     payment_period(data: FormData): Observable<any> {
         return this._httpClient
             .post<any>(environment.baseURL + '/api/payment_period', data)
