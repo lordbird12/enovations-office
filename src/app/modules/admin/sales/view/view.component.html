@@ -86,7 +86,7 @@
                                 <mat-checkbox [(ngModel)]="product.selected"
                                               (change)="onSelectMultipleMachineProducts($event, product)"
                                               color="primary"
-                                              [disabled]="product?.return_products?.status === 'approve'">
+                                              [disabled]="product?.return_products?.status === 'approved' || (product?.return_products?.status === 'waiting_approve' && this.user?.team_role !== 'User')">
                                 </mat-checkbox>
                             </td>
                             <td class="border p-2">
@@ -104,7 +104,7 @@
                                     class="bg-blue-200 p-1 rounded-md text-blue-800 font-bold">
                                     รออนุมัติ
                                 </div>
-                                <div *ngIf="product?.return_products?.status === 'approve'"
+                                <div *ngIf="product?.return_products?.status === 'approved'"
                                     class="bg-green-200 p-1 rounded-md text-green-800 font-bold">
                                     คืนแล้ว
                                 </div>
@@ -142,7 +142,7 @@
                 <h3 class="text-xl font-bold text-gray-500 mb-4">รายการหัวฉีดที่ต้องการ</h3>
 
                 <button class="px-6 bg-blue-500" mat-flat-button color="primary" (click)="openDialogReturnTransducerProducts(selectedTransducerProducts)"
-                *ngIf="selectedTransducerProducts.length > 0">คืนสินค้าที่เลือก</button>
+                *ngIf="selectedTransducerProducts.length > 0 ">คืนสินค้าที่เลือก</button>
             </div>
             <ng-container *ngFor="let machine of itemData?.transducers">
                 <p><strong>รุ่นเครื่อง:</strong> {{ machine?.machine_model?.name ?? '-' }}</p>
@@ -163,7 +163,7 @@
                                 <mat-checkbox [(ngModel)]="product.selected"
                                               (change)="onSelectMultipleTransducerProducts($event, product)"
                                               color="primary"
-                                              [disabled]="product?.return_products?.status === 'approve'">
+                                              [disabled]="product?.return_products?.status === 'approved' || (product?.return_products?.status === 'waiting_approve' && this.user?.team_role !== 'User')">
                                 </mat-checkbox>
                             </td>
                             <td class="border p-2">
@@ -181,7 +181,7 @@
                                     class="bg-blue-200 p-1 rounded-md text-blue-800 font-bold">
                                     รออนุมัติ
                                 </div>
-                                <div *ngIf="product?.return_products?.status === 'approve'"
+                                <div *ngIf="product?.return_products?.status === 'approved'"
                                     class="bg-green-200 p-1 rounded-md text-green-800 font-bold">
                                     คืนแล้ว
                                 </div>
