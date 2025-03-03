@@ -71,6 +71,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     companie: any;
     // public dataRow: any[];
     dataRow: any[] = [];
+    user: any
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     constructor(
         private dialog: MatDialog,
@@ -80,6 +81,7 @@ export class ListComponent implements OnInit, AfterViewInit {
         private _fuseConfirmationService: FuseConfirmationService,
         private _fb: FormBuilder
     ) {
+        this.user = JSON.parse(localStorage.getItem('user') || '{}');
         this.form = this._fb.group({
             category_product_id: '',
             supplier_id: '',

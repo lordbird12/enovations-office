@@ -34,6 +34,7 @@ import { CommonModule } from '@angular/common';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import { MatRadioModule } from '@angular/material/radio';
+import { J } from '@fullcalendar/core/internal-common';
 
 @Component({
     selector: 'form-product',
@@ -86,7 +87,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
 
     formData: FormGroup;
     formData2: FormGroup;
-
+    user: any
     files: File[] = [];
     files1: File[] = [];
     files2: File[] = [];
@@ -121,7 +122,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
         private _activatedRoute: ActivatedRoute,
         private _authService: AuthService
     ) {
-
+        this.user = JSON.parse(localStorage.getItem('user'))
         this.Id = this._activatedRoute.snapshot.paramMap.get('id');
         this.category = this._activatedRoute.snapshot.data.category.data
         this.area = this._activatedRoute.snapshot.data.area.data
