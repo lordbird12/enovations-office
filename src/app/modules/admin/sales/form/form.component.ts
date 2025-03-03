@@ -302,6 +302,7 @@ export class FormComponent implements OnInit {
         this.filterMachineModel.next(this.mcData.slice());
 
         this.formData = this._fb.group({
+            reserve_ref_no: null,
             calendar_date: null,
             budget: 0,
             request_purpose: null,
@@ -353,7 +354,7 @@ export class FormComponent implements OnInit {
                     this.workstationFilter.setValue(this.itemData.product?.name)
                     this.formData.patchValue({
                         ...this.itemData,
-                        
+
                     });
                     for (let index = 0; index < this.itemData.machine_models.length; index++) {
                         const element = this.itemData.machine_models[index];
@@ -363,7 +364,7 @@ export class FormComponent implements OnInit {
                             machine_model_name: element.machine_model.name,
                             qty: element.qty
                         }))
-                        
+
                     }
 
                     for (let index = 0; index < this.itemData.transducers.length; index++) {
@@ -374,7 +375,7 @@ export class FormComponent implements OnInit {
                             machine_model_name: element.machine_model.name,
                             qty: element.qty
                         }))
-                        
+
                     }
 
                     this._changeDetectorRef.markForCheck();
@@ -842,7 +843,7 @@ export class FormComponent implements OnInit {
 
     onSelectMachineModel(event: any,type: any) {
         console.log(type);
-        
+
         const selectedName = event.option.value;
         const selected = this.mcData.find(item => item.name === selectedName);
 
@@ -855,7 +856,7 @@ export class FormComponent implements OnInit {
                 this.machineModelFilter.setValue(null); // ล้างค่าในช่อง input
             } else {
                 if (type === 'machine_models') {
-                    
+
                     let item = this._fb.group({
                         machine_model_id: selected.id,
                         machine_model_name: selected.name,

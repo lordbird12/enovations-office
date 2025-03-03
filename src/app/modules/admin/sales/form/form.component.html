@@ -20,6 +20,13 @@
                             </p>
                         </span>
                         <div class="w-full px-3 mb-6 md:mb-0">
+                            <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                                <mat-label>เลขที่ใบยืม</mat-label>
+                                <input matInput placeholder="เลขที่ใบยืม"
+                                    [formControlName]="'reserve_ref_no'">
+                            </mat-form-field>
+                        </div>
+                        <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field class="w-full" [ngClass]="formFieldHelpers">
                                 <mat-label>วันทีจอง</mat-label>
                                 <mat-date-range-input [rangePicker]="picker">
