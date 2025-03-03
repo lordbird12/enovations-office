@@ -99,9 +99,7 @@ export class EditDialogComponent implements OnInit {
             remark: '',
             vendor_id: ''
         });
-        this._service.getPosition().subscribe((resp: any)=>{
-            this.positions = resp.data
-        })
+         
 
         // console.log(this.data)
 
