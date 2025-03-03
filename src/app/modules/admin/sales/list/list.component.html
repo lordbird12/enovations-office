@@ -12,7 +12,19 @@
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
                     รายการจองเครื่อง
                 </h2>
+
                 <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                        <mat-form-field mat-flat-button class="mr-4">
+                            <mat-label>สถานะ</mat-label>
+                            <mat-select [(value)]="selectedStatus" (selectionChange)="filterByStatus($event.value)">
+                                <mat-option value="">ทั้งหมด</mat-option>
+                                <mat-option value="Ordered">รออนุมัติ</mat-option>
+                                <mat-option value="Confirm">อนุมัติ</mat-option>
+                                <mat-option value="Reject">ไม่อนุมัติ</mat-option>
+                                <mat-option value="Finish">รอคืน</mat-option>
+                                <mat-option value="Returned">เสร็จสิ้น</mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
                     <button mat-button [matMenuTriggerFor]="menu" mat-flat-button [color]="'primary'">
                         <mat-icon svgIcon="heroicons_outline:plus-small" [color]="'primary'"></mat-icon>
@@ -57,7 +69,7 @@
                                     <mat-icon svgIcon="heroicons_solid:eye"></mat-icon>
                                     <span>รายละเอียด</span>
                                 </button>
-                                <button mat-menu-item color="accent" (click)="delete(item.id)">
+                                <button mat-menu-item color="accent" (click)="deleteorder(item.id)">
                                     <mat-icon>delete</mat-icon>
                                     <span>ลบ</span>
                                 </button>

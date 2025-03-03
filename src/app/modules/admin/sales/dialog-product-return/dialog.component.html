@@ -1,6 +1,6 @@
 <h2 mat-dialog-title class="mx-auto text-2xl text-center font-semibold">เพิ่มสินค้า</h2>
 <mat-dialog-content [formGroup]="form" class="space-y-6 p-4 w-full max-w-lg mx-auto md:max-w-2xl items-center">
-    
+
     <mat-form-field class="w-full" [ngClass]="formFieldHelpers">
         <mat-label>วันที่คืน</mat-label>
         <input matInput [matDatepicker]="returnDatePicker" formControlName="return_date">
@@ -12,18 +12,19 @@
         <mat-label>หมายเหตุ</mat-label>
         <textarea matInput formControlName="remark"></textarea>
     </mat-form-field>
-    
+
     <h3 class="text-xl font-medium">สินค้า</h3>
     <div formArrayName="products" class="space-y-4">
         <div *ngFor="let product of productsArray.controls; let i = index" [formGroupName]="i"
             class="border p-4 rounded-lg shadow-sm">
-            <p><strong>วันที่จอง:</strong> {{ data.product.product.name }}</p>
-            <p><strong>วัตถุประสงค์:</strong> {{ data.product.product.serial_no }}</p>
+            <p><strong>ชื่อสินค้า:</strong> {{ data.product[i].product.name }}</p>
+            <p><strong>Serial No:</strong> {{ data.product[i].product.serial_no }}</p>
+
             <mat-form-field class="w-full">
                 <mat-label>หมายเหตุสินค้า</mat-label>
                 <textarea matInput formControlName="remark"></textarea>
             </mat-form-field>
-            
+
             <div class="flex flex-col md:flex-row w-full">
                 <div class="w-full md:min-w-full">
                     <ngx-dropzone class="w-full h-32" accept="image/*" (change)="onSelectsPC($event, i)">
@@ -39,9 +40,8 @@
             </div>
         </div>
     </div>
-    <!-- {{this.form.value | json}} -->
-    <mat-dialog-actions align="end" class="p-4 flex justify-end gap-4">
-        <button mat-flat-button color="accent" (click)="closeDialog()">ยกเลิก</button>
-        <button mat-flat-button color="primary" (click)="saveData()">บันทึก</button>
-    </mat-dialog-actions>
 </mat-dialog-content>
+<mat-dialog-actions align="end" class="p-4 flex justify-end gap-4">
+    <button mat-flat-button color="accent" (click)="closeDialog()">ยกเลิก</button>
+    <button mat-flat-button color="primary" (click)="saveData()">บันทึก</button>
+</mat-dialog-actions>

@@ -1,5 +1,3 @@
-
-
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule, NgClass } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
@@ -299,6 +297,7 @@ export class ViewOrderComponent implements OnInit {
         this.filterClient.next(this.clientData.slice());
 
         this.formData = this._fb.group({
+            reserve_ref_no: null,
             id: null,
             calendar_date: null,
             budget: 0,
@@ -309,6 +308,7 @@ export class ViewOrderComponent implements OnInit {
             additional_equipment: null,
             meeting_details: null,
             current_machine_model: null,
+            created_at: null,
             current_work_station: null,
             current_usage_problem: null,
             competitor_model: null,
@@ -351,6 +351,7 @@ export class ViewOrderComponent implements OnInit {
                     this.workstationFilter.setValue(this.itemData.product?.name)
                     this.formData.patchValue({
                         ...this.itemData,
+                        created_at: DateTime.fromISO(this.itemData.created_at).toFormat('yyyy-MM-dd'),
                         // memberIds: memberIds,
                         // tds: tDs
                     });
@@ -1225,6 +1226,50 @@ export class ViewOrderComponent implements OnInit {
             });
 
     }
+    openDialogReturnProductarray(formValue: any[]): void {
+        console.log('form',formValue);
+
+        this.dialog
+            .open(DialogReturnProductComponent, {
+                maxHeight: '100vh',
+                width: '80vh',
+                maxWidth: '100vh',
+                data: {
+                    order: this.itemData,
+                    product: formValue,
+                },
+            })
+            .afterClosed()
+            .subscribe((item) => {
+                if (item) {
+                    this._service.getById(this.Id).subscribe((resp: any) => {
+                        this.itemData = resp.data;
+                        // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
+                        // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
+                        this.saleFilter.setValue(this.itemData.user?.name)
+                        this.clientFilter.setValue(this.itemData.client?.name)
+                        this.productFilter.setValue(this.itemData.product?.name)
+                        this.accessorieFilter.setValue(this.itemData.product?.name)
+                        this.workstationFilter.setValue(this.itemData.product?.name)
+                        this.formData.patchValue({
+                            ...this.itemData,
+                            // memberIds: memberIds,
+                            // tds: tDs
+                        });
+
+                        // console.log(this.formData.value);
+
+                        this._changeDetectorRef.markForCheck();
+
+                    });
+                } else {
+                    console.log('no data');
+
+                }
+
+            });
+
+    }
 
     onEdit(element: any) {
         this._router.navigate(['admin/sales/edit/' + element]);
@@ -1236,6 +1281,9 @@ export class ViewOrderComponent implements OnInit {
         const imagePaths = imgObject?.return_products?.images.map(item => item.image);
         this.dialog
             .open(PicturesComponent, {
+                maxHeight: '90vh',
+                width: '80vh',
+                maxWidth: '90vh',
                 autoFocus: false,
                 data: {
                     imgSelected: imagePaths,
@@ -1248,6 +1296,49 @@ export class ViewOrderComponent implements OnInit {
             });
     }
 
+    onSelectMultipleProducts(event: any, product: any): void {
+        if (event.checked) {
+            this.selectedProducts.push(product);
+        } else {
+            const index = this.selectedProducts.indexOf(product);
+            if (index > -1) {
+                this.selectedProducts.splice(index, 1);
+            }
+        }
+    }
+
+    selectedMachineProducts: any[] = [];
+    selectedTransducerProducts: any[] = [];
+
+    onSelectMultipleMachineProducts(event: any, product: any): void {
+        if (event.checked) {
+            this.selectedMachineProducts.push(product);
+        } else {
+            const index = this.selectedMachineProducts.indexOf(product);
+            if (index > -1) {
+                this.selectedMachineProducts.splice(index, 1);
+            }
+        }
+    }
+
+    onSelectMultipleTransducerProducts(event: any, product: any): void {
+        if (event.checked) {
+            this.selectedTransducerProducts.push(product);
+        } else {
+            const index = this.selectedTransducerProducts.indexOf(product);
+            if (index > -1) {
+                this.selectedTransducerProducts.splice(index, 1);
+            }
+        }
+    }
+
+    openDialogReturnMachineProducts(): void {
+        this.openDialogReturnProductarray(this.selectedMachineProducts);
+    }
+
+    openDialogReturnTransducerProducts(): void {
+        this.openDialogReturnProductarray(this.selectedTransducerProducts);
+    }
 }
 
 

@@ -7,7 +7,7 @@
         </h2>
         <div class="flex flex-row flex-wrap gap-2 mt-2 md:mt-0">
             <button class="px-6 bg-yellow-500" mat-flat-button color="primary" (click)="openDialogAddProduct()"
-                *ngIf="formData.value.status !== 'Ordered' && this.user?.team_role !== 'User'">จัดการเครื่อง</button>
+            *ngIf="this.user?.team_role !== 'User'">จัดการเครื่อง</button>
             <button class="px-6 bg-green-700" mat-flat-button color="primary" (click)="openDialogApprove()"
                 *ngIf="this.user?.team_role !== 'User'">Update
                 Status</button>
@@ -22,6 +22,7 @@
             <!-- ข้อมูลการจอง -->
             <div class="bg-card p-6 rounded-lg shadow  space-y-2">
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลการจอง</h3>
+                <p><strong>เลขที่ใบจอง:</strong> {{ formData.value.reserve_ref_no ?? '-' }}</p>
                 <p><strong>วันที่จอง:</strong> {{ formData.value.start_date }} - {{ formData.value.end_date }}</p>
                 <p><strong>วัตถุประสงค์:</strong> {{ formData.value.request_purpose ?? '-' }}</p>
                 <p *ngIf="formData.value.request_purpose === 'Demo'"><strong>งบประมาณ:</strong> {{ formData.value.budget
@@ -29,6 +30,7 @@
                 <p><strong>Function Qualifications:</strong> {{ formData.value.function_qualifications }}</p>
                 <p><strong>อุปกรณ์เพิ่มเติม:</strong> {{ formData.value.additional_equipment }}</p>
                 <p><strong>วัน เวลา สถานที่นัดหมาย:</strong> {{ formData.value.meeting_details }}</p>
+                <p><strong>วันที่ขอ:</strong> {{ formData.value.created_at | date:'dd-MM-yyyy' }}</p>
                 <p><strong>สถานะ:</strong> <span
                         class="bg-green-50 rounded-md text-sm px-2 mb-2 mx-2 py-1 text-green-400 font-semibold">{{formData.value.status}}</span>
                 </p>
@@ -59,13 +61,19 @@
 
         <!-- ตารางแสดงรายการเครื่องที่ต้องการ -->
         <div class="mt-6 bg-card rounded-lg shadow p-6">
-            <h3 class="text-xl font-bold text-gray-500">รายการเครื่องที่ต้องการ</h3>
+            <div class="flex justify-between">
+                <h3 class="text-xl font-bold text-gray-500 mb-4">รายการเครื่องที่ต้องการ</h3>
+
+                <button class="px-6 bg-blue-500" mat-flat-button color="primary" (click)="openDialogReturnMachineProducts(selectedMachineProducts)"
+                *ngIf="selectedMachineProducts.length > 0">คืนสินค้าที่เลือก</button>
+            </div>
             <ng-container *ngFor="let machine of itemData?.machine_models">
                 <p><strong>รุ่นเครื่อง:</strong> {{ machine?.machine_model?.name ?? '-' }}</p>
                 <p><strong>จำนวน:</strong> {{ machine?.qty ?? 0 }}</p>
                 <table class="w-full border mt-2 bg-white shadow-sm mb-4">
                     <thead>
                         <tr class="bg-gray-200">
+                            <th class="border p-2 w-[1%]">#</th>
                             <th class="border p-2 text-left w-2/6">เครื่อง</th>
                             <th class="border p-2 w-1/6">Serial No.</th>
                             <th class="border p-2 w-1/6">Status</th>
@@ -74,6 +82,13 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let product of machine?.products">
+                            <td class="border p-2 items-center justify-center">
+                                <mat-checkbox [(ngModel)]="product.selected"
+                                              (change)="onSelectMultipleMachineProducts($event, product)"
+                                              color="primary"
+                                              [disabled]="product.return === 'Y'">
+                                </mat-checkbox>
+                            </td>
                             <td class="border p-2">
                                 {{ product?.product?.name ?? '-' }}
                             </td>
@@ -97,11 +112,11 @@
                                     <mat-icon svgIcon="heroicons_solid:cog-8-tooth"></mat-icon>
                                 </button>
                                 <mat-menu #menu="matMenu">
-                                    <button mat-menu-item color="accent" *ngIf="product.return ==='N'"
+                                    <!-- <button mat-menu-item color="accent" *ngIf="product.return ==='N'"
                                         (click)="openDialogReturnProduct(product)">
                                         <mat-icon svgIcon="heroicons_solid:pencil"></mat-icon>
                                         <span>คืนสินค้า</span>
-                                    </button>
+                                    </button> -->
                                     <mat-dive></mat-dive>
                                     <button mat-menu-item color="accent" *ngIf="product.return ==='Y'"
                                         (click)="showPicture(product)">
@@ -120,13 +135,19 @@
             </ng-container>
         </div>
         <div class="mt-6 bg-card rounded-lg shadow p-6">
-            <h3 class="text-xl font-bold text-gray-500">รายการหัวฉีดที่ต้องการ</h3>
+            <div class="flex justify-between">
+                <h3 class="text-xl font-bold text-gray-500 mb-4">รายการหัวฉีดที่ต้องการ</h3>
+
+                <button class="px-6 bg-blue-500" mat-flat-button color="primary" (click)="openDialogReturnTransducerProducts(selectedTransducerProducts)"
+                *ngIf="selectedTransducerProducts.length > 0">คืนสินค้าที่เลือก</button>
+            </div>
             <ng-container *ngFor="let machine of itemData?.transducers">
                 <p><strong>รุ่นเครื่อง:</strong> {{ machine?.machine_model?.name ?? '-' }}</p>
                 <p><strong>จำนวน:</strong> {{ machine?.qty ?? 0 }}</p>
                 <table class="w-full border mt-2 bg-white shadow-sm mb-4">
                     <thead>
                         <tr class="bg-gray-200">
+                            <th class="border p-2 w-[1%]">#</th>
                             <th class="border p-2 text-left w-2/6">เครื่อง</th>
                             <th class="border p-2 w-1/6">Serial No.</th>
                             <th class="border p-2 w-1/6">Status</th>
@@ -135,6 +156,13 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let product of machine?.products">
+                            <td class="border p-2 items-center justify-center">
+                                <mat-checkbox [(ngModel)]="product.selected"
+                                              (change)="onSelectMultipleTransducerProducts($event, product)"
+                                              color="primary"
+                                              [disabled]="product.return === 'Y'">
+                                </mat-checkbox>
+                            </td>
                             <td class="border p-2">
                                 {{ product?.product?.name ?? '-' }}
                             </td>

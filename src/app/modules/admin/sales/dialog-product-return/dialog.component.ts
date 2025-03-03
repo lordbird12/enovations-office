@@ -82,9 +82,10 @@ export class DialogReturnProductComponent implements OnInit {
   ) {
 
     console.log(this.data);
-    
+
     this.form = this.fb.group({
       order_id: [data.order.id],
+      reserve_ref_no: data.order.reserve_ref_no,
       return_date: DateTime.now().toFormat('yyyy-MM-dd'),
       remark: '',
       products: this.fb.array([])
@@ -94,14 +95,17 @@ export class DialogReturnProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let formProduct = this.fb.group({
-      product_id: this.data.product.product_id,
-      machine_model_id: this.data.product.machine_model_id,
-      remark: '',
-      images: this.fb.array([])
-    })
-    this.productsArray.push(formProduct)
-    
+    this.data.product.forEach(product => {
+        let formProduct = this.fb.group({
+            product_id: product.product_id,
+            machine_model_id: product.machine_model_id,
+            remark: '',
+            images: this.fb.array([])
+        });
+        this.productsArray.push(formProduct);
+    });
+    console.log('form',this.form.value);
+
   }
 
 
@@ -186,6 +190,9 @@ export class DialogReturnProductComponent implements OnInit {
 
 
   saveData(): void {
+
+    console.log('form',this.form.value);
+
     const dialogRef = this._fuseConfirmationService.open({
       "title": "บันทึกข้อมูล",
       "message": "คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?",

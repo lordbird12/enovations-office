@@ -56,6 +56,16 @@ export class PageService {
             );
     }
 
+    createmachinemodel(data: any): Observable<any> {
+        return this._httpClient
+            .post<any>(environment.baseURL + '/api/machine_model', data)
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
+
     createCC(data: any): Observable<any> {
         return this._httpClient
             .post<any>(environment.baseURL + '/api/c_c', data)
@@ -86,7 +96,7 @@ export class PageService {
     }
     updateModel(data: any, id: any): Observable<any> {
         return this._httpClient
-            .put<any>(environment.baseURL + '/api/brand_model/'+ id, data)
+            .put<any>(environment.baseURL + '/api/machine_model/'+ id, data)
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -118,7 +128,7 @@ export class PageService {
     }
     deleteBrandModel(id: any): Observable<any> {
         return this._httpClient.delete<any>(
-            environment.baseURL + '/api/brand_model/' + id,
+            environment.baseURL + '/api/machine_model/' + id,
         );
     }
     deleteCC(id: any): Observable<any> {
@@ -162,7 +172,7 @@ export class PageService {
 
     getByIdModel(id: string): Observable<any> {
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/brand_model/' + id)
+            .get<any>(environment.baseURL + '/api/machine_model/' + id)
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -207,7 +217,7 @@ export class PageService {
     getPageBrandModel(dataTablesParameters: any): Observable<DataTablesResponse> {
         return this._httpClient
             .post(
-                environment.baseURL + '/api/brand_model_page',
+                environment.baseURL + '/api/machine_model_page',
                 dataTablesParameters,
             )
             .pipe(
@@ -216,10 +226,10 @@ export class PageService {
                 })
             );
     }
-    getPageCC(dataTablesParameters: any): Observable<DataTablesResponse> {
+    getProduct(dataTablesParameters: any): Observable<DataTablesResponse> {
         return this._httpClient
             .post(
-                environment.baseURL + '/api/c_c_page',
+                environment.baseURL + '/api/product_page',
                 dataTablesParameters,
             )
             .pipe(

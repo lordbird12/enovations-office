@@ -1,8 +1,6 @@
-
-
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule, NgClass } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -55,7 +53,7 @@ import { FormDialogColorComponent } from '../form-dialog-color/form-dialog.compo
   ],
 
 })
-export class EditBrandModelComponent implements OnInit {
+export class EditBrandModelComponent implements OnInit, AfterViewInit {
 
   @ViewChild(DataTableDirective)
   dtElement!: DataTableDirective;
@@ -92,6 +90,7 @@ export class EditBrandModelComponent implements OnInit {
 
       id: '',
       brand_id: '',
+      category_product_id: '',
       name: '',
       detail: '',
       status: '',
@@ -107,6 +106,10 @@ export class EditBrandModelComponent implements OnInit {
     })
     this.loadTable();
 
+  }
+
+  ngAfterViewInit(): void {
+    this.loadTable();
   }
 
   onSubmit(): void {
@@ -170,37 +173,12 @@ export class EditBrandModelComponent implements OnInit {
     })
   }
 
-  addElementCC(data: any) {
-    const dialogRef = this.dialog.open(FormDialogCCComponent, {
-      width: '500px', // กำหนดความกว้างของ Dialog
-      maxHeight: '100Vh',
-      data: {
-        data: data,
-        brand_model_id: this.Id
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.rerender();
-      }
-    });
-  }
-
-  addElementColor(data: any) {
-    const dialogRef = this.dialog.open(FormDialogColorComponent, {
-      width: '500px', // กำหนดความกว้างของ Dialog
-      maxHeight: '100Vh',
-      data: {
-        data: data,
-        brand_model_id: this.Id
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.rerender();
-        this._changeDetectorRef.markForCheck();
-      }
-    });
+  addProduct(id: any) {
+    if(id){
+        this._router.navigate(['admin/product/edit/', id])
+    }else{
+        this._router.navigate(['admin/product/form'])
+    }
   }
 
 
@@ -218,13 +196,13 @@ export class EditBrandModelComponent implements OnInit {
       pageLength: 25,
       serverSide: true,
       processing: true,
+    //   scrollX: true,
       language: {
         url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json",
       },
       ajax: (dataTablesParameters: any, callback) => {
-        dataTablesParameters.status = null;
-        dataTablesParameters.brand_model_id = +this.Id;
-        that._Service.getPageCC(dataTablesParameters).subscribe((resp: any) => {
+        // dataTablesParameters.brand_model_id = +this.Id;
+        that._Service.getProduct(dataTablesParameters).subscribe((resp: any) => {
           this.dataRowcc = resp.data;
           this.pages.current_page = resp.current_page;
           this.pages.last_page = resp.last_page;
@@ -248,53 +226,9 @@ export class EditBrandModelComponent implements OnInit {
       columns: [
         { data: 'action', orderable: false },
         { data: 'No' },
+        { data: 'serial_no' },
         { data: 'name' },
         { data: 'detail' },
-        { data: 'create_by' },
-        { data: 'created_at' },
-
-      ],
-    };
-    this.dtOptionsColor = {
-      pagingType: "full_numbers",
-      pageLength: 25,
-      serverSide: true,
-      processing: true,
-      language: {
-        url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json",
-      },
-      ajax: (dataTablesParameters: any, callback) => {
-        dataTablesParameters.status = null;
-        dataTablesParameters.brand_model_id = +this.Id;
-        that._Service.getPageColor(dataTablesParameters).subscribe((resp: any) => {
-          this.dataRow = resp.data;
-          this.pages.current_page = resp.current_page;
-          this.pages.last_page = resp.last_page;
-          this.pages.per_page = resp.per_page;
-          if (resp.current_page > 1) {
-            this.pages.begin =
-              parseInt(resp.per_page) *
-              (parseInt(resp.current_page) - 1);
-          } else {
-            this.pages.begin = 0;
-          }
-
-          callback({
-            recordsTotal: resp.total,
-            recordsFiltered: resp.total,
-            data: [],
-          });
-          this._changeDetectorRef.markForCheck();
-        });
-      },
-      columns: [
-        { data: 'action', orderable: false },
-        { data: 'No' },
-        { data: 'name' },
-        { data: 'detail' },
-        { data: 'create_by' },
-        { data: 'created_at' },
-
       ],
     };
   }
@@ -310,7 +244,7 @@ export class EditBrandModelComponent implements OnInit {
     return this.formFieldHelpers.join(' ');
   }
   backTo() {
-    this._router.navigate(['admin/brand/list'])
+    this._router.navigate(['admin/brand/edit/'+ this.itemData.brand_id])
   }
 
   files: File[] = [];
@@ -330,7 +264,7 @@ export class EditBrandModelComponent implements OnInit {
     }
   }
 
-  deleteCC(itemid: any) {
+  delete(itemid: any) {
     const confirmation = this._fuseConfirmationService.open({
       title: 'ลบข้อมูล',
       message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
@@ -355,38 +289,6 @@ export class EditBrandModelComponent implements OnInit {
     confirmation.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
         this._Service.deleteCC(itemid).subscribe((resp) => {
-          this.rerender();
-        });
-      }
-      error: (err: any) => { };
-    });
-  }
-
-  deleteColor(itemid: any) {
-    const confirmation = this._fuseConfirmationService.open({
-      title: 'ลบข้อมูล',
-      message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
-      icon: {
-        show: true,
-        name: 'heroicons_outline:exclamation-triangle',
-        color: 'warning',
-      },
-      actions: {
-        confirm: {
-          show: true,
-          label: 'ยืนยัน',
-          color: 'warn',
-        },
-        cancel: {
-          show: true,
-          label: 'ยกเลิก',
-        },
-      },
-      dismissible: true,
-    });
-    confirmation.afterClosed().subscribe((result) => {
-      if (result === 'confirmed') {
-        this._Service.deleteColor(itemid).subscribe((resp) => {
           this.rerender();
         });
       }

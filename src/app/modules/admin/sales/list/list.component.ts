@@ -24,7 +24,7 @@ import { MatTableModule } from '@angular/material/table';
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
 import { PageService } from '../page.service';
 import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
-import { DataTablesModule } from 'angular-datatables';
+import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { Router } from '@angular/router';
 import { PictureComponent } from '../../picture/picture.component';
 import { FormReportComponent } from '../../product/form-report/form-report.component';
@@ -57,12 +57,15 @@ import { MatMenuModule } from '@angular/material/menu';
     ],
 })
 export class ListComponent implements OnInit, AfterViewInit {
+    @ViewChild(DataTableDirective)
+    dtElement!: DataTableDirective;
     isLoading: boolean = false;
     dtOptions: DataTables.Settings = {};
     positions: any[];
     // public dataRow: any[];
     dataRow: any[] = [];
     user: any
+    selectedStatus: string = '';
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     constructor(
         private dialog: MatDialog,
@@ -95,7 +98,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             this._router.navigate(['admin/sales/form/ec']);
         } else if (data === 'rc') {
             this._router.navigate(['admin/sales/form/rc']);
-        } 
+        }
     }
 
 
@@ -110,8 +113,9 @@ export class ListComponent implements OnInit, AfterViewInit {
             language: {
                 url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json",
             },
+            order: [[0, 'desc']],
             ajax: (dataTablesParameters: any, callback) => {
-                dataTablesParameters.status = null;
+                dataTablesParameters.status = this.selectedStatus || null;
                 that._service.getPage(dataTablesParameters).subscribe((resp: any) => {
                     this.dataRow = resp.data;
                     console.log(this.dataRow)
@@ -164,14 +168,14 @@ export class ListComponent implements OnInit, AfterViewInit {
             });
     }
 
-  
+
 
     downloadReport(item: any) {
         const dialogRef = this.dialog.open(FormReportComponent, {
             width: '700px', // กำหนดความกว้างของ Dialog
             height: '700px',
             data: item
-         
+
         });
 
         dialogRef.afterClosed().subscribe((result) => {
@@ -184,5 +188,27 @@ export class ListComponent implements OnInit, AfterViewInit {
     joinSringModel(machine_models: any) {
         const result = machine_models.map(model => model.name).join(',');
         return result;
+    }
+
+    filterByStatus(status: string): void {
+        this.selectedStatus = status;
+        this.rerender();
+    }
+
+    rerender(): void {
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.ajax.reload();
+        });
+      }
+
+    deleteorder(id: any) {
+        this._service.delete(id).subscribe({
+            next: (resp: any) => {
+                this.rerender();
+            },
+            error: (err: any) => {
+                console.log(err);
+            }
+        })
     }
 }
