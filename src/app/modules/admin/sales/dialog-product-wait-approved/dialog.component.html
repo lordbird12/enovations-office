@@ -1,0 +1,29 @@
+<h2 mat-dialog-title class="mx-auto text-2xl text-center font-semibold">อนุมัติการคืนสินค้า</h2>
+<mat-dialog-content class="space-y-6 p-4 w-full max-w-lg mx-auto md:max-w-2xl items-center">
+  <form [formGroup]="form">
+    <div formArrayName="products">
+      <div *ngFor="let product of products.controls; let i = index" class="border p-4 rounded-lg shadow-sm w-full mb-4">
+        <div [formGroupName]="i">
+          <h3 class="mb-3">Product name: {{product.get('name').value}}</h3>
+          
+          <div class="mb-4">
+            <label class="block mb-2">สถานะ</label>
+            <mat-radio-group formControlName="status" class="flex gap-4">
+              <mat-radio-button value="approved">Approved</mat-radio-button>
+              <mat-radio-button value="rejected">Rejected</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <mat-form-field class="w-full">
+            <mat-label>เหตุผล</mat-label>
+            <textarea matInput formControlName="remark"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="p-4 flex justify-end gap-4">
+  <button mat-flat-button color="accent" (click)="closeDialog()">ยกเลิก</button>
+  <button mat-flat-button color="primary" (click)="saveData()">บันทึก</button>
+</mat-dialog-actions>

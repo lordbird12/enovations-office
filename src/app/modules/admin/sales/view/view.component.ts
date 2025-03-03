@@ -35,6 +35,8 @@ import { DialogReturnProductComponent } from '../dialog-product-return/dialog.co
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { PicturesComponent } from '../pictures/picture.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { DialogReturnProductWaitApprovedComponent } from '../dialog-product-wait-approved/dialog.component';
 @Component({
     selector: 'view-product-sales',
     templateUrl: './view.component.html',
@@ -61,8 +63,8 @@ import { PicturesComponent } from '../pictures/picture.component';
         MatCheckboxModule,
         MatChipsModule,
         MatMenuModule,
-        MatDividerModule
-
+        MatDividerModule,
+        MatSnackBarModule
     ],
 })
 export class ViewOrderComponent implements OnInit {
@@ -273,6 +275,7 @@ export class ViewOrderComponent implements OnInit {
         public activatedRoute: ActivatedRoute,
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _snackBar: MatSnackBar,
 
     ) {
         this.user = JSON.parse(localStorage.getItem('user'))
@@ -1226,10 +1229,9 @@ export class ViewOrderComponent implements OnInit {
             });
 
     }
-    openDialogReturnProductarray(formValue: any[]): void {
-        console.log('form',formValue);
-
-        this.dialog
+    openDialogReturnProductarray(formValue: any[]): void {        
+        if(this.type_return === 'return'){
+            this.dialog
             .open(DialogReturnProductComponent, {
                 maxHeight: '100vh',
                 width: '80vh',
@@ -1260,6 +1262,8 @@ export class ViewOrderComponent implements OnInit {
                         // console.log(this.formData.value);
 
                         this._changeDetectorRef.markForCheck();
+                        this.selectedMachineProducts = [];
+                        this.selectedTransducerProducts = [];
 
                     });
                 } else {
@@ -1268,6 +1272,32 @@ export class ViewOrderComponent implements OnInit {
                 }
 
             });
+        }else{
+            this.dialog
+            .open(DialogReturnProductWaitApprovedComponent, {
+                maxHeight: '100vh',
+                width: '80vh',
+                maxWidth: '100vh',
+                data: {
+                    order: this.itemData,
+                    product: formValue,
+                },
+            })
+            .afterClosed()
+            .subscribe((item) => {
+                if (item) {
+                    this._service.getById(this.Id).subscribe((resp: any) => {
+                        this.itemData = resp.data;
+                        this.formData.patchValue({
+                            ...this.itemData,
+                        });
+                        this._changeDetectorRef.markForCheck();
+                    });
+                } else {
+                    console.log('no data');
+                }
+            });
+        }
 
     }
 
@@ -1309,8 +1339,31 @@ export class ViewOrderComponent implements OnInit {
 
     selectedMachineProducts: any[] = [];
     selectedTransducerProducts: any[] = [];
+    type_return:string;
 
     onSelectMultipleMachineProducts(event: any, product: any): void {
+        const selectedStatus = this.selectedMachineProducts.length > 0 ? this.selectedMachineProducts[0]?.return_products : null;
+        const productStatus = product?.return_products;
+        if(productStatus?.status === 'waiting_approve'){
+            this.type_return = 'waiting_approve'
+        }else{
+            this.type_return = 'return'
+        }
+        if(this.selectedMachineProducts.length > 0 ){
+            if ((selectedStatus === null && productStatus !== null) ||
+                (selectedStatus !== null && productStatus === null) ||
+                (selectedStatus?.status === 'waiting_approve' && productStatus?.status !== 'waiting_approve') ||
+                (selectedStatus?.status !== 'waiting_approve' && productStatus?.status === 'waiting_approve')) {
+                this._snackBar.open('ไม่ใช้ข้อมูลประเภทเดียวกัน', 'ปิด', {
+                    duration: 3000,
+                    horizontalPosition: 'left',
+                    verticalPosition: 'bottom',
+                });
+                event.source.checked = false;
+                return;
+            }
+        }
+
         if (event.checked) {
             this.selectedMachineProducts.push(product);
         } else {
