@@ -86,7 +86,7 @@
                                 <mat-checkbox [(ngModel)]="product.selected"
                                               (change)="onSelectMultipleMachineProducts($event, product)"
                                               color="primary"
-                                              [disabled]="product.return === 'Y'">
+                                              [disabled]="product?.return_products?.status === 'approve'">
                                 </mat-checkbox>
                             </td>
                             <td class="border p-2">
@@ -96,12 +96,15 @@
                                 {{ product?.product?.serial_no ?? '-' }}
                             </td>
                             <td class="border p-2 text-center">
-                                <div *ngIf="product.return === 'N'"
+                                <div *ngIf="product?.return_products === null"
                                     class="bg-yellow-200 p-1 rounded-md text-yellow-800 font-bold">
                                     รอคืน
                                 </div>
-
-                                <div *ngIf="product.return === 'Y'"
+                                <div *ngIf="product?.return_products?.status === 'waiting_approve'"
+                                    class="bg-blue-200 p-1 rounded-md text-blue-800 font-bold">
+                                    รออนุมัติ
+                                </div>
+                                <div *ngIf="product?.return_products?.status === 'approve'"
                                     class="bg-green-200 p-1 rounded-md text-green-800 font-bold">
                                     คืนแล้ว
                                 </div>
@@ -160,7 +163,7 @@
                                 <mat-checkbox [(ngModel)]="product.selected"
                                               (change)="onSelectMultipleTransducerProducts($event, product)"
                                               color="primary"
-                                              [disabled]="product.return === 'Y'">
+                                              [disabled]="product?.return_products?.status === 'approve'">
                                 </mat-checkbox>
                             </td>
                             <td class="border p-2">
@@ -170,12 +173,16 @@
                                 {{ product?.product?.serial_no ?? '-' }}
                             </td>
                             <td class="border p-2 text-center">
-                                <div *ngIf="product.return === 'N'"
+                                <div *ngIf="product?.return_products === null"
                                     class="bg-yellow-200 p-1 rounded-md text-yellow-800 font-bold">
                                     รอคืน
                                 </div>
-                                <div *ngIf="product.return === 'Y'"
-                                    class="bg-green-200 p-1 rounded-md text-green-800 font-bold ">
+                                <div *ngIf="product?.return_products?.status === 'waiting_approve'"
+                                    class="bg-blue-200 p-1 rounded-md text-blue-800 font-bold">
+                                    รออนุมัติ
+                                </div>
+                                <div *ngIf="product?.return_products?.status === 'approve'"
+                                    class="bg-green-200 p-1 rounded-md text-green-800 font-bold">
                                     คืนแล้ว
                                 </div>
                             </td>

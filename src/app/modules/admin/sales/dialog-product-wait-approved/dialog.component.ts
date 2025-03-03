@@ -31,7 +31,7 @@ interface OrderData {
 }
 
 @Component({
-  selector: 'app-dialog-return-product',
+  selector: 'app-dialog-return-product-wait-approved',
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss'],
   standalone: true,
@@ -58,7 +58,7 @@ interface OrderData {
     ToastrModule
   ]
 })
-export class DialogReturnProductComponent implements OnInit {
+export class DialogReturnProductWaitApprovedComponent implements OnInit {
   form: FormGroup;
   formFieldHelpers: string[] = ['fuse-mat-dense'];
   productFilter = new FormControl('');
@@ -71,123 +71,44 @@ export class DialogReturnProductComponent implements OnInit {
   saleFilter = new FormControl('');
   filterSale: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   saleData: any[] = [];
+
+  productArray:[{Id:number,status:string,remark:string}];
+  
   constructor(
     private fb: FormBuilder,
     private _service: PageService,
-    private dialogRef: MatDialogRef<DialogReturnProductComponent>,
+    private dialogRef: MatDialogRef<DialogReturnProductWaitApprovedComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _fuseConfirmationService: FuseConfirmationService,
     private _changeDetectorRef: ChangeDetectorRef,
     private toastr: ToastrService
   ) {
 
-    console.log(this.data);
-    
-    this.form = this.fb.group({
-      order_id: [data.order.id],
-      reserve_ref_no: data.order.reserve_ref_no,
-      return_date: DateTime.now().toFormat('yyyy-MM-dd'),
-      remark: '',
-      products: this.fb.array([])
+    console.log('data',this.data);
 
-
-    });
   }
 
   ngOnInit(): void {
-    this.data.product.forEach(product => {
-        let formProduct = this.fb.group({
-            product_id: product.product_id,
-            machine_model_id: product.machine_model_id,
-            remark: '',
-            images: this.fb.array([])
-        });
-        this.productsArray.push(formProduct);
+    // Initialize the form
+    this.form = this.fb.group({
+      products: this.fb.array(this.data.product.map(product => this.fb.group({
+        name: [product.product.name],
+        id: [product.id],
+        status: ['approved'],
+        remark: ['']
+      })))
     });
-    console.log('form',this.form.value);
 
+    console.log('form', this.form.value);
   }
 
-
-  get productsArray(): FormArray {
+  get products(): FormArray {
     return this.form.get('products') as FormArray;
   }
 
   closeDialog(): void {
     this.dialogRef.close();
   }
-
-  filesPC: { [key: number]: File } = {}; // แยกไฟล์แต่ละแถว
-
-  async onSelectsPC(event: { addedFiles: File[] }, i: number): Promise<void> {
-    if (!event.addedFiles.length) return;
-
-    const file = event.addedFiles[0];
-
-    // ตรวจสอบว่าไฟล์เป็นรูปภาพหรือไม่
-    if (!file.type.startsWith('image/')) {
-        alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
-        return;
-    }
-
-    this.filesPC[i] = file; // ผูกไฟล์เฉพาะ index นี้
-    const formData1 = new FormData();
-    formData1.append('image', file);
-    formData1.append('path', 'images/asset/');
-
-    try {
-        // อัปโหลดรูปภาพและรับ URL
-        const im = await lastValueFrom(this._service.uploadImg(formData1));
-
-        if (!im) {
-            console.error("Invalid image response:", im);
-            return;
-        }
-
-        console.log("Uploaded Image URL:", im); // สมมติว่า API ส่ง path กลับมาเป็น im.path
-
-        // เข้าถึง FormArray 'products'
-        const productCollections = this.form.get('products') as FormArray;
-        if (!productCollections) {
-            console.error("Products FormArray not found");
-            return;
-        }
-
-        const productGroup = productCollections.at(i) as FormGroup; // ดึง FormGroup ตาม index
-        if (!productGroup) {
-            console.error("Product FormGroup not found at index", i);
-            return;
-        }
-
-        // เข้าถึง FormArray 'images' ใน FormGroup
-        let imagesArray = productGroup.get('images') as FormArray;
-        if (!imagesArray) {
-            console.error("Images FormArray not found in FormGroup, creating one.");
-            imagesArray = this.fb.array([]);
-            productGroup.setControl('images', imagesArray); // สร้างใหม่ถ้าไม่มี
-        }
-
-        imagesArray.push(this.fb.control(im)); // ✅ ใช้ push() กับ FormArray โดยตรง
-
-        // แสดงค่า Form เพื่อ debug
-        console.log("Updated Form Value:", this.form.value);
-
-        // แปลงไฟล์เป็น URL เพื่อแสดงใน img
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-            // this.imageUrls[i] = e.target.result;
-        };
-        reader.readAsDataURL(file);
-
-        this._changeDetectorRef.markForCheck();
-
-    } catch (error) {
-        console.error("Upload failed", error);
-    }
-}
-
-
-
 
   saveData(): void {
 
@@ -216,28 +137,33 @@ export class DialogReturnProductComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe((result => {
       if (result === 'confirmed') {
-        let formValue = this.form.value;
-        formValue.products = formValue.products.map(product => ({
-          ...product,
-          images: product.images === "" ? [] : product.images
-        }));
-        this._service.updateReturnProduct(formValue).subscribe({
-          next: (resp: any) => {
-             this.toastr.success('สำเร็จ')
-            this.dialogRef.close(resp);
-          },
-          error: (err: any) => {
-            this.toastr.error('เกิดข้อผิดผลาด')
-          }
-        })
-      } else {
-
+        const formValue = this.form.value;
+        const products = formValue.products;
+        
+        // Create an array of API calls
+        const apiCalls = products.map(product => {
+          const payload = {
+            id: product.id,
+            status: product.status,
+            remark: product.remark
+          };
+          
+          return this._service.updateStatusReturn(payload);
+        });
+        
+        // Use Promise.all to wait for all API calls to complete
+        Promise.all(apiCalls.map(call => lastValueFrom(call)))
+          .then(responses => {
+            this.toastr.success('บันทึกข้อมูลสำเร็จ');
+            this.dialogRef.close(responses);
+          })
+          .catch(error => {
+            this.toastr.error('เกิดข้อผิดพลาด');
+            console.error('Error updating products:', error);
+          });
       }
     }))
-
   }
-
-
 }
 
 
