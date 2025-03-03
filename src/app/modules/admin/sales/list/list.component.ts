@@ -200,4 +200,15 @@ export class ListComponent implements OnInit, AfterViewInit {
           dtInstance.ajax.reload();
         });
       }
+
+    deleteorder(id: any) {
+        this._service.delete(id).subscribe({
+            next: (resp: any) => {
+                this.rerender();
+            },
+            error: (err: any) => {
+                console.log(err);
+            }
+        })
+    }
 }

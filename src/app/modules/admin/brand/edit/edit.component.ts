@@ -23,6 +23,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatDialog } from '@angular/material/dialog';
 import { FormDialogComponent } from '../../brand-model/form-dialog/form-dialog.component';
+import { FormDialogMachineModelComponent } from '../form-dialog-machine-model/form-dialog-machine-model.component';
 
 @Component({
   selector: 'edit-brand',
@@ -48,7 +49,7 @@ import { FormDialogComponent } from '../../brand-model/form-dialog/form-dialog.c
     MatTableModule,
     DataTablesModule,
     MatCheckboxModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
   ],
 
 })
@@ -256,10 +257,15 @@ export class EditComponent implements OnInit {
   }
 
   addElement() {
-    const dialogRef = this.dialog.open(FormDialogComponent, {
+    console.log('itemdata',this.itemData);
+
+    const dialogRef = this.dialog.open(FormDialogMachineModelComponent, {
       width: '500px', // กำหนดความกว้างของ Dialog
-      maxHeight: '100Vh',
-      data: this.Id
+      maxHeight: '95Vh',
+      data: {
+        Id:this.Id,
+        category_product_id: this.itemData.category_product_id ?? 0,
+      }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
