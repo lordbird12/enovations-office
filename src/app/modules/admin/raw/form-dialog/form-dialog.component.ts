@@ -104,9 +104,7 @@ export class FormDialogComponent implements OnInit {
             vendor_id: ''
         });
 
-        this._service.getPosition().subscribe((resp: any)=>{
-            this.positions = resp.data
-        })
+         
     }
 
     onSaveClick(): void {

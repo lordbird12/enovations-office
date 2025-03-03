@@ -66,9 +66,7 @@ export class FormDialogComponent implements OnInit{
             month: [],
             remark: [],
         });
-        this._service.getPosition().subscribe((resp: any)=>{
-            this.positions = resp.data
-        })
+         
     }
 
     ngOnInit(): void {

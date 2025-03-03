@@ -57,9 +57,7 @@ export class FormDialogComponent implements OnInit{
         private _fuseConfirmationService: FuseConfirmationService,
         private _changeDetectorRef: ChangeDetectorRef
     ) {
-        this._service.getPosition().subscribe((resp: any)=>{
-            this.positions = resp.data
-        })
+         
     }
 
     ngOnInit(): void {
