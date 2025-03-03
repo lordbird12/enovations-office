@@ -117,8 +117,8 @@
                         <div class="w-full px-3 mb-6 md:mb-0"
                             *ngIf="this.type === 'Echocardiogram' || this.type === 'Ultrasound Imaging' || this.type === 'rc'">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                                <mat-label>หัวตรวจ</mat-label>
-                                <input matInput placeholder="หัวตรวจ" [formControlName]="'competitor_transducer'">
+                                <mat-label>หัวฉีด</mat-label>
+                                <input matInput placeholder="หัวฉีด" [formControlName]="'competitor_transducer'">
                             </mat-form-field>
                         </div>
                         <div class="w-full px-3 mb-6 md:mb-0">
@@ -228,12 +228,12 @@
                 </div>
                 <hr class="border-2 border-slate-300 mx-6">
                 <div class="w-full px-6 mb-6 md:mb-0 mt-2">
-                    <span class="text-xl font-bold text-gray-500">รายการหัวตรวจที่ต้องการ</span>
+                    <span class="text-xl font-bold text-gray-500">รายการหัวฉีดที่ต้องการ</span>
                     <div formArrayName="transducers">
                         <div *ngFor="let transducer of transducers.controls; let i = index" [formGroupName]="i"
                             class="flex items-center gap-2 mt-2">
                             <mat-form-field class="w-1/2" [ngClass]="formFieldHelpers">
-                                <mat-label>รุ่นหัวตรวจ</mat-label>
+                                <mat-label>รุ่นหัวฉีด</mat-label>
                                 <input matInput placeholder="Transducer Model" formControlName="machine_model_name">
                             </mat-form-field>
                             <mat-form-field class="w-1/4" [ngClass]="formFieldHelpers">
@@ -246,8 +246,8 @@
                         </div>
                     </div>
                     <mat-form-field class="w-full md:w-9/12 " [ngClass]="formFieldHelpers">
-                        <mat-label>ค้นหารุ่นหัวตรวจ</mat-label>
-                        <input matInput [formControl]="machineModelFilter" [matAutocomplete]="transducer" placeholder="ค้นหารุ่นหัวตรวจ" />
+                        <mat-label>ค้นหารุ่นหัวฉีด</mat-label>
+                        <input matInput [formControl]="machineModelFilter" [matAutocomplete]="transducer" placeholder="ค้นหารุ่นหัวฉีด" />
                         <mat-autocomplete #transducer="matAutocomplete" (optionSelected)="onSelectMachineModel($event, 'transducer')">
                             <mat-option *ngFor="let item of filterMachineModel | async" [value]="item.name">
                                 <span>{{item.name}}</span>
