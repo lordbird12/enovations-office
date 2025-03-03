@@ -11,7 +11,9 @@
                     </div>
                     <div class="flex flex-col min-w-0 ml-4">
                         <ng-container *transloco="let t">
-                            <div class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">{{t('ยินดีต้อนรับ')}} Admin</div>
+                            <div
+                                class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+                                {{t('ยินดีต้อนรับ')}} Admin</div>
                         </ng-container>
                         <div class="flex items-center">
                             <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:bell'"></mat-icon>
@@ -73,11 +75,11 @@
                             <!-- Summary -->
                             <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
                                 <div class="flex items-start justify-between">
-                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม</div>
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม
+                                    </div>
                                     <div class="ml-2 -mt-2 -mr-3">
                                         <button mat-icon-button [matMenuTriggerFor]="summaryMenu">
-                                            <mat-icon
-                                                class="icon-size-5"
+                                            <mat-icon class="icon-size-5"
                                                 [svgIcon]="'heroicons_mini:ellipsis-vertical'"></mat-icon>
                                         </button>
                                         <mat-menu #summaryMenu="matMenu">
@@ -88,7 +90,9 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-center mt-2">
-                                    <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">21</div>
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">
+                                        21</div>
                                     <!-- <div class="text-lg font-medium text-blue-600 dark:text-blue-500">Due Tasks</div> -->
                                     <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                                         <div class="text-md font-medium truncate">Completed:</div>
@@ -99,11 +103,11 @@
                             <!-- Overdue -->
                             <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
                                 <div class="flex items-start justify-between">
-                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม</div>
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม
+                                    </div>
                                     <div class="ml-2 -mt-2 -mr-3">
                                         <button mat-icon-button [matMenuTriggerFor]="overdueMenu">
-                                            <mat-icon
-                                                class="icon-size-5"
+                                            <mat-icon class="icon-size-5"
                                                 [svgIcon]="'heroicons_mini:ellipsis-vertical'"></mat-icon>
                                         </button>
                                         <mat-menu #overdueMenu="matMenu">
@@ -114,7 +118,9 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-center mt-2">
-                                    <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">17</div>
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">
+                                        17</div>
                                     <!-- <div class="text-lg font-medium text-red-600 dark:text-red-500">Tasks</div> -->
                                     <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                                         <div class="text-md font-medium truncate">From yesterday:</div>
@@ -125,11 +131,11 @@
                             <!-- Issues -->
                             <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
                                 <div class="flex items-start justify-between">
-                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม</div>
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม
+                                    </div>
                                     <div class="ml-2 -mt-2 -mr-3">
                                         <button mat-icon-button [matMenuTriggerFor]="issuesMenu">
-                                            <mat-icon
-                                                class="icon-size-5"
+                                            <mat-icon class="icon-size-5"
                                                 [svgIcon]="'heroicons_mini:ellipsis-vertical'"></mat-icon>
                                         </button>
                                         <mat-menu #issuesMenu="matMenu">
@@ -140,7 +146,9 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-center mt-2">
-                                    <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">24</div>
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">
+                                        24</div>
                                     <!-- <div class="text-lg font-medium text-amber-600 dark:text-amber-500">Open</div> -->
                                     <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                                         <div class="text-md font-medium truncate">Closed today:</div>
@@ -151,11 +159,11 @@
                             <!-- Features -->
                             <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
                                 <div class="flex items-start justify-between">
-                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม</div>
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม
+                                    </div>
                                     <div class="ml-2 -mt-2 -mr-3">
                                         <button mat-icon-button [matMenuTriggerFor]="featuresMenu">
-                                            <mat-icon
-                                                class="icon-size-5"
+                                            <mat-icon class="icon-size-5"
                                                 [svgIcon]="'heroicons_mini:ellipsis-vertical'"></mat-icon>
                                         </button>
                                         <mat-menu #featuresMenu="matMenu">
@@ -166,7 +174,9 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-center mt-2">
-                                    <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">38</div>
+                                    <div
+                                        class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">
+                                        38</div>
                                     <!-- <div class="text-lg font-medium text-red-600 dark:text-red-500">Proposals</div> -->
                                     <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
                                         <div class="text-md font-medium truncate">Implemented:</div>
@@ -175,11 +185,14 @@
                                 </div>
                             </div>
                             <!-- Github issues summary -->
-                            <div class="sm:col-span-2 md:col-span-4 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                            <div
+                                class="sm:col-span-2 md:col-span-4 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
                                 <div class="flex flex-col sm:flex-row items-start justify-between">
-                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม</div>
+                                    <div class="text-lg font-medium tracking-tight leading-6 truncate">ตัวอย่างผลรวม
+                                    </div>
                                     <div class="mt-3 sm:mt-0 sm:ml-2">
-                                        <mat-button-toggle-group value="this-week" #githubIssuesWeekSelector="matButtonToggleGroup">
+                                        <mat-button-toggle-group value="this-week"
+                                            #githubIssuesWeekSelector="matButtonToggleGroup">
                                             <mat-button-toggle value="last-week">ย้อนหลัง</mat-button-toggle>
                                             <mat-button-toggle value="this-week">ปัจจุบัน</mat-button-toggle>
                                         </mat-button-toggle-group>
@@ -190,9 +203,16 @@
                                     <div class="flex flex-col flex-auto">
                                         <div class="font-medium text-secondary">New vs. Closed</div>
                                         <div class="flex flex-col flex-auto">
-                                            <apx-chart class="flex-auto w-full h-80" [chart]="chartGithubIssues.chart" [colors]="chartGithubIssues.colors" [dataLabels]="chartGithubIssues.dataLabels" [grid]="chartGithubIssues.grid" [labels]="chartGithubIssues.labels" [legend]="chartGithubIssues.legend"
-                                                [plotOptions]="chartGithubIssues.plotOptions" [series]="chartGithubIssues.series[githubIssuesWeekSelector.value]" [states]="chartGithubIssues.states" [stroke]="chartGithubIssues.stroke" [tooltip]="chartGithubIssues.tooltip"
-                                                [xaxis]="chartGithubIssues.xaxis" [yaxis]="chartGithubIssues.yaxis"></apx-chart>
+                                            <apx-chart class="flex-auto w-full h-80" [chart]="chartGithubIssues.chart"
+                                                [colors]="chartGithubIssues.colors"
+                                                [dataLabels]="chartGithubIssues.dataLabels"
+                                                [grid]="chartGithubIssues.grid" [labels]="chartGithubIssues.labels"
+                                                [legend]="chartGithubIssues.legend"
+                                                [plotOptions]="chartGithubIssues.plotOptions"
+                                                [series]="chartGithubIssues.series[githubIssuesWeekSelector.value]"
+                                                [states]="chartGithubIssues.states" [stroke]="chartGithubIssues.stroke"
+                                                [tooltip]="chartGithubIssues.tooltip" [xaxis]="chartGithubIssues.xaxis"
+                                                [yaxis]="chartGithubIssues.yaxis"></apx-chart>
                                         </div>
                                     </div>
                                     <!-- Overview -->
@@ -200,42 +220,50 @@
                                         <div class="font-medium text-secondary">ข้อมูลสรุป</div>
                                         <div class="flex-auto grid grid-cols-4 gap-4 mt-6">
                                             <!-- New issues -->
-                                            <div class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-indigo-800 dark:bg-white dark:bg-opacity-5 dark:text-indigo-400">
-                                                <div class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
+                                            <div
+                                                class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-indigo-50 text-indigo-800 dark:bg-white dark:bg-opacity-5 dark:text-indigo-400">
+                                                <div
+                                                    class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
                                                     {{data.githubIssues.overview[githubIssuesWeekSelector.value]['new-issues']}}
                                                 </div>
                                                 <div class="mt-1 text-sm sm:text-lg font-medium">New Issues</div>
                                             </div>
                                             <!-- Closed -->
-                                            <div class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-red-50 text-red-800 dark:bg-white dark:bg-opacity-5 dark:text-red-500">
-                                                <div class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
+                                            <div
+                                                class="col-span-2 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-red-50 text-red-800 dark:bg-white dark:bg-opacity-5 dark:text-red-500">
+                                                <div
+                                                    class="text-5xl sm:text-7xl font-semibold leading-none tracking-tight">
                                                     {{data.githubIssues.overview[githubIssuesWeekSelector.value]['closed-issues']}}
                                                 </div>
                                                 <div class="mt-1 text-sm sm:text-lg font-medium">Closed</div>
                                             </div>
                                             <!-- Fixed -->
-                                            <div class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
+                                            <div
+                                                class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
                                                 <div class="text-5xl font-semibold leading-none tracking-tight">
                                                     {{data.githubIssues.overview[githubIssuesWeekSelector.value]['fixed']}}
                                                 </div>
                                                 <div class="mt-1 text-sm font-medium text-center">Fixed</div>
                                             </div>
                                             <!-- Won't fix -->
-                                            <div class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
+                                            <div
+                                                class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
                                                 <div class="text-5xl font-semibold leading-none tracking-tight">
                                                     {{data.githubIssues.overview[githubIssuesWeekSelector.value]['wont-fix']}}
                                                 </div>
                                                 <div class="mt-1 text-sm font-medium text-center">Won't Fix</div>
                                             </div>
                                             <!-- Re-opened -->
-                                            <div class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
+                                            <div
+                                                class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
                                                 <div class="text-5xl font-semibold leading-none tracking-tight">
                                                     {{data.githubIssues.overview[githubIssuesWeekSelector.value]['re-opened']}}
                                                 </div>
                                                 <div class="mt-1 text-sm font-medium text-center">Re-opened</div>
                                             </div>
                                             <!-- Needs triage -->
-                                            <div class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
+                                            <div
+                                                class="col-span-2 sm:col-span-1 flex flex-col items-center justify-center py-8 px-1 rounded-2xl bg-gray-100 text-secondary dark:bg-white dark:bg-opacity-5">
                                                 <div class="text-5xl font-semibold leading-none tracking-tight">
                                                     {{data.githubIssues.overview[githubIssuesWeekSelector.value]['needs-triage']}}
                                                 </div>
@@ -260,4 +288,54 @@
         </div>
     </div>
 
+</div>
+
+<div *ngIf="showPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 max-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-auto max-w-[90vh] overflow-auto max-h-[80vh]">
+        <h2 class="text-xl font-bold">แจ้งเตือนงานค้าง</h2>
+        <table class="table-auto w-full bg-white whitespace-nowrap mt-4 border border-gray-300 text-sm">
+            <thead class="border-b border-gray-300 bg-gray-100">
+                <tr class="border-b border-gray-300">
+                    <th class="w-[10px] border-r border-gray-300 p-2 text-left">ลำดับ</th>
+                    <th class="border-r border-gray-300 p-2 text-left">Document No.</th>
+                    <th class="border-r border-gray-300 p-2 text-left">วัตถุประสงค์</th>
+                    <th class="border-r border-gray-300 p-2 text-left">ผู้จอง</th>
+                    <th class="border-r border-gray-300 p-2 text-left">ลูกค้า</th>
+                    <th class="border-r border-gray-300 p-2 text-center">วันที่ยืม</th>
+                    <th class="border-r border-gray-300 p-2 text-center">วันที่ยืม</th>
+                    <th class="border-r border-gray-300 p-2 text-center">วันคืน</th>
+                    <th class="p-2 text-center">สถานะ</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="popupData.data.data?.length != 0">
+                <tr *ngFor="let item of popupData.data.data; let i = index" class="border-b border-gray-300 hover:bg-gray-50">
+                    <td class="border-r border-gray-300 p-2 text-left">{{ i + 1 }}</td>
+                    <td class="border-r border-gray-300 p-2 text-left">{{ item.code ?? '-' }}</td>
+                    <td class="border-r border-gray-300 p-2 text-left">{{ item.request_purpose ? item.request_purpose : "-" }}</td>
+                    <td class="border-r border-gray-300 p-2 text-left">{{ item.user ? item.user?.name : "-" }}</td>
+                    <td class="border-r border-gray-300 p-2 text-left">{{ item.client ? item.client?.name : "-" }}</td>
+                    <td class="border-r border-gray-300 p-2 text-center">{{ item.created_at !== null ? (item.created_at | date : "dd-MM-yyyy") : "-" }}</td>
+                    <td class="border-r border-gray-300 p-2 text-center">{{ item.start_date !== null ? (item.start_date | date : "dd-MM-yyyy") : "-" }}</td>
+                    <td class="border-r border-gray-300 p-2 text-center">{{ item.end_date !== null ? (item.end_date | date : "dd-MM-yyyy") : "-" }}</td>
+                    <td class="p-2 text-center">
+                        <div *ngIf="item.status === 'Ordered'" class="bg-yellow-200 px-2 py-1 rounded-md text-yellow-800 font-bold">รออนุมัติ</div>
+                        <div *ngIf="item.status === 'Reject'" class="bg-red-200 px-2 py-1 rounded-md text-red-800 font-bold">ไม่อนุมัติ</div>
+                        <div *ngIf="item.status === 'Confirm'" class="bg-green-200 px-2 py-1 rounded-md text-green-800 font-bold">อนุมัติ</div>
+                        <div *ngIf="item.status === 'Approve'" class="bg-green-200 px-2 py-1 rounded-md text-green-800 font-bold">รอรับของ</div>
+                        <div *ngIf="item.status === 'Finish'" class="bg-blue-200 px-2 py-1 rounded-md text-blue-800 font-bold">รอคืน</div>
+                        <div *ngIf="item.status === 'Returned'" class="bg-blue-200 px-2 py-1 rounded-md text-blue-800 font-bold">เสร็จสิ้น</div>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="popupData.data.data?.length == 0">
+                <tr class="border-t border-gray-300">
+                    <td colspan="9" class="no-data-available text-center p-4 text-gray-500">ไม่มีข้อมูล !</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="mt-4 flex justify-end">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded" (click)="closePopup()">ตกลง</button>
+        </div>
+    </div>
 </div>
