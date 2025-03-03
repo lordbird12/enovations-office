@@ -100,7 +100,10 @@ export class EditComponent implements OnInit {
         ...this.itemData,
         image: ''
       })
-      this.url_image = this.itemData.image;
+      console.log(this.itemData.image);
+      
+      this.url_image = (this.itemData.image && Object.keys(this.itemData.image).length > 0) ? this.itemData.image : "";
+
     })
     this.loadTable();
 

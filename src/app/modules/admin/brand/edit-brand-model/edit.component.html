@@ -39,7 +39,7 @@
                 </div>
                 <div class="flex justify-end mt-2">
                     <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="onSubmit()">
-                        บันทึก
+                        บันท
                     </button>
                     <button class="px-6 ml-3" mat-flat-button [color]="'warn'" (click)="backTo()">
                         ยกเลิก
@@ -62,11 +62,11 @@
             <table datatable [dtOptions]="dtOptionsCC" class="table row-border hover w-full bg-white whitespace-nowrap">
                 <thead>
                     <tr>
-                        <th class="w-[30px]">จัดการ</th>
-                        <th class="w-[30px]">ลำดับ</th>
-                        <th class="w-[30px]">Serial No</th>
-                        <th class="w-[30px]">ชื่อ</th>
-                        <th class="w-[30px]">รายละเอียด</th>
+                        <th class="w-1/12">จัดการ</th>
+                        <th class="w-1/12">ลำดับ</th>
+                        <th class="w-3/12">รหัสสินค้า</th>
+                        <th class="w-4/12">ชื่อสินค้า</th>
+                        <th class="w-/12">Serial No</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="dataRowcc?.length != 0">
@@ -77,9 +77,9 @@
                             </button>
                         </td>
                         <td class="text-center">{{ pages.begin + (i + 1) }}</td>
-                        <td class="text-center">{{ item.serial_no ? item.serial_no : "-" }}</td>
+                        <td class="text-center">{{ item.code ? item.code : "-" }}</td>
                         <td class="text-center">{{ item.name ? item.name : "-" }}</td>
-                        <td>{{ item.detail ? item.detail : "-" }}</td>
+                        <td class="text-center">{{ item.serial_no ? item.serial_no : "-" }}</td>
                     </tr>
                 </tbody>
                 <tbody *ngIf="dataRowcc?.length == 0">

@@ -228,7 +228,6 @@ export class EditBrandModelComponent implements OnInit, AfterViewInit {
         { data: 'No' },
         { data: 'serial_no' },
         { data: 'name' },
-        { data: 'detail' },
       ],
     };
   }

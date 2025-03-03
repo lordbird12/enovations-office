@@ -97,6 +97,8 @@ export class TeamDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        console.log(this.data.data);
+        
         this.loadTable(this.data.data);
     }
 
