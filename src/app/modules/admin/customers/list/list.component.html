@@ -29,6 +29,7 @@
                     <tr>
                         <th class="w-[100px]">จัดการ</th>
                         <th class="w-[10px]">ลำดับ</th>
+                        <th >รหัสลูกค้า</th>
                         <th>ชื่อ</th>
                         <th>เบอร์ติดต่อ</th>
                         <th>อีเมล</th>
@@ -47,6 +48,7 @@
                             </button>
                         </td>
                         <td>{{ pages.begin + (i + 1) }}</td>
+                        <td>{{ item.code ? item.code : "-"}}</td>
                         <td>{{ item.name ? item.name : "-"}}</td>
                         <td>{{ item.phone ? item.phone : "-"}}</td>
                         <td>{{ item.email ? item.email : "-"}}</td>

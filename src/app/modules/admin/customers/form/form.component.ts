@@ -89,6 +89,7 @@ export class FormComponent implements OnInit {
 
     this.addForm = this._formBuilder.group({
         id: '',
+        code: '',
         name: '',
         email: '',
         idcard: '',
