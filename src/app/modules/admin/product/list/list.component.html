@@ -21,7 +21,7 @@
                     <button class="px-6 ml-3" mat-flat-button [color]="'accent'" (click)="reset()">
                         ล้าง
                     </button>
-                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()" *ngIf="user.permission_id === '1' || user.permission_id === '3'">
+                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()" *ngIf="user.permission_id === 1 || user.permission_id === 3">
                         <mat-icon>person_add</mat-icon>
                         &nbsp;
                         เพิ่มสินค้า
@@ -81,7 +81,8 @@
                         <th class="w-[100px]">Brand</th>
                         <th class="w-[100px]">Code</th>
                         <th class="w-[100px]">Name</th>
-                        <th class="w-[200px]">Detail</th>
+                        <th class="w-[200px]">Serial No.</th>
+                        <th class="w-[200px]">วันที่สร้าง</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="dataRow?.length != 0">
@@ -109,7 +110,8 @@
                         <td>{{ item.brand ? item.brand?.name : "-" }}</td>
                         <td>{{ item.code ? item.code : "-" }}</td>
                         <td>{{ item.name ? item.name: "-"}}</td>
-                        <td>{{ item.detail ? item.detail : "-" }}</td>
+                        <td>{{ item.detail ? item.serial_no : "-" }}</td>
+                        <td>{{ item.created_at !== null ? (item.created_at):  "-"}}</td>
                     </tr>
                 </tbody>
                 <tbody *ngIf="dataRow?.length == 0">

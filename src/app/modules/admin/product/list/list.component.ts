@@ -92,6 +92,8 @@ export class ListComponent implements OnInit, AfterViewInit {
             companie_id: '',
             area_id: '',
         })
+        console.log(this.user, 'user')  ;
+        
      }
 
      getSuppliers(): void {

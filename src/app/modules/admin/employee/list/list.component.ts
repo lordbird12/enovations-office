@@ -184,7 +184,7 @@ export class ListComponent implements OnInit, AfterViewInit {
         });
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
-                this._service.delete(itemid).subscribe((resp) => {
+                this._service.delete(itemid.id).subscribe((resp) => {
                     this.rerender();
                 });
             }
