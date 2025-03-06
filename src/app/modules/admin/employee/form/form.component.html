@@ -36,7 +36,7 @@
                         <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                             <mat-label>สิทธิ์การใช้งาน</mat-label>
                             <mat-select [formControlName]="'permission_id'">
-                                <mat-option *ngFor="let item of this.permissions;" value="{{item.id}}">
+                                <mat-option *ngFor="let item of this.permissions;" [value]="item.id">
                                     {{item.name}}
                                 </mat-option>
                             </mat-select>

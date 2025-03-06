@@ -145,18 +145,13 @@ export class FormComponent implements OnInit {
             
             this._service.getById(this.Id).subscribe((resp: any)=>{
                 this.itemData = resp.data;
-                console.log(this.itemData, 'itemData');
-                
                 this.addForm.patchValue({
                     ...this.itemData,
-                    // permission_id: this.itemData.permission_id,
+                    permission_id: this.itemData.permission_id,
                     department_id: +this.itemData.department_id,
                     position_id: +this.itemData.position_id,
                     image: ''
    
-                })
-                this.addForm2.patchValue({
-                    ...this.itemData,
                 })
                 this.url_image = this.itemData.image
             })
@@ -232,6 +227,12 @@ export class FormComponent implements OnInit {
             if (result === 'confirmed') {
                 if(this.Id) {
                     let formvalue = this.addForm.value 
+                    if(formvalue.team_id === null) {
+                        formvalue.team_id = ''
+                    }
+                    if(formvalue.team_role === null) {
+                        formvalue.team_role = ''
+                    }
                     delete formvalue.password
                     const formData = new FormData();
                     Object.entries(this.addForm.value).forEach(
