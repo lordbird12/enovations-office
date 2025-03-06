@@ -39,13 +39,15 @@ export class ProjectService {
         );
     }
 
-    // ตรวจสอบว่าวันนี้เคยกดปิด popup ไปหรือยัง
     hasClosedToday(): boolean {
+        const permissionId = localStorage.getItem('permission_id');
+        if (permissionId !== '3') {
+            return false; // ออกจากฟังก์ชันหาก permission_id ไม่ใช่ 3
+        }
         const lastClosedDate = localStorage.getItem('popup_closed_date');
         const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
         return lastClosedDate === today;
     }
-
     // บันทึกว่าวันนี้กดปิดไปแล้ว
     setClosedToday(): void {
         const today = new Date().toISOString().split('T')[0];
