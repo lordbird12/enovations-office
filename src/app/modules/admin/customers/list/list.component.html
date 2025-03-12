@@ -31,6 +31,7 @@
                         <th class="w-[10px]">ลำดับ</th>
                         <th >รหัสลูกค้า</th>
                         <th>ชื่อ</th>
+                        <th>จังหวัด</th>
                         <th>เบอร์ติดต่อ</th>
                         <th>อีเมล</th>
                         <th>สร้างโดย</th>
@@ -50,6 +51,7 @@
                         <td>{{ pages.begin + (i + 1) }}</td>
                         <td>{{ item.code ? item.code : "-"}}</td>
                         <td>{{ item.name ? item.name : "-"}}</td>
+                        <td>{{ item.province ? item.province : "-"}}</td>
                         <td>{{ item.phone ? item.phone : "-"}}</td>
                         <td>{{ item.email ? item.email : "-"}}</td>
                         <td>{{ item.create_by ? item.create_by : "-" }}</td>

@@ -181,7 +181,6 @@ export class FormComponent implements OnInit {
     if (this.Id) {
       this._Service.getById(this.Id).subscribe((resp: any) => {
         this.itemData = resp.data;
-        console.log(this.itemData)
         this.addForm.patchValue({
           ...this.itemData,
           image: '',
