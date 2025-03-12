@@ -150,7 +150,7 @@ export class FormComponent implements OnInit {
     'อุตรดิตถ์',
     'ยะลา',
     'ยโสธร'
-];
+  ];
   /**
    * Constructor
    */
@@ -166,14 +166,14 @@ export class FormComponent implements OnInit {
     this.Id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.addForm = this._formBuilder.group({
-        id: '',
-        code: '',
-        name: '',
-        email: '',
-        idcard: '',
-        phone: '',
-        address: '',
-        province: '',
+      id: '',
+      code: '',
+      name: '',
+      email: '',
+      idcard: '',
+      phone: '',
+      address: '',
+      province: ['', Validators.required],
     })
   }
 
@@ -208,6 +208,47 @@ export class FormComponent implements OnInit {
   }
 
   onSubmit(): void {
+
+    if (this.addForm.invalid) {
+
+      const invalidRequiredFields = Object.keys(this.addForm.controls).filter(field => {
+        return this.addForm.get(field)?.errors?.['required'];
+      });
+
+      const fieldNames: any = {
+        province: 'จังหวัด',
+        name: 'ชื่อ',
+        email: 'อีเมล',
+        idcard: 'เลขบัตรประชาชน',
+        phone: 'เบอร์โทรศัพท์',
+        address: 'ที่อยู่'
+      };
+
+      const invalidFieldsMessage = invalidRequiredFields.map(field => `- ${fieldNames[field] || field}`).join('<br>');
+
+      this._fuseConfirmationService.open({
+        title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+        message: invalidFieldsMessage,  // ตอนนี้กลายเป็นข้อความแล้ว
+        icon: {
+          name: 'heroicons_outline:exclamation-circle',
+          color: 'warning'
+        },
+        actions: {
+          confirm: {
+            show: true,
+            label: 'ตกลง',
+            color: 'warn'
+          },
+          cancel: {
+            show: false
+          }
+        }
+      });
+
+      return;
+    }
+
+
     // Open the confirmation dialog
     if (this.Id) {
       const confirmation = this._fuseConfirmationService.open({
@@ -235,15 +276,8 @@ export class FormComponent implements OnInit {
       // Subscribe to the confirmation dialog closed action
       confirmation.afterClosed().subscribe((result) => {
         if (result === 'confirmed') {
-          const formData = new FormData();
-          Object.entries(this.addForm.value).forEach(([key, value]: any[]) => {
-            formData.append(key, value === null ? '' : value);
-          });
 
-          for (var i = 0; i < this.files.length; i++) {
-            formData.append('image', this.files[i]);
-          }
-          this._Service.update(formData).subscribe({
+          this._Service.update(this.addForm.value, this.Id).subscribe({
             next: (resp: any) => {
               this._router.navigate(['admin/customers/list'])
             },

@@ -66,9 +66,19 @@ export class PageService {
             );
     }
 
-    update(data: FormData): Observable<any> {
+    // update(data: FormData): Observable<any> {
+    //     return this._httpClient
+    //         .post<any>(environment.baseURL + '/api/update_client' ,data)
+    //         .pipe(
+    //             tap((result) => {
+    //                 this._data.next(result);
+    //             })
+    //         );
+    // }
+
+    update(data: any, id: any): Observable<any> {
         return this._httpClient
-            .post<any>(environment.baseURL + '/api/update_client' ,data)
+            .put<any>(environment.baseURL + '/api/client/' + id, data)
             .pipe(
                 tap((result) => {
                     this._data.next(result);
