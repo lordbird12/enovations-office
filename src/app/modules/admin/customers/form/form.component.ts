@@ -151,6 +151,10 @@ export class FormComponent implements OnInit {
     'ยะลา',
     'ยโสธร'
   ];
+
+  customerType: string[] = [
+    'Government', 'Private', 'Clinic', 'Vet'
+  ];
   /**
    * Constructor
    */
@@ -174,6 +178,7 @@ export class FormComponent implements OnInit {
       phone: '',
       address: '',
       province: ['', Validators.required],
+      type: ['', Validators.required],
     })
   }
 
@@ -216,15 +221,16 @@ export class FormComponent implements OnInit {
       });
 
       const fieldNames: any = {
-        province: 'จังหวัด',
         name: 'ชื่อ',
         email: 'อีเมล',
         idcard: 'เลขบัตรประชาชน',
         phone: 'เบอร์โทรศัพท์',
+        province: 'จังหวัด',
+        type: 'ประเภท',
         address: 'ที่อยู่'
       };
 
-      const invalidFieldsMessage = invalidRequiredFields.map(field => `- ${fieldNames[field] || field}`).join('<br>');
+      const invalidFieldsMessage = invalidRequiredFields.map(field => `โปรดระบุ ${fieldNames[field]}`).join('<br>');
 
       this._fuseConfirmationService.open({
         title: 'กรุณากรอกข้อมูลให้ครบถ้วน',

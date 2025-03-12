@@ -34,6 +34,7 @@
                         <th>จังหวัด</th>
                         <th>เบอร์ติดต่อ</th>
                         <th>อีเมล</th>
+                        <th>ประเภท</th>
                         <th>สร้างโดย</th>
                         <th>วันที่สร้าง</th>
                     </tr>
@@ -54,6 +55,7 @@
                         <td>{{ item.province ? item.province : "-"}}</td>
                         <td>{{ item.phone ? item.phone : "-"}}</td>
                         <td>{{ item.email ? item.email : "-"}}</td>
+                        <td>{{ item.type ? item.type : "-"}}</td>
                         <td>{{ item.create_by ? item.create_by : "-" }}</td>
                         <td>{{ item.created_at !== null ? (item.created_at | date : "dd-MM-yy, HH:mm"): "-"}}</td>
                     </tr>

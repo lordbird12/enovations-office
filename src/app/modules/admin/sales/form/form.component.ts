@@ -410,8 +410,8 @@ export class FormComponent implements OnInit {
             machine_models: this._fb.array([]),
             transducers: this._fb.array([]),
             memberIds: [],
-            tds: []
-
+            tds: [],
+            client_name: null
         });
     }
 
@@ -972,6 +972,7 @@ export class FormComponent implements OnInit {
     }
 
     onSubmit(): void {
+       
         if (this.isForm === true) {
             const dialogRef = this._fuseConfirmationService.open({
                 "title": "บันทึกข้อมูล",
@@ -996,7 +997,12 @@ export class FormComponent implements OnInit {
             })
             dialogRef.afterClosed().subscribe((result => {
                 if (result === 'confirmed') {
+                    if(this.formData.value.client_id == null){
+                        this.formData.value.client_name = this.clientFilter;
+                    }
+
                     let formValue = this.formData.value;
+
                     formValue.start_date = DateTime.fromISO(this.formData.value.start_date).toFormat('yyyy-MM-dd')
                     formValue.end_date = DateTime.fromISO(this.formData.value.end_date).toFormat('yyyy-MM-dd')
 
