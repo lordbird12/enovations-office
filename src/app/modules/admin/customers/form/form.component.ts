@@ -291,7 +291,7 @@ export class FormComponent implements OnInit {
               this.addForm.enable();
               this._fuseConfirmationService.open({
                 "title": "กรุณาระบุข้อมูล",
-                "message": err.error.message,
+                "message": err.message,
                 "icon": {
                   "show": true,
                   "name": "heroicons_outline:exclamation",
@@ -358,7 +358,7 @@ export class FormComponent implements OnInit {
               this.addForm.enable();
               this._fuseConfirmationService.open({
                 "title": "กรุณาระบุข้อมูล",
-                "message": err.error.message,
+                "message": err.message,
                 "icon": {
                   "show": true,
                   "name": "heroicons_outline:exclamation",

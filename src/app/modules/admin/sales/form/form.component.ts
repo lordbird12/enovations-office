@@ -998,7 +998,7 @@ export class FormComponent implements OnInit {
             dialogRef.afterClosed().subscribe((result => {
                 if (result === 'confirmed') {
                     if(this.formData.value.client_id == null){
-                        this.formData.value.client_name = this.clientFilter;
+                        this.formData.value.client_name = this.clientFilter.value;
                     }
 
                     let formValue = this.formData.value;
@@ -1100,6 +1100,11 @@ export class FormComponent implements OnInit {
                 }
             }))
         }
+    }
+
+    onAddHospital() {
+        // Logic สำหรับเปิด Dialog หรือแสดงฟอร์มเพื่อเพิ่มโรงพยาบาลใหม่
+        console.log('กดเพิ่มโรงพยาบาลใหม่');
     }
 
     removeAllItems(array: string) {
