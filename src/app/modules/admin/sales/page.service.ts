@@ -342,6 +342,16 @@ export class PageService {
             );
     }
 
+    getMachineModelById(id): Observable<any> {
+        return this._httpClient
+            .get<any>(environment.baseURL + '/api/get_machine_model/'+id)
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
+
     getUser(): Observable<any> {
         return this._httpClient
             .get<any>(environment.baseURL + '/api/get_user')

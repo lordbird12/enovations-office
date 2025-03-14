@@ -1103,10 +1103,39 @@ export class FormComponent implements OnInit {
     }
 
     onAddHospital() {
-        // Logic สำหรับเปิด Dialog หรือแสดงฟอร์มเพื่อเพิ่มโรงพยาบาลใหม่
-        console.log('กดเพิ่มโรงพยาบาลใหม่');
+        window.open(this._router.serializeUrl(this._router.createUrlTree(['admin/customers/form'])), '_blank');
     }
 
+    refreshClients(): void {
+        this._service.getClient().subscribe({
+            next: (resp: any) => {
+                this.clientData = resp.data;
+                this.filterClient.next(this.clientData.slice());
+            },
+            error: (err: any) => {
+                this._fuseConfirmationService.open({
+                    title: "เกิดข้อผิดพลาด",
+                    message: "ไม่สามารถโหลดข้อมูลลูกค้าใหม่ได้ กรุณาลองอีกครั้ง",
+                    icon: {
+                        show: true,
+                        name: "heroicons_outline:x-circle",
+                        color: "warn"
+                    },
+                    actions: {
+                        confirm: {
+                            show: true,
+                            label: "ตกลง",
+                            color: "primary"
+                        },
+                        cancel: {
+                            show: false
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
     removeAllItems(array: string) {
         if (array === 'machine_models') {
             const formArray = this.formData.get('machine_models') as FormArray;

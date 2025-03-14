@@ -143,10 +143,19 @@
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <div class="flex items-center justify-between mb-1">
                                 <label class="text-sm font-md">ชื่อโรงพยาบาล</label>
-                                <button mat-mini-fab color="primary" (click)="onAddHospital()"
-                                    matTooltip="เพิ่มโรงพยาบาลใหม่">
-                                    <mat-icon>add</mat-icon>
-                                </button>
+                                <div class="flex gap-1">
+                                    <!-- ปุ่มเพิ่มโรงพยาบาล -->
+                                    <button mat-mini-fab color="primary" (click)="onAddHospital()"
+                                        matTooltip="เพิ่มโรงพยาบาลใหม่">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+
+                                    <!-- ปุ่มรีโหลด (ให้ถูกต้องเป็น 'refresh') -->
+                                    <button mat-mini-fab color="accent" (click)="refreshClients()"
+                                        matTooltip="รีโหลดรายชื่อโรงพยาบาล">
+                                        <mat-icon>refresh</mat-icon>
+                                    </button>
+                                </div>
                             </div>
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
 
