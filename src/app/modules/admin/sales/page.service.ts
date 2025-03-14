@@ -342,9 +342,11 @@ export class PageService {
             );
     }
 
-    getMachineModelById(id): Observable<any> {
+    getMachineModelByTeam(id): Observable<any> {
+        var user = JSON.parse(localStorage.getItem('user'));
+        console.log(user);
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_machine_model/'+id)
+            .get<any>(environment.baseURL + '/api/get_machine_model_team'+id)
             .pipe(
                 tap((result) => {
                     this._data.next(result);
