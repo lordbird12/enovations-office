@@ -1229,7 +1229,7 @@ export class ViewOrderComponent implements OnInit {
             });
 
     }
-    openDialogReturnProductarray(formValue: any[]): void {        
+    openDialogReturnProductarray(formValue: any[]): void {
         if(this.type_return === 'return'){
             this.dialog
             .open(DialogReturnProductComponent, {
@@ -1346,11 +1346,7 @@ export class ViewOrderComponent implements OnInit {
     onSelectMultipleMachineProducts(event: any, product: any): void {
         const selectedStatus = this.selectedMachineProducts.length > 0 ? this.selectedMachineProducts[0]?.return_products : null;
         const productStatus = product?.return_products;
-        if(productStatus?.status === 'waiting_approve'){
-            this.type_return = 'waiting_approve'
-        }else{
-            this.type_return = 'return'
-        }
+
         if(this.selectedMachineProducts.length > 0 ){
             if ((selectedStatus === null && productStatus !== null) ||
                 (selectedStatus !== null && productStatus === null) ||
@@ -1368,6 +1364,13 @@ export class ViewOrderComponent implements OnInit {
 
         if (event.checked) {
             this.selectedMachineProducts.push(product);
+
+            if(productStatus?.status === 'waiting_approve'){
+                this.type_return = 'waiting_approve'
+            }else{
+                this.type_return = 'return'
+            }
+
         } else {
             const index = this.selectedMachineProducts.indexOf(product);
             if (index > -1) {
@@ -1377,8 +1380,32 @@ export class ViewOrderComponent implements OnInit {
     }
 
     onSelectMultipleTransducerProducts(event: any, product: any): void {
+        const selectedStatus = this.selectedTransducerProducts.length > 0 ? this.selectedTransducerProducts[0]?.return_products : null;
+        const productStatus = product?.return_products;
+
+        if(this.selectedTransducerProducts.length > 0 ){
+            if ((selectedStatus === null && productStatus !== null) ||
+                (selectedStatus !== null && productStatus === null) ||
+                (selectedStatus?.status === 'waiting_approve' && productStatus?.status !== 'waiting_approve') ||
+                (selectedStatus?.status !== 'waiting_approve' && productStatus?.status === 'waiting_approve')) {
+                this._snackBar.open('ไม่ใช้ข้อมูลประเภทเดียวกัน', 'ปิด', {
+                    duration: 3000,
+                    horizontalPosition: 'left',
+                    verticalPosition: 'bottom',
+                });
+                event.source.checked = false;
+                return;
+            }
+        }
+
         if (event.checked) {
             this.selectedTransducerProducts.push(product);
+
+            if(productStatus?.status === 'waiting_approve'){
+                this.type_return = 'waiting_approve'
+            }else{
+                this.type_return = 'return'
+            }
         } else {
             const index = this.selectedTransducerProducts.indexOf(product);
             if (index > -1) {
