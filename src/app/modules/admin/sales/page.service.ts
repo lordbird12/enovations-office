@@ -346,7 +346,7 @@ export class PageService {
         var user = JSON.parse(localStorage.getItem('user'));
         console.log(user);
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_machine_model_team'+id)
+            .get<any>(environment.baseURL + '/api/get_machine_model_team')
             .pipe(
                 tap((result) => {
                     this._data.next(result);

@@ -85,7 +85,7 @@ export class ClaimDialogComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
         private _router: Router
-    ) { 
+    ) {
         this.user = JSON.parse(localStorage.getItem('user'))
 
     }
@@ -104,7 +104,7 @@ export class ClaimDialogComponent implements OnInit {
             const date = new Date();
             this.form.patchValue({
                 date: date,
-                product_id: this.order.orders.product_id,
+                product_id: this.order?.orders?.product_id,
                 service_fee: '',
                 price: '',
                 remark: '',
