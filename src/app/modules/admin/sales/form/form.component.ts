@@ -69,7 +69,7 @@ export class FormComponent implements OnInit {
     isForm: boolean = true
 
     purpose: string[] = [
-        'Demo', 'Install', 'Post', 'Sale', 'Present', 'Booth', 'Workshop'
+        'Demo','Install','Post Sale','Present','Booth','Workshop'
     ];
 
     customerType: string[] = [
@@ -378,6 +378,8 @@ export class FormComponent implements OnInit {
 
         this.mcData = this.activatedRoute.snapshot.data.machine_model.data
         this.filterMachineModel.next(this.mcData.slice());
+        console.log(this.mcData);
+
 
         this.formData = this._fb.group({
             reserve_ref_no: null,
@@ -972,7 +974,7 @@ export class FormComponent implements OnInit {
     }
 
     onSubmit(): void {
-       
+
         if (this.isForm === true) {
             const dialogRef = this._fuseConfirmationService.open({
                 "title": "บันทึกข้อมูล",
@@ -1135,7 +1137,7 @@ export class FormComponent implements OnInit {
             }
         });
     }
-    
+
     removeAllItems(array: string) {
         if (array === 'machine_models') {
             const formArray = this.formData.get('machine_models') as FormArray;
