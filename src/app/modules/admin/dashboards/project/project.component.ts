@@ -45,6 +45,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     chartYearlyExpenses: ApexOptions = {};
     data: any;
     dataRow: any;
+    user: any;
     selectedProject: string = 'ACME Corp. Backend App';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -56,6 +57,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _changeDetectorRef: ChangeDetectorRef
     ) {
+
+        this.user = JSON.parse(localStorage.getItem('user'));
+        console.log(this.user);
+        
     }
 
     // -----------------------------------------------------------------------------------------------------

@@ -22,8 +22,7 @@
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>เลขที่ใบยืม</mat-label>
-                                <input matInput placeholder="เลขที่ใบยืม"
-                                    [formControlName]="'reserve_ref_no'">
+                                <input matInput placeholder="เลขที่ใบยืม" [formControlName]="'reserve_ref_no'">
                             </mat-form-field>
                         </div>
                         <div class="w-full px-3 mb-6 md:mb-0">
@@ -142,18 +141,35 @@
                             </p>
                         </span>
                         <div class="w-full px-3 mb-6 md:mb-0">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-sm font-md">ชื่อโรงพยาบาล</label>
+                                <div class="flex gap-1">
+                                    <!-- ปุ่มเพิ่มโรงพยาบาล -->
+                                    <button mat-mini-fab color="primary" (click)="onAddHospital()"
+                                        matTooltip="เพิ่มโรงพยาบาลใหม่">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+
+                                    <!-- ปุ่มรีโหลด (ให้ถูกต้องเป็น 'refresh') -->
+                                    <button mat-mini-fab color="accent" (click)="refreshClients()"
+                                        matTooltip="รีโหลดรายชื่อโรงพยาบาล">
+                                        <mat-icon>refresh</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                                <mat-label>ชื่อโรงพยาบาล</mat-label>
+
                                 <input matInput [formControl]="clientFilter" [matAutocomplete]="clientAutoComplete"
                                     placeholder="ค้นหาโรงพยาบาล" />
                                 <mat-autocomplete #clientAutoComplete="matAutocomplete"
-                                    (optionSelected)="onSelectClient( $event.option.value, 'manual')">
+                                    (optionSelected)="onSelectClient($event.option.value, 'manual')">
                                     <mat-option *ngFor="let item of filterClient | async" [value]="item.name">
                                         {{item.name}}
                                     </mat-option>
                                 </mat-autocomplete>
                             </mat-form-field>
                         </div>
+
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>ประเภทโรงพยาบาล</mat-label>
@@ -163,6 +179,8 @@
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
+
+
                         </div>
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
@@ -212,7 +230,8 @@
                             class="flex items-center gap-2 mt-2">
                             <mat-form-field class="w-1/2" [ngClass]="formFieldHelpers">
                                 <mat-label>รุ่นเครื่อง</mat-label>
-                                <input matInput placeholder="Machine Model" formControlName="machine_model_name" readonly>
+                                <input matInput placeholder="Machine Model" formControlName="machine_model_name"
+                                    readonly>
                             </mat-form-field>
                             <mat-form-field class="w-1/4" [ngClass]="formFieldHelpers">
                                 <mat-label>จำนวน</mat-label>
@@ -225,8 +244,10 @@
                     </div>
                     <mat-form-field class="w-full md:w-9/12 " [ngClass]="formFieldHelpers">
                         <mat-label>ค้นหาเครื่อง</mat-label>
-                        <input matInput [formControl]="machineModelFilter" [matAutocomplete]="item" placeholder="ค้นหาเครื่องที่ต้องการ" />
-                        <mat-autocomplete #item="matAutocomplete" (optionSelected)="onSelectMachineModel($event, 'machine_models')">
+                        <input matInput [formControl]="machineModelFilter" [matAutocomplete]="item"
+                            placeholder="ค้นหาเครื่องที่ต้องการ" />
+                        <mat-autocomplete #item="matAutocomplete"
+                            (optionSelected)="onSelectMachineModel($event, 'machine_models')">
                             <mat-option *ngFor="let item of filterMachineModel | async" [value]="item.name">
                                 <span>{{item.name}}</span>
                             </mat-option>
@@ -254,8 +275,10 @@
                     </div>
                     <mat-form-field class="w-full md:w-9/12 " [ngClass]="formFieldHelpers">
                         <mat-label>ค้นหารุ่นหัวตรวจ</mat-label>
-                        <input matInput [formControl]="machineModelFilter" [matAutocomplete]="transducer" placeholder="ค้นหารุ่นหัวตรวจ" />
-                        <mat-autocomplete #transducer="matAutocomplete" (optionSelected)="onSelectMachineModel($event, 'transducer')">
+                        <input matInput [formControl]="machineModelFilter" [matAutocomplete]="transducer"
+                            placeholder="ค้นหารุ่นหัวตรวจ" />
+                        <mat-autocomplete #transducer="matAutocomplete"
+                            (optionSelected)="onSelectMachineModel($event, 'transducer')">
                             <mat-option *ngFor="let item of filterMachineModel | async" [value]="item.name">
                                 <span>{{item.name}}</span>
                             </mat-option>

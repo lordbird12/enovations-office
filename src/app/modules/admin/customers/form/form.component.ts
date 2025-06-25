@@ -73,6 +73,88 @@ export class FormComponent implements OnInit {
     'บุคคลธรรมดา',
     'นิติบุคคล',
   ]
+  provinces: string[] = [
+    'กรุงเทพมหานคร',
+    'อำนาจเจริญ',
+    'อ่างทอง',
+    'บึงกาฬ',
+    'บุรีรัมย์',
+    'ฉะเชิงเทรา',
+    'ชัยนาท',
+    'ชัยภูมิ',
+    'จันทบุรี',
+    'เชียงใหม่',
+    'เชียงราย',
+    'ชลบุรี',
+    'ชุมพร',
+    'กาฬสินธุ์',
+    'กำแพงเพชร',
+    'กาญจนบุรี',
+    'ขอนแก่น',
+    'กระบี่',
+    'ลำปาง',
+    'ลำพูน',
+    'เลย',
+    'ลพบุรี',
+    'แม่ฮ่องสอน',
+    'มหาสารคาม',
+    'มุกดาหาร',
+    'นครนายก',
+    'นครปฐม',
+    'นครพนม',
+    'นครราชสีมา',
+    'นครสวรรค์',
+    'นครศรีธรรมราช',
+    'น่าน',
+    'นราธิวาส',
+    'หนองบัวลำภู',
+    'หนองคาย',
+    'นนทบุรี',
+    'ปทุมธานี',
+    'ปัตตานี',
+    'พังงา',
+    'พัทลุง',
+    'พะเยา',
+    'เพชรบูรณ์',
+    'เพชรบุรี',
+    'พิจิตร',
+    'พิษณุโลก',
+    'แพร่',
+    'ภูเก็ต',
+    'ปราจีนบุรี',
+    'ประจวบคีรีขันธ์',
+    'ระนอง',
+    'ราชบุรี',
+    'ระยอง',
+    'ร้อยเอ็ด',
+    'สระแก้ว',
+    'สกลนคร',
+    'สมุทรปราการ',
+    'สมุทรสาคร',
+    'สมุทรสงคราม',
+    'สระบุรี',
+    'สตูล',
+    'สิงห์บุรี',
+    'ศรีสะเกษ',
+    'สงขลา',
+    'สุโขทัย',
+    'สุพรรณบุรี',
+    'สุราษฎร์ธานี',
+    'สุรินทร์',
+    'ตาก',
+    'ตรัง',
+    'ตราด',
+    'อุบลราชธานี',
+    'อุดรธานี',
+    'อุทัยธานี',
+    'อุตรดิตถ์',
+    'ยะลา',
+    'ยโสธร'
+  ];
+
+  customerType: string[] = [
+    'Government', 'Private', 'Clinic', 'Vet'
+  ];
   /**
    * Constructor
    */
@@ -88,13 +170,15 @@ export class FormComponent implements OnInit {
     this.Id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.addForm = this._formBuilder.group({
-        id: '',
-        code: '',
-        name: '',
-        email: '',
-        idcard: '',
-        phone: '',
-        address: ''
+      id: '',
+      code: '',
+      name: '',
+      email: '',
+      idcard: '',
+      phone: '',
+      address: '',
+      province: ['', Validators.required],
+      type: ['', Validators.required],
     })
   }
 
@@ -102,7 +186,6 @@ export class FormComponent implements OnInit {
     if (this.Id) {
       this._Service.getById(this.Id).subscribe((resp: any) => {
         this.itemData = resp.data;
-        console.log(this.itemData)
         this.addForm.patchValue({
           ...this.itemData,
           image: '',
@@ -130,6 +213,48 @@ export class FormComponent implements OnInit {
   }
 
   onSubmit(): void {
+
+    if (this.addForm.invalid) {
+
+      const invalidRequiredFields = Object.keys(this.addForm.controls).filter(field => {
+        return this.addForm.get(field)?.errors?.['required'];
+      });
+
+      const fieldNames: any = {
+        name: 'ชื่อ',
+        email: 'อีเมล',
+        idcard: 'เลขบัตรประชาชน',
+        phone: 'เบอร์โทรศัพท์',
+        province: 'จังหวัด',
+        type: 'ประเภท',
+        address: 'ที่อยู่'
+      };
+
+      const invalidFieldsMessage = invalidRequiredFields.map(field => `โปรดระบุ ${fieldNames[field]}`).join('<br>');
+
+      this._fuseConfirmationService.open({
+        title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+        message: invalidFieldsMessage,  // ตอนนี้กลายเป็นข้อความแล้ว
+        icon: {
+          name: 'heroicons_outline:exclamation-circle',
+          color: 'warning'
+        },
+        actions: {
+          confirm: {
+            show: true,
+            label: 'ตกลง',
+            color: 'warn'
+          },
+          cancel: {
+            show: false
+          }
+        }
+      });
+
+      return;
+    }
+
+
     // Open the confirmation dialog
     if (this.Id) {
       const confirmation = this._fuseConfirmationService.open({
@@ -157,15 +282,8 @@ export class FormComponent implements OnInit {
       // Subscribe to the confirmation dialog closed action
       confirmation.afterClosed().subscribe((result) => {
         if (result === 'confirmed') {
-          const formData = new FormData();
-          Object.entries(this.addForm.value).forEach(([key, value]: any[]) => {
-            formData.append(key, value === null ? '' : value);
-          });
 
-          for (var i = 0; i < this.files.length; i++) {
-            formData.append('image', this.files[i]);
-          }
-          this._Service.update(formData).subscribe({
+          this._Service.update(this.addForm.value, this.Id).subscribe({
             next: (resp: any) => {
               this._router.navigate(['admin/customers/list'])
             },
@@ -173,7 +291,7 @@ export class FormComponent implements OnInit {
               this.addForm.enable();
               this._fuseConfirmationService.open({
                 "title": "กรุณาระบุข้อมูล",
-                "message": err.error.message,
+                "message": err.message,
                 "icon": {
                   "show": true,
                   "name": "heroicons_outline:exclamation",
@@ -240,7 +358,7 @@ export class FormComponent implements OnInit {
               this.addForm.enable();
               this._fuseConfirmationService.open({
                 "title": "กรุณาระบุข้อมูล",
-                "message": err.error.message,
+                "message": err.message,
                 "icon": {
                   "show": true,
                   "name": "heroicons_outline:exclamation",

@@ -98,32 +98,26 @@ export class DialogAddProductComponent implements OnInit {
             this.saleData = resp.data;
             this.filterSale.next(this.saleData.slice());
         });
-        this._service.getMachineModelAll().subscribe((resp: any) => {
-            this.productData = resp.data;
+        this._service.getMachineModelAll().subscribe({
+            next: (resp: any) => {
+                // console.log('Machine models loaded:', resp.data);
+                this.productData = resp.data;
 
-            // let allProducts = [];
-            // this.productData.forEach((model) => {
-            //     if (model.products && Array.isArray(model.products)) {
-            //         allProducts = [...allProducts, ...model.products];
-            //     }
-            // });
+                // สร้าง map ของข้อมูลสินค้า
+                this.productData.forEach(model => {
+                    if (model.products && Array.isArray(model.products)) {
+                        // console.log(`Products for model ${model.id}:`, model.products);
+                        this.machineProductsMap.set(model.id.toString(), model.products);
+                    }
+                });
 
-            // // ส่งรายการสินค้าทั้งหมดไปยัง filterProduct
-            // this.filterProduct.next(allProducts);
-            // this.filterProduct1.next(allProducts);
-            // สร้าง map ของข้อมูลสินค้าสำหรับแต่ละ machine model
-            this.productData.forEach((model) => {
-                if (model.products && Array.isArray(model.products)) {
-                    this.machineProductsMap.set(
-                        model.id.toString(),
-                        model.products
-                    );
-                }
-            });
-
-            // เตรียมข้อมูลเริ่มต้นสำหรับ form
-            this.initializeProductsForMachineModels();
-            this.initializeProductsForTransducers();
+                // เตรียมข้อมูลเริ่มต้น
+                this.initializeProductsForMachineModels();
+                this.initializeProductsForTransducers();
+            },
+            error: (err) => {
+                console.error('Error loading machine models:', err);
+            }
         });
 
         this.form = this.fb.group({
