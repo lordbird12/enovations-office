@@ -1,0 +1,94 @@
+<h2 mat-dialog-title class="mx-auto text-2xl text-center font-semibold">เพิ่มสินค้า</h2>
+<mat-dialog-content [formGroup]="form" class="space-y-6 p-4 w-full max-w-lg mx-auto md:max-w-2xl items-center">
+    <!-- Users Section -->
+    <h3 class="text-lg font-medium">พนักงาน
+    </h3>
+    <div formArrayName="users" class="space-y-4">
+        <div *ngFor="let user of usersArray.controls; let i = index" [formGroupName]="i"
+            class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+            <mat-form-field class="w-full col-span-2" [ngClass]="formFieldHelpers">
+                <mat-label>ชื่อ - นามสกุล</mat-label>
+                <input matInput placeholder="" formControlName="name" readonly>
+            </mat-form-field>
+            <mat-form-field [ngClass]="formFieldHelpers" class="col-span-2 w-full">
+                <mat-label>วันเริ่มต้น - วันสิ้นสุด</mat-label>
+                <mat-date-range-input [rangePicker]="picker1">
+                    <input matStartDate formControlName="start_date" placeholder="Start" (dateChange)="dateChange()">
+                    <input matEndDate formControlName="end_date" placeholder="End" (dateChange)="dateChange(user)">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker1></mat-date-range-picker>
+            </mat-form-field>
+            <button mat-icon-button color="warn" (click)="removeUser(i)" class="justify-self-end">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+        <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+            <mat-label>ค้นหาพนักงาน</mat-label>
+            <input matInput [formControl]="saleFilter" [matAutocomplete]="sale" placeholder="ค้นหาพนักงาน" />
+            <mat-autocomplete #sale="matAutocomplete" (optionSelected)="onSelectSale( $event.option.value, 'manual')">
+                <mat-option *ngFor="let item of filterSale | async" [value]="item.name">
+                    {{item.name}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+    <h3 class="text-xl font-medium">Machine Models</h3>
+    <div formArrayName="machine_models" class="space-y-4">
+        <div *ngFor="let model of machineModelsArray.controls; let i = index" [formGroupName]="i"
+            class="border p-4 rounded-lg shadow-sm">
+            <h4 class="text-lg font-semibold">Machine Model: {{ model.value.machine_name }}</h4>
+            <button mat-mini-fab color="primary" (click)="addProduct(i, 'machine_model')" class="mb-2">
+                <mat-icon>add</mat-icon>
+            </button>
+            <div formArrayName="products" class="space-y-2">
+                <div *ngFor="let product of model.get('products').controls; let j = index" [formGroupName]="j"
+                    class="grid grid-col-1 md:grid-cols-2 gap-4 items-center">
+                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                        <mat-label>สินค้า</mat-label>
+                        <mat-select [formControlName]="'product_id'">
+                            <mat-option *ngFor="let item of model['productsSubject'] | async" [value]="item.id">
+                                {{item.name}} {{item.serial_no ? '[SN: ' + item.serial_no + ']' : ''}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button color="warn" (click)="removeProduct(i, j, 'machine_model')"
+                        class="justify-self-end">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3 class="text-xl font-medium">Transducer</h3>
+    <div formArrayName="transducers" class="space-y-4">
+        <div *ngFor="let model of transducersArray.controls; let i = index" [formGroupName]="i"
+            class="border p-4 rounded-lg shadow-sm">
+            <h4 class="text-lg font-semibold">Machine Model: {{ model.value.machine_name }}</h4>
+            <button mat-mini-fab color="primary" (click)="addProduct(i, 'transducer')" class="mb-2">
+                <mat-icon>add</mat-icon>
+            </button>
+            <div formArrayName="products" class="space-y-2">
+                <div *ngFor="let product of model.get('products').controls; let j = index" [formGroupName]="j"
+                    class="grid grid-cols-2 gap-4 items-center">
+                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                        <mat-label>สินค้า</mat-label>
+                        <mat-select [formControlName]="'product_id'">
+                            <mat-option *ngFor="let item of model['productsSubject'] | async" [value]="item.id">
+                                {{item.name}} {{item.serial_no ? '[SN: ' + item.serial_no + ']' : ''}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button color="warn" (click)="removeProduct(i, j, 'transducer')"
+                        class="justify-self-end">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="p-4 flex justify-end gap-4">
+    <button mat-flat-button color="accent" (click)="closeDialog()">ยกเลิก</button>
+    <button mat-flat-button color="primary" (click)="saveData()">บันทึก</button>
+</mat-dialog-actions>

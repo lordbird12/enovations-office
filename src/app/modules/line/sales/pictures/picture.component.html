@@ -1,0 +1,10 @@
+<div class="grid grid-cols-1 gap-2 p-4" [ngClass]="{
+    'grid grid-cols-1': imgSelected?.length === 1,
+    'flex flex-row justify-center': imgSelected?.length === 2,
+    'grid grid-cols-3': imgSelected?.length >= 3
+  }">
+    <img *ngFor="let img of fallbackImages; let i = index"
+         [src]="img"
+         class="max-w-100 object-cover rounded-lg"
+         (error)="onImageError(i)" />
+  </div>

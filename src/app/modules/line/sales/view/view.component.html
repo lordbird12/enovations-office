@@ -1,0 +1,236 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row items-center justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+            {{ type ? 'รายละเอียดใบจอง ' + type : 'รายละเอียดการจอง' }}
+        </h2>
+        <div class="flex flex-row flex-wrap gap-2 mt-2 md:mt-0">
+            <button class="px-6 bg-yellow-500" mat-flat-button color="primary" (click)="openDialogAddProduct()"
+                *ngIf="this.user?.team_role !== 'User'">จัดการเครื่อง</button>
+            <button class="px-6 bg-green-700" mat-flat-button color="primary" (click)="openDialogApprove()"
+                *ngIf="this.user?.team_role !== 'User'">Update
+                Status</button>
+            <button class="px-6" mat-flat-button color="primary" (click)="onEdit(formData.value.id)">แก้ไข</button>
+            <button class="px-6" mat-flat-button color="accent" (click)="onBack()">ย้อนกลับ</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
+            <!-- ข้อมูลการจอง -->
+            <div class="bg-card p-6 rounded-xl shadow-md  space-y-2">
+                <h3 class="text-xl font-bold text-gray-500">ข้อมูลการจอง</h3>
+                <p><strong>เลขที่ใบจอง:</strong> {{ formData.value.reserve_ref_no ?? '-' }}</p>
+                <p><strong>วันที่จอง:</strong> {{ formData.value.start_date }} - {{ formData.value.end_date }}</p>
+                <p><strong>วัตถุประสงค์:</strong> {{ formData.value.request_purpose ?? '-' }}</p>
+                <p *ngIf="formData.value.request_purpose === 'Demo'"><strong>งบประมาณ:</strong> {{ formData.value.budget
+                    ?? 0 }}</p>
+                <p><strong>Function Qualifications:</strong> {{ formData.value.function_qualifications }}</p>
+                <p><strong>อุปกรณ์เพิ่มเติม:</strong> {{ formData.value.additional_equipment }}</p>
+                <p><strong>วัน เวลา สถานที่นัดหมาย:</strong> {{ formData.value.meeting_details }}</p>
+                <p><strong>วันที่ขอ:</strong> {{ formData.value.created_at | date:'dd-MM-yyyy' }}</p>
+                <p><strong>สถานะ:</strong> <span
+                        class="bg-green-50 rounded-md text-sm px-2 mb-2 mx-2 py-1 text-green-400 font-semibold">{{formData.value.status}}</span>
+                </p>
+            </div>
+            <!-- ข้อมูลโรงพยาบาล -->
+            <div class="bg-card p-6 rounded-xl shadow-md space-y-2">
+                <h3 class="text-xl font-bold text-gray-500">ข้อมูลการใช้เครื่องปัจจุบันของโรงพยาบาล</h3>
+                <p><strong>รุ่นที่ใช้อยู่:</strong> {{ formData.value.current_machine_model }}</p>
+                <p><strong>Work Station:</strong> {{ formData.value.current_work_station }}</p>
+                <p><strong>ปัญหาหรือความต้องการ:</strong> {{ formData.value.current_usage_problem }}</p>
+                <h3 class="text-xl font-bold text-gray-500">ข้อมูลการเครื่องคู่แข่งที่นำเสนอ</h3>
+                <p><strong>รุ่นที่นำเสนอ:</strong> {{ formData.value.competitor_model }}</p>
+                <p><strong>หัวตรวจ:</strong> {{ formData.value.competitor_transducer }}</p>
+                <p><strong>Feddback ลูกค้า:</strong> {{ formData.value.customer_feedback }}</p>
+            </div>
+
+            <!-- ข้อมูลโรงพยาบาล -->
+            <div class="bg-card p-6 rounded-xl shadow-md space-y-2">
+                <h3 class="text-xl font-bold text-gray-500">ข้อมูลโรงพยาบาล</h3>
+                <p><strong>ชื่อโรงพยาบาล:</strong> {{ formData.value.client_name }}</p>
+                <p><strong>ประเภทโรงพยาบาล:</strong> {{ formData.value.customer_type }}</p>
+                <p><strong>จังหวัด:</strong> {{ formData.value.province }}</p>
+                <p><strong>แผนก:</strong> {{ formData.value.department }}</p>
+                <p><strong>ชั้น:</strong> {{ formData.value.floor }}</p>
+                <p><strong>แพทย์ KOL:</strong> {{ formData.value.kol_doctor }}</p>
+            </div>
+        </div>
+
+        <!-- ตารางแสดงรายการเครื่องที่ต้องการ -->
+        <div class="py-4 space-y-6">
+            <!-- Machine Products Section -->
+            <div class="bg-white rounded-xl shadow-md p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">รายการเครื่องที่ต้องการ</h3>
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm"
+                        (click)="openDialogReturnMachineProducts(selectedMachineProducts)"
+                        *ngIf="selectedMachineProducts.length > 0">
+                        คืนสินค้าที่เลือก
+                    </button>
+                </div>
+
+                <ng-container *ngFor="let machine of itemData?.machine_models">
+                    <div class="my-4 p-3 bg-gray-50 rounded-lg">
+                        <p class="font-medium text-gray-600">รุ่นเครื่อง: <span class="text-gray-800">{{
+                                machine?.machine_model?.name ?? '-' }}</span></p>
+                        <p class="font-medium text-gray-600">จำนวน: <span class="text-gray-800">{{ machine?.qty ?? 0
+                                }}</span></p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div *ngFor="let product of machine?.products" class="border rounded-lg p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center">
+                                    <mat-checkbox [(ngModel)]="product.selected"
+                                        (change)="onSelectMultipleMachineProducts($event, product)" color="primary"
+                                        class="mr-2">
+                                    </mat-checkbox>
+                                    <span class="font-medium">{{ product?.product?.name ?? '-' }}</span>
+                                </div>
+                                <div [ngClass]="{
+                  'bg-yellow-100 text-yellow-800': product?.return_products === null,
+                  'bg-blue-100 text-blue-800': product?.return_products?.status === 'waiting_approve',
+                  'bg-green-100 text-green-800': product?.return_products?.status === 'approved'
+                }" class="text-xs px-2 py-1 rounded-full">
+                                    {{ getStatusText(product) }}
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <div>
+                                    <p class="text-gray-500">Serial No.</p>
+                                    <p>{{ product?.product?.serial_no ?? '-' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 flex justify-end">
+                                <button mat-icon-button [matMenuTriggerFor]="mobileMenu" class="text-gray-500">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #mobileMenu="matMenu">
+                                    <button mat-menu-item (click)="showPicture(product)" *ngIf="product.return ==='Y'">
+                                        <mat-icon>image</mat-icon>
+                                        <span>รูปภาพ</span>
+                                    </button>
+                                    <button mat-menu-item (click)="delete(item.id)">
+                                        <mat-icon>delete</mat-icon>
+                                        <span>ลบ</span>
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <!-- Transducer Products Section -->
+            <div class="bg-white rounded-xl shadow-md p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">รายการหัวฉีดที่ต้องการ</h3>
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm"
+                        (click)="openDialogReturnTransducerProducts(selectedTransducerProducts)"
+                        *ngIf="selectedTransducerProducts.length > 0">
+                        คืนสินค้าที่เลือก
+                    </button>
+                </div>
+
+                <ng-container *ngFor="let machine of itemData?.transducers">
+                    <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                        <p class="font-medium text-gray-600">รุ่นเครื่อง: <span class="text-gray-800">{{
+                                machine?.machine_model?.name ?? '-' }}</span></p>
+                        <p class="font-medium text-gray-600">จำนวน: <span class="text-gray-800">{{ machine?.qty ?? 0
+                                }}</span></p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div *ngFor="let product of machine?.products" class="border rounded-lg p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center">
+                                    <mat-checkbox [(ngModel)]="product.selected"
+                                        (change)="onSelectMultipleTransducerProducts($event, product)" color="primary"
+                                        [disabled]="product?.return_products?.status === 'approved' || (product?.return_products?.status === 'waiting_approve' && this.user?.team_role !== 'User')"
+                                        class="mr-2">
+                                    </mat-checkbox>
+                                    <span class="font-medium">{{ product?.product?.name ?? '-' }}</span>
+                                </div>
+                                <div [ngClass]="{
+                  'bg-yellow-100 text-yellow-800': product?.return_products === null,
+                  'bg-blue-100 text-blue-800': product?.return_products?.status === 'waiting_approve',
+                  'bg-green-100 text-green-800': product?.return_products?.status === 'approved'
+                }" class="text-xs px-2 py-1 rounded-full">
+                                    {{ getStatusText(product) }}
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <div>
+                                    <p class="text-gray-500">Serial No.</p>
+                                    <p>{{ product?.product?.serial_no ?? '-' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 flex justify-end">
+                                <button mat-icon-button [matMenuTriggerFor]="mobileMenu" class="text-gray-500">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #mobileMenu="matMenu">
+                                    <button mat-menu-item *ngIf="product.return ==='N'"
+                                        (click)="openDialogReturnProduct(product)">
+                                        <mat-icon>assignment_return</mat-icon>
+                                        <span>คืนสินค้า</span>
+                                    </button>
+                                    <button mat-menu-item (click)="showPicture(product)" *ngIf="product.return ==='Y'">
+                                        <mat-icon>image</mat-icon>
+                                        <span>รูปภาพ</span>
+                                    </button>
+                                    <button mat-menu-item (click)="delete(item.id)">
+                                        <mat-icon>delete</mat-icon>
+                                        <span>ลบ</span>
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <!-- Staff Section -->
+            <div class="bg-white rounded-xl shadow-md p-4">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">พนักงาน</h3>
+                <div class="space-y-3">
+                    <div *ngFor="let item of itemData?.order_users" class="border rounded-lg p-3">
+                        <p class="font-medium">{{ item?.user?.name ?? '-' }}</p>
+                        <div class="grid grid-cols-2 gap-2 mt-2 text-sm">
+                            <div>
+                                <p class="text-gray-500">Start Date</p>
+                                <p>{{ item?.start_date ?? '-' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500">End Date</p>
+                                <p>{{ item?.end_date ?? '-' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Win & Lose Section -->
+            <div class="bg-white rounded-xl shadow-md p-4">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Win & lose</h3>
+                <div class="space-y-3">
+                    <div *ngFor="let item of winLose" class="border rounded-lg p-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium">{{ item?.status ?? '-' }}</span>
+                            <span class="text-sm text-gray-500">{{ (item?.updated_at | date : 'dd/MM/yyyy') ?? '-'
+                                }}</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600">{{ item?.note ?? '-' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

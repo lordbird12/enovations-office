@@ -335,7 +335,29 @@ export const appRoutes: Route[] = [
                         loadChildren: () =>
                             import('app/modules/admin/team/page.routes'),
                     },
+
                 ],
+            },
+           
+        ],
+    },
+    {
+        path: '',
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        data: {
+            layout: 'empty',
+        },
+        component: LayoutComponent,
+        resolve: {
+            initialData: initialDataResolver,
+        },
+        children: [
+
+            {
+                path: 'line',
+                loadChildren: () =>
+                    import('app/modules/line/line.routing'),
             },
         ],
     },

@@ -1,0 +1,291 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <!-- Loader -->
+    <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+        <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+    </div>
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-4 sm:p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title and Actions -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <!-- Page Title -->
+                <h2
+                    class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    รายการจองเครื่อง
+                </h2>
+
+                <!-- Action Buttons -->
+                <div class="flex    flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+                    <!-- Status Filter Dropdown -->
+                    <div class="relative flex-1 sm:flex-none">
+                        <button mat-button [matMenuTriggerFor]="menu_status" mat-flat-button [color]="'primary'"
+                            class="w-full sm:w-auto h-12 flex items-center justify-center gap-1 px-4">
+                            <mat-icon svgIcon="heroicons_outline:adjustments-horizontal" class="sm:mr-1"></mat-icon>
+                            <span class="truncate hidden xs:inline">สถานะ</span>
+                            <mat-icon svgIcon="heroicons_outline:chevron-down" class="ml-1"></mat-icon>
+                        </button>
+
+                        <mat-menu #menu_status="matMenu" class="filter-menu bg-slate-100">
+                            <button mat-menu-item (click)="set_status('')" class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:list-bullet"></mat-icon>
+                                <span>ทั้งหมด</span>
+                            </button>
+                            <button mat-menu-item (click)="set_status('Ordered')" class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:clock" class="text-yellow-500"></mat-icon>
+                                <span>รออนุมัติ</span>
+                            </button>
+                            <button mat-menu-item (click)="set_status('Confirm')" class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:check-circle" class="text-green-500"></mat-icon>
+                                <span>อนุมัติ</span>
+                            </button>
+                            <button mat-menu-item (click)="set_status('Reject')" class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:x-circle" class="text-red-500"></mat-icon>
+                                <span>ไม่อนุมัติ</span>
+                            </button>
+                            <button mat-menu-item (click)="set_status('Finish')" class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:arrow-path" class="text-blue-500"></mat-icon>
+                                <span>รอคืน</span>
+                            </button>
+                            <button mat-menu-item (click)="set_status('Returned')" class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:check-badge" class="text-purple-500"></mat-icon>
+                                <span>เสร็จสิ้น</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+
+                    <!-- Add Booking Button -->
+                    <div class="relative flex-1 sm:flex-none">
+                        <button mat-button [matMenuTriggerFor]="menu" mat-flat-button [color]="'primary'"
+                            class="w-full sm:w-auto h-12 flex items-center justify-center gap-1 px-4">
+                            <mat-icon svgIcon="heroicons_outline:plus-circle" class="sm:mr-1"></mat-icon>
+                            <span class="truncate hidden xs:inline">เพิ่มการจอง</span>
+                        </button>
+
+                        <mat-menu #menu="matMenu" class="action-menu">
+                            <button mat-menu-item (click)="addElement('Echocardiogram')"
+                                class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:heart"></mat-icon>
+                                <span>Echocardiogram</span>
+                            </button>
+                            <button mat-menu-item (click)="addElement('Ultrasound Imaging')"
+                                class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:photo"></mat-icon>
+                                <span>Ultrasound Imaging</span>
+                            </button>
+                            <button mat-menu-item (click)="addElement('ec')" class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:bolt"></mat-icon>
+                                <span>EC</span>
+                            </button>
+                            <button mat-menu-item (click)="addElement('rc')" class="flex items-center gap-2">
+                                <mat-icon svgIcon="heroicons_outline:signal"></mat-icon>
+                                <span>RC</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="p-2 sm:p-4 md:m-6">
+        <!-- Mobile Cards View -->
+        <div class="sm:hidden space-y-4">
+            <div class="flex justify-start items-center w-full px-2">
+                <div
+                    class="flex text-md font-normal tracking-tight leading-7 sm:leading-10 truncate justify-center items-center w-full">
+                    <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                        <mat-icon svgIcon="search"></mat-icon>
+                        <input matInput placeholder="ค้นหา" [(ngModel)]="searchQuery" (ngModelChange)="applySearch()">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div *ngFor="let item of dataRow; let i = index" class="bg-white rounded-lg shadow p-4">
+                <div class="flex justify-between items-start">
+                    <div class="text-lg font-semibold truncate">หมายเลขการจอง : {{ item.code ?? '-' }}</div>
+                    <div>
+                        <button mat-icon-button [matMenuTriggerFor]="mobileMenu">
+                            <mat-icon svgIcon="heroicons_solid:ellipsis-vertical"></mat-icon>
+                        </button>
+                        <mat-menu #mobileMenu="matMenu">
+                            <button mat-menu-item (click)="editElement(item)">
+                                <mat-icon svgIcon="heroicons_solid:eye"></mat-icon>
+                                <span>รายละเอียด</span>
+                            </button>
+                            <button mat-menu-item (click)="deleteorder(item.id)">
+                                <mat-icon>delete</mat-icon>
+                                <span>ลบ</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                </div>
+
+                <div class="mt-2 grid grid-cols-3 gap-2 text-md">
+                    <div class="text-gray-500">วัตถุประสงค์:</div>
+                    <div class="col-span-2">{{ item.request_purpose ? item.request_purpose : "-" }}</div>
+
+                    <div class="text-gray-500">ผู้จอง:</div>
+                    <div class="col-span-2">{{ item.user ? item.user?.name : "-" }}</div>
+
+                    <div class="text-gray-500">ลูกค้า:</div>
+                    <div class="col-span-2">{{ item.client ? item.client?.name : "-" }}</div>
+
+                    <div class="text-gray-500">วันที่ขอ:</div>
+                    <div class="col-span-2">{{ item.created_at !== null ? (item.created_at | date : "dd-MM-yyyy") : "-" }}</div>
+
+                    <div class="text-gray-500">วันที่ยืม:</div>
+                    <div class="col-span-2">{{ item.start_date !== null ? (item.start_date | date : "dd-MM-yyyy") : "-" }}</div>
+
+                    <div class="text-gray-500">วันคืน:</div>
+                    <div class="col-span-2">{{ item.end_date !== null ? (item.end_date | date : "dd-MM-yyyy") : "-" }}</div>
+
+                    <div class="text-gray-500">สถานะ:</div>
+                    <div >
+                        <span *ngIf="item.status === 'Ordered'"
+                            class="bg-yellow-200 px-2 py-1 rounded-md text-yellow-800 text-md font-bold">
+                            รออนุมัติ
+                        </span>
+                        <span *ngIf="item.status === 'Reject'"
+                            class="bg-red-200 px-2 py-1 rounded-md text-red-800 text-md font-bold">
+                            ไม่อนุมัติ
+                        </span>
+                        <span *ngIf="item.status === 'Confirm'"
+                            class="bg-green-200 px-2 py-1 rounded-md text-green-800 text-md font-bold">
+                            อนุมัติ
+                        </span>
+                        <span *ngIf="item.status === 'Approve'"
+                            class="bg-green-200 px-2 py-1 rounded-md text-green-800 text-md font-bold">
+                            รอรับของ
+                        </span>
+                        <span *ngIf="item.status === 'Finish'"
+                            class="bg-blue-200 px-2 py-1 rounded-md text-blue-800 text-md font-bold">
+                            รอคืน
+                        </span>
+                        <span *ngIf="item.status === 'Returned'"
+                            class="bg-blue-200 px-2 py-1 rounded-md text-purple-800 text-md font-bold">
+                            เสร็จสิ้น
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="dataRow?.length == 0" class="bg-white rounded-lg shadow p-4 text-center">
+                ไม่มีข้อมูล !
+            </div>
+        </div>
+        <!-- Pagination Section -->
+        <div class="flex flex-col items-center gap-2 mt-6 text-gray-700 text-sm">
+            <div class="text-center">
+                แสดงหน้า <span class="font-semibold">{{ pages.current_page }}</span>
+                จาก <span class="font-semibold">{{ pages.last_page }}</span>
+                | รายการทั้งหมด <span class="font-semibold">{{ pages.total }}</span> รายการ
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <button mat-stroked-button color="primary" (click)="changePage(pages.current_page - 1)"
+                    [disabled]="pages.current_page <= 1" class="px-4">
+                    ก่อนหน้า
+                </button>
+
+                <span class="flex items-center font-medium text-lg px-2">
+                    หน้า {{ pages.current_page }}
+                </span>
+
+                <button mat-stroked-button color="primary" (click)="changePage(pages.current_page + 1)"
+                    [disabled]="pages.current_page >= pages.last_page" class="px-4">
+                    ถัดไป
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Desktop Table View -->
+        <div class="hidden sm:block relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
+            <div class="flex flex-col flex-auto p-5 sm:overflow-y-auto">
+                <table datatable [dtOptions]="dtOptions" id="booking-list"
+                    class="table row-border hover w-full bg-white whitespace-nowrap">
+                    <thead>
+                        <tr>
+                            <th class="w-[100px]">จัดการ</th>
+                            <th class="w-[10px]">ลำดับ</th>
+                            <th>Document No.</th>
+                            <th>วัตถุประสงค์</th>
+                            <th>ผู้จอง</th>
+                            <th>ลูกค้า</th>
+                            <th>วันที่ขอ</th>
+                            <th>วันที่ยืม</th>
+                            <th>วันคืน</th>
+                            <th>สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="dataRow?.length != 0">
+                        <tr *ngFor="let item of dataRow; let i = index">
+                            <td>
+                                <button mat-icon-button [matMenuTriggerFor]="menu"
+                                    aria-label="Example icon-button with a menu">
+                                    <mat-icon svgIcon="heroicons_solid:cog-8-tooth"></mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                    <button mat-menu-item color="accent" (click)="editElement(item)">
+                                        <mat-icon svgIcon="heroicons_solid:eye"></mat-icon>
+                                        <span>รายละเอียด</span>
+                                    </button>
+                                    <button mat-menu-item color="accent" (click)="deleteorder(item.id)">
+                                        <mat-icon>delete</mat-icon>
+                                        <span>ลบ</span>
+                                    </button>
+                                </mat-menu>
+                            </td>
+                            <td>{{ pages.begin + (i + 1) }}</td>
+                            <td>{{ item.code ?? '-'}}</td>
+                            <td>{{ item.request_purpose ? item.request_purpose : "-" }}</td>
+                            <td>{{ item.user ? item.user?.name : "-" }}</td>
+                            <td>{{ item.client ? item.client?.name : "-" }}</td>
+                            <td class="text-center">{{ item.created_at !== null ? (item.created_at | date :
+                                "dd-MM-yyyy"):
+                                "-"}}</td>
+                            <td class="text-center">{{ item.start_date !== null ? (item.start_date | date :
+                                "dd-MM-yyyy"):
+                                "-"}}</td>
+                            <td class="text-center">{{ item.end_date !== null ? (item.end_date | date : "dd-MM-yyyy"):
+                                "-"}}
+                            </td>
+                            <td class="text-center">
+                                <div *ngIf="item.status === 'Ordered'"
+                                    class="bg-yellow-200 p-1 rounded-md text-yellow-800 font-bold">
+                                    รออนุมัติ
+                                </div>
+                                <div *ngIf="item.status === 'Reject'"
+                                    class="bg-red-200 p-1 rounded-md text-red-800 font-bold">
+                                    ไม่อนุมัติ
+                                </div>
+                                <div *ngIf="item.status === 'Confirm'"
+                                    class="bg-green-200 p-1 rounded-md text-green-800 font-bold text-center">
+                                    อนุมัติ
+                                </div>
+                                <div *ngIf="item.status === 'Approve'"
+                                    class="bg-green-200 p-1 rounded-md text-green-800 font-bold text-center">
+                                    รอรับของ
+                                </div>
+                                <div *ngIf="item.status === 'Finish'"
+                                    class="bg-blue-200 p-1 rounded-md text-blue-800 font-bold text-center">
+                                    รอคืน
+                                </div>
+                                <div *ngIf="item.status === 'Returned'"
+                                    class="bg-blue-200 p-1 rounded-md text-purple-800 font-bold text-center">
+                                    เสร็จสิ้น
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="dataRow?.length == 0">
+                        <tr>
+                            <td colspan="10" class="no-data-available text-center">ไม่มีข้อมูล !</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
