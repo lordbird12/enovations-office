@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
-import { catchError, map, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LineService {
-
+    private _data: BehaviorSubject<any | null> = new BehaviorSubject(null);
   constructor(
     private readonly _httpClient: HttpClient,
   ) { }
@@ -33,6 +33,39 @@ export class LineService {
   uploadFile(item: FormData): Observable<any> {
     return this._httpClient.post<any>(environment.baseURL + 'api/upload_file', item,);
   }
+
+
+  getNews(): Observable<any> {
+    return this._httpClient
+      .get<any>(environment.baseURL + '/api/get_news')
+      .pipe(
+        tap((result) => {
+          this._data.next(result);
+        })
+      );
+  }
+
+    getNewsById(id:any): Observable<any> {
+    return this._httpClient
+      .get<any>(environment.baseURL + '/api/news/' + id)
+      .pipe(
+        tap((result) => {
+          this._data.next(result);
+        })
+      );
+  }
+
+   getCategoryNews(): Observable<any> {
+    return this._httpClient
+      .get<any>(environment.baseURL + '/api/get_category_news')
+      .pipe(
+        tap((result) => {
+          this._data.next(result);
+        })
+      );
+  }
+
+
 
   // apiKey = environment.LONG_DO_API_KEY;
   count = 0;

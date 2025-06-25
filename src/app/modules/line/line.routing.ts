@@ -5,6 +5,8 @@ import { inject } from '@angular/core';
 import { FormComponent } from './sales/form/form.component';
 import { PageService } from './sales/page.service';
 import { ViewOrderComponent } from './sales/view/view.component';
+import { NewsComponent } from './banner/list/form.component';
+import { NewsDetailComponent } from './banner/view/form.component';
 
 
 export default [
@@ -155,6 +157,14 @@ export default [
                 data: {
                     page_type: 'EDIT'
                 }
+            },
+            {
+                path: 'news',
+                component: NewsComponent,
+            },
+            {
+                path: 'news/:id',
+                component: NewsDetailComponent,
             },
         ],
     },
