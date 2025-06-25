@@ -814,7 +814,7 @@ export class ViewOrderComponent implements OnInit {
     }
 
     onBack() {
-        this._router.navigate(['admin/sales/list'])
+        this._router.navigate(['line/list/booking'])
     }
 
     onSubmit(): void {
@@ -1304,7 +1304,7 @@ export class ViewOrderComponent implements OnInit {
     }
 
     onEdit(element: any) {
-        this._router.navigate(['admin/sales/edit/' + element]);
+        this._router.navigate(['line/edit/booking/' + element]);
     }
 
 

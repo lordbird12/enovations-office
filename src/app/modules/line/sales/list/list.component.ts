@@ -92,7 +92,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
     // เพิ่มเมธอด editElement(element) และ deleteElement(element)
     editElement(element: any) {
-        this._router.navigate(['line/booking/view/' + element.id]);
+        this._router.navigate(['line/view/booking/' + element.id]);
     }
     addElement(data: any) {
         if (data === 'Echocardiogram') {

@@ -70,7 +70,7 @@
             </button>
             <div formArrayName="products" class="space-y-2">
                 <div *ngFor="let product of model.get('products').controls; let j = index" [formGroupName]="j"
-                    class="grid grid-cols-2 gap-4 items-center">
+                    class="grid grid-col-1 md:grid-cols-2 gap-4 items-center">
                     <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                         <mat-label>สินค้า</mat-label>
                         <mat-select [formControlName]="'product_id'">

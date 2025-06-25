@@ -120,7 +120,7 @@ export default [
                 }
             },
             {
-                path: 'edit/:id',
+                path: 'edit/booking/:id',
                 component: FormComponent,
                 resolve: {
                     products: () => inject(PageService).getProductEno(),

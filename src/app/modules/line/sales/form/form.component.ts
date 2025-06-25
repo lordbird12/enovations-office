@@ -962,7 +962,7 @@ export class FormComponent implements OnInit {
     }
 
     onBack() {
-        this._router.navigate(['admin/sales/list'])
+        this._router.navigate(['line/list/booking'])
     }
 
     onSubmit(): void {
@@ -996,7 +996,7 @@ export class FormComponent implements OnInit {
 
                     this._service.create(formValue).subscribe({
                         next: (resp: any) => {
-                            this._router.navigate(['admin/sales/list'])
+                            this._router.navigate(['line/list/booking'])
                         },
                         error: (err: any) => {
                             this._fuseConfirmationService.open({
@@ -1056,7 +1056,7 @@ export class FormComponent implements OnInit {
                     formValue.end_date = DateTime.fromISO(this.formData.value.end_date).toFormat('yyyy-MM-dd')
                     this._service.update(formValue, this.Id).subscribe({
                         next: (resp: any) => {
-                            this._router.navigate(['admin/sales/list'])
+                            this._router.navigate(['line/list/booking'])
                         },
                         error: (err: any) => {
                             this._fuseConfirmationService.open({

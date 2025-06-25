@@ -32,7 +32,7 @@
                 <p><strong>วัน เวลา สถานที่นัดหมาย:</strong> {{ formData.value.meeting_details }}</p>
                 <p><strong>วันที่ขอ:</strong> {{ formData.value.created_at | date:'dd-MM-yyyy' }}</p>
                 <p><strong>สถานะ:</strong> <span
-                        class="bg-green-50 rounded-md text-sm px-2 mb-2 mx-2 py-1 text-green-400 font-semibold">{{formData.value.status}}</span>
+                        class="bg-green-50 rounded-md text-md px-2 mb-2 mx-2 py-1 text-green-400 font-semibold">{{formData.value.status}}</span>
                 </p>
             </div>
             <!-- ข้อมูลโรงพยาบาล -->
@@ -65,7 +65,7 @@
             <div class="bg-white rounded-xl shadow-md p-4">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold text-gray-700">รายการเครื่องที่ต้องการ</h3>
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm"
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg text-md"
                         (click)="openDialogReturnMachineProducts(selectedMachineProducts)"
                         *ngIf="selectedMachineProducts.length > 0">
                         คืนสินค้าที่เลือก
@@ -94,12 +94,12 @@
                   'bg-yellow-100 text-yellow-800': product?.return_products === null,
                   'bg-blue-100 text-blue-800': product?.return_products?.status === 'waiting_approve',
                   'bg-green-100 text-green-800': product?.return_products?.status === 'approved'
-                }" class="text-xs px-2 py-1 rounded-full">
+                }" class="text-md px-2 py-1 rounded-full">
                                     {{ getStatusText(product) }}
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="grid grid-cols-2 gap-2 text-md">
                                 <div>
                                     <p class="text-gray-500">Serial No.</p>
                                     <p>{{ product?.product?.serial_no ?? '-' }}</p>
@@ -130,7 +130,7 @@
             <div class="bg-white rounded-xl shadow-md p-4">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold text-gray-700">รายการหัวฉีดที่ต้องการ</h3>
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm"
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg text-md"
                         (click)="openDialogReturnTransducerProducts(selectedTransducerProducts)"
                         *ngIf="selectedTransducerProducts.length > 0">
                         คืนสินค้าที่เลือก
@@ -160,12 +160,12 @@
                   'bg-yellow-100 text-yellow-800': product?.return_products === null,
                   'bg-blue-100 text-blue-800': product?.return_products?.status === 'waiting_approve',
                   'bg-green-100 text-green-800': product?.return_products?.status === 'approved'
-                }" class="text-xs px-2 py-1 rounded-full">
+                }" class="text-md px-2 py-1 rounded-full">
                                     {{ getStatusText(product) }}
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="grid grid-cols-2 gap-2 text-md">
                                 <div>
                                     <p class="text-gray-500">Serial No.</p>
                                     <p>{{ product?.product?.serial_no ?? '-' }}</p>
@@ -203,13 +203,13 @@
                 <div class="space-y-3">
                     <div *ngFor="let item of itemData?.order_users" class="border rounded-lg p-3">
                         <p class="font-medium">{{ item?.user?.name ?? '-' }}</p>
-                        <div class="grid grid-cols-2 gap-2 mt-2 text-sm">
+                        <div class="grid grid-cols-2 gap-2 mt-2 text-md">
                             <div>
-                                <p class="text-gray-500">Start Date</p>
+                                <p class="text-gray-500">วันเริ่มต้น</p>
                                 <p>{{ item?.start_date ?? '-' }}</p>
                             </div>
                             <div>
-                                <p class="text-gray-500">End Date</p>
+                                <p class="text-gray-500">วันสิ้นสุด</p>
                                 <p>{{ item?.end_date ?? '-' }}</p>
                             </div>
                         </div>
@@ -224,10 +224,10 @@
                     <div *ngFor="let item of winLose" class="border rounded-lg p-3">
                         <div class="flex justify-between items-center">
                             <span class="font-medium">{{ item?.status ?? '-' }}</span>
-                            <span class="text-sm text-gray-500">{{ (item?.updated_at | date : 'dd/MM/yyyy') ?? '-'
+                            <span class="text-md text-gray-500">{{ (item?.updated_at | date : 'dd/MM/yyyy') ?? '-'
                                 }}</span>
                         </div>
-                        <p class="mt-2 text-sm text-gray-600">{{ item?.note ?? '-' }}</p>
+                        <p class="mt-2 text-md text-gray-600">{{ item?.note ?? '-' }}</p>
                     </div>
                 </div>
             </div>
