@@ -28,6 +28,7 @@
     "@fullcalendar/angular": "^6.1.16",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
+    "@line/liff": "^2.27.0",
     "@ngneat/transloco": "4.2.7",
     "angular-datatables": "16.0.0",
     "apexcharts": "3.40.0",
