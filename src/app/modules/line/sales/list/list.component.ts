@@ -81,9 +81,26 @@ export class ListComponent implements OnInit, AfterViewInit {
         this.user = JSON.parse(localStorage.getItem('user'))
     }
 
-    ngOnInit() {
-        this.loadTable();
+    async ngOnInit(): Promise<void> {
+        this.loadTable()
 
+        // try {
+        //     await liff.init({ liffId: environment.LIFF_OT });
+        //     this.liffInitialized = true;
+
+        //     if (liff.isLoggedIn()) {
+
+        //         this.profile = await liff.getProfile();
+
+        //         this.formData.get('line_id')?.setValue(this.profile?.userId);
+
+        //         this.getTypeOt();
+        //     } else {
+        //         liff.login();
+        //     }
+        // } catch (error) {
+        //     console.error('LIFF initialization failed', error);
+        // }
     }
 
     ngAfterViewInit(): void {
