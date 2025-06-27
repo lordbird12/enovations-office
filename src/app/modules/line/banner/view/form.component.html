@@ -1,27 +1,45 @@
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+
   <!-- News Header Section -->
   <div class="relative bg-white dark:bg-gray-800 shadow-sm">
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-4">
       <div class="max-w-3xl mx-auto">
-       
 
+        <!-- Back Button -->
+        <div class="mb-6">
+          <button (click)="goBack()"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 rounded-md shadow-sm dark:bg-gray-700 dark:hover:bg-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            ย้อนกลับ
+          </button>
+        </div>
         <!-- Category and Date -->
         <div class="flex items-center space-x-4 mb-4">
-       
+
           <span class="text-sm text-gray-500 dark:text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             {{( newsItem?.created_at | date : 'dd/MM/yyyy') || '1 วันที่แล้ว' }}
           </span>
           <span class="text-sm text-gray-500 dark:text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
             {{ newsItem?.views || '1,245' }} views
           </span>
         </div>
+
 
         <!-- News Title -->
         <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl mb-6">
@@ -41,40 +59,28 @@
 
       <!-- News Content -->
       <div class="prose dark:prose-invert prose-lg max-w-none">
-        <p class="lead">{{ newsItem?.description || 'นี่คือบทสรุปของข่าวสารนี้ที่ให้ภาพรวมคร่าวๆ ก่อนเข้าสู่เนื้อหาหลัก' }}</p>
+        <p class="lead">{{ newsItem?.description || 'นี่คือบทสรุปของข่าวสารนี้ที่ให้ภาพรวมคร่าวๆ ก่อนเข้าสู่เนื้อหาหลัก'
+          }}</p>
       </div>
 
       <!-- Tags -->
       <div class="mt-12 border-t border-gray-200 dark:border-gray-700 pt-8">
         <h3 class="text-md font-medium text-gray-500 dark:text-gray-400 mb-4">แท็กที่เกี่ยวข้อง</h3>
         <div class="flex flex-wrap gap-2">
-          <a href="#" class="inline-flex items-center px-3 py-1 rounded-full text-md font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
+          <a href="#"
+            class="inline-flex items-center px-3 py-1 rounded-full text-md font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
             การเมือง
           </a>
-          <a href="#" class="inline-flex items-center px-3 py-1 rounded-full text-md font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
+          <a href="#"
+            class="inline-flex items-center px-3 py-1 rounded-full text-md font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
             เศรษฐกิจ
           </a>
-          <a href="#" class="inline-flex items-center px-3 py-1 rounded-full text-md font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
+          <a href="#"
+            class="inline-flex items-center px-3 py-1 rounded-full text-md font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
             สังคม
           </a>
         </div>
       </div>
-
-      <!-- Related News -->
-      <!-- <div class="mt-12 border-t border-gray-200 dark:border-gray-700 pt-12">
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6">ข่าวสารที่เกี่ยวข้อง</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div *ngFor="let related of relatedNews" class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden hover:shadow-md transition-shadow">
-            <a [routerLink]="['/news', related.id]" class="block">
-              <img [src]="related.image" alt="{{ related.name }}" class="w-full h-40 object-cover">
-              <div class="p-4">
-                <h4 class="font-medium text-gray-900 dark:text-white mb-1 line-clamp-2">{{ related.name }}</h4>
-                <p class="text-sm text-gray-500 dark:text-gray-400">{{ related.date || '1 วันที่แล้ว' }}</p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </div>

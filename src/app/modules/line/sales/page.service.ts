@@ -353,18 +353,52 @@ export class PageService {
     }
 
     uploadImg(img: FormData): Observable<any> {
-            return this._httpClient
-                .post(
-                    environment.baseURL + '/api/upload_images',
-                    img,
-                    this.httpOptionsFormdata
-                )
-                .pipe(
-                    switchMap((response: any) => {
-                        return of(response.data);
-                    })
-                );
-        }
+        return this._httpClient
+            .post(
+                environment.baseURL + '/api/upload_images',
+                img,
+                this.httpOptionsFormdata
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
 
 
+    getAllProduct(): Observable<any> {
+        return this._httpClient
+            .get(
+                environment.baseURL + '/api/get_product_all',
+
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
+    getOrderByUserCalendar(id: any): Observable<any> {
+        return this._httpClient
+            .get(
+                environment.baseURL + '/api/get_order_by_user_calendar/' + id,
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
+    getOrderByProductCalendar(id: any): Observable<any> {
+        return this._httpClient
+            .get(
+                environment.baseURL + '/api/get_order_by_product_calendar/' + id,
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
 }

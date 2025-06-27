@@ -7,6 +7,7 @@ import { PageService } from './sales/page.service';
 import { ViewOrderComponent } from './sales/view/view.component';
 import { NewsComponent } from './banner/list/form.component';
 import { NewsDetailComponent } from './banner/view/form.component';
+import { CalendarOrderLineComponent } from './calendar/list/list.component';
 
 
 export default [
@@ -165,6 +166,18 @@ export default [
             {
                 path: 'news/:id',
                 component: NewsDetailComponent,
+            },
+            {
+                path: 'calendar-order/list',
+                component: CalendarOrderLineComponent,
+                resolve: {
+                    allProduct: () => inject(PageService).getAllProduct(),
+                    user: () => inject(PageService).getUser(),
+                    // categories: () => inject(InventoryService).getCategories(),
+                    // products  : () => inject(InventoryService).getProducts(),
+                    // tags      : () => inject(InventoryService).getTags(),
+                    // vendors   : () => inject(InventoryService).getVendors(),
+                },
             },
         ],
     },

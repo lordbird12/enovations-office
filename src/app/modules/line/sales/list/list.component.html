@@ -8,81 +8,80 @@
         class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-4 sm:p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
         <div class="flex-1 min-w-0">
             <!-- Title and Actions -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex flex-row sm:items-center justify-between gap-4 mb-4">
                 <!-- Page Title -->
                 <h2
                     class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
                     รายการจองเครื่อง
                 </h2>
+                <mat-icon svgIcon="heroicons_outline:calendar-days" class="icon-size-7" (click)="goToCalendar()"></mat-icon>
+            </div>
+            <!-- Action Buttons -->
+            <div class="flex    flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+                <!-- Status Filter Dropdown -->
+                <div class="relative flex-1 sm:flex-none">
+                    <button mat-button [matMenuTriggerFor]="menu_status" mat-flat-button [color]="'primary'"
+                        class="w-full sm:w-auto h-12 flex items-center justify-center gap-1 px-4">
+                        <mat-icon svgIcon="heroicons_outline:adjustments-horizontal" class="sm:mr-1"></mat-icon>
+                        <span class="truncate hidden xs:inline">สถานะ</span>
+                        <mat-icon svgIcon="heroicons_outline:chevron-down" class="ml-1"></mat-icon>
+                    </button>
 
-                <!-- Action Buttons -->
-                <div class="flex    flex-row gap-2 sm:gap-3 w-full sm:w-auto">
-                    <!-- Status Filter Dropdown -->
-                    <div class="relative flex-1 sm:flex-none">
-                        <button mat-button [matMenuTriggerFor]="menu_status" mat-flat-button [color]="'primary'"
-                            class="w-full sm:w-auto h-12 flex items-center justify-center gap-1 px-4">
-                            <mat-icon svgIcon="heroicons_outline:adjustments-horizontal" class="sm:mr-1"></mat-icon>
-                            <span class="truncate hidden xs:inline">สถานะ</span>
-                            <mat-icon svgIcon="heroicons_outline:chevron-down" class="ml-1"></mat-icon>
+                    <mat-menu #menu_status="matMenu" class="filter-menu bg-slate-100">
+                        <button mat-menu-item (click)="set_status('')" class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:list-bullet"></mat-icon>
+                            <span>ทั้งหมด</span>
                         </button>
-
-                        <mat-menu #menu_status="matMenu" class="filter-menu bg-slate-100">
-                            <button mat-menu-item (click)="set_status('')" class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:list-bullet"></mat-icon>
-                                <span>ทั้งหมด</span>
-                            </button>
-                            <button mat-menu-item (click)="set_status('Ordered')" class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:clock" class="text-yellow-500"></mat-icon>
-                                <span>รออนุมัติ</span>
-                            </button>
-                            <button mat-menu-item (click)="set_status('Confirm')" class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:check-circle" class="text-green-500"></mat-icon>
-                                <span>อนุมัติ</span>
-                            </button>
-                            <button mat-menu-item (click)="set_status('Reject')" class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:x-circle" class="text-red-500"></mat-icon>
-                                <span>ไม่อนุมัติ</span>
-                            </button>
-                            <button mat-menu-item (click)="set_status('Finish')" class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:arrow-path" class="text-blue-500"></mat-icon>
-                                <span>รอคืน</span>
-                            </button>
-                            <button mat-menu-item (click)="set_status('Returned')" class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:check-badge" class="text-purple-500"></mat-icon>
-                                <span>เสร็จสิ้น</span>
-                            </button>
-                        </mat-menu>
-                    </div>
-
-                    <!-- Add Booking Button -->
-                    <div class="relative flex-1 sm:flex-none">
-                        <button mat-button [matMenuTriggerFor]="menu" mat-flat-button [color]="'primary'"
-                            class="w-full sm:w-auto h-12 flex items-center justify-center gap-1 px-4">
-                            <mat-icon svgIcon="heroicons_outline:plus-circle" class="sm:mr-1"></mat-icon>
-                            <span class="truncate hidden xs:inline">เพิ่มการจอง</span>
+                        <button mat-menu-item (click)="set_status('Ordered')" class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:clock" class="text-yellow-500"></mat-icon>
+                            <span>รออนุมัติ</span>
                         </button>
+                        <button mat-menu-item (click)="set_status('Confirm')" class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:check-circle" class="text-green-500"></mat-icon>
+                            <span>อนุมัติ</span>
+                        </button>
+                        <button mat-menu-item (click)="set_status('Reject')" class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:x-circle" class="text-red-500"></mat-icon>
+                            <span>ไม่อนุมัติ</span>
+                        </button>
+                        <button mat-menu-item (click)="set_status('Finish')" class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:arrow-path" class="text-blue-500"></mat-icon>
+                            <span>รอคืน</span>
+                        </button>
+                        <button mat-menu-item (click)="set_status('Returned')" class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:check-badge" class="text-purple-500"></mat-icon>
+                            <span>เสร็จสิ้น</span>
+                        </button>
+                    </mat-menu>
+                </div>
 
-                        <mat-menu #menu="matMenu" class="action-menu">
-                            <button mat-menu-item (click)="addElement('Echocardiogram')"
-                                class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:heart"></mat-icon>
-                                <span>Echocardiogram</span>
-                            </button>
-                            <button mat-menu-item (click)="addElement('Ultrasound Imaging')"
-                                class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:photo"></mat-icon>
-                                <span>Ultrasound Imaging</span>
-                            </button>
-                            <button mat-menu-item (click)="addElement('ec')" class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:bolt"></mat-icon>
-                                <span>EC</span>
-                            </button>
-                            <button mat-menu-item (click)="addElement('rc')" class="flex items-center gap-2">
-                                <mat-icon svgIcon="heroicons_outline:signal"></mat-icon>
-                                <span>RC</span>
-                            </button>
-                        </mat-menu>
-                    </div>
+                <!-- Add Booking Button -->
+                <div class="relative flex-1 sm:flex-none">
+                    <button mat-button [matMenuTriggerFor]="menu" mat-flat-button [color]="'primary'"
+                        class="w-full sm:w-auto h-12 flex items-center justify-center gap-1 px-4">
+                        <mat-icon svgIcon="heroicons_outline:plus-circle" class="sm:mr-1"></mat-icon>
+                        <span class="truncate hidden xs:inline">เพิ่มการจอง</span>
+                    </button>
+
+                    <mat-menu #menu="matMenu" class="action-menu">
+                        <button mat-menu-item (click)="addElement('Echocardiogram')" class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:heart"></mat-icon>
+                            <span>Echocardiogram</span>
+                        </button>
+                        <button mat-menu-item (click)="addElement('Ultrasound Imaging')"
+                            class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:photo"></mat-icon>
+                            <span>Ultrasound Imaging</span>
+                        </button>
+                        <button mat-menu-item (click)="addElement('ec')" class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:bolt"></mat-icon>
+                            <span>EC</span>
+                        </button>
+                        <button mat-menu-item (click)="addElement('rc')" class="flex items-center gap-2">
+                            <mat-icon svgIcon="heroicons_outline:signal"></mat-icon>
+                            <span>RC</span>
+                        </button>
+                    </mat-menu>
                 </div>
             </div>
         </div>
@@ -132,16 +131,19 @@
                     <div class="col-span-2">{{ item.client ? item.client?.name : "-" }}</div>
 
                     <div class="text-gray-500">วันที่ขอ:</div>
-                    <div class="col-span-2">{{ item.created_at !== null ? (item.created_at | date : "dd-MM-yyyy") : "-" }}</div>
+                    <div class="col-span-2">{{ item.created_at !== null ? (item.created_at | date : "dd-MM-yyyy") : "-"
+                        }}</div>
 
                     <div class="text-gray-500">วันที่ยืม:</div>
-                    <div class="col-span-2">{{ item.start_date !== null ? (item.start_date | date : "dd-MM-yyyy") : "-" }}</div>
+                    <div class="col-span-2">{{ item.start_date !== null ? (item.start_date | date : "dd-MM-yyyy") : "-"
+                        }}</div>
 
                     <div class="text-gray-500">วันคืน:</div>
-                    <div class="col-span-2">{{ item.end_date !== null ? (item.end_date | date : "dd-MM-yyyy") : "-" }}</div>
+                    <div class="col-span-2">{{ item.end_date !== null ? (item.end_date | date : "dd-MM-yyyy") : "-" }}
+                    </div>
 
                     <div class="text-gray-500">สถานะ:</div>
-                    <div >
+                    <div>
                         <span *ngIf="item.status === 'Ordered'"
                             class="bg-yellow-200 px-2 py-1 rounded-md text-yellow-800 text-md font-bold">
                             รออนุมัติ

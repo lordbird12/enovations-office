@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, catchError, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LineService {
-    private _data: BehaviorSubject<any | null> = new BehaviorSubject(null);
+  private _data: BehaviorSubject<any | null> = new BehaviorSubject(null);
   constructor(
     private readonly _httpClient: HttpClient,
   ) { }
@@ -45,7 +45,7 @@ export class LineService {
       );
   }
 
-    getNewsById(id:any): Observable<any> {
+  getNewsById(id: any): Observable<any> {
     return this._httpClient
       .get<any>(environment.baseURL + '/api/news/' + id)
       .pipe(
@@ -55,7 +55,7 @@ export class LineService {
       );
   }
 
-   getCategoryNews(): Observable<any> {
+  getCategoryNews(): Observable<any> {
     return this._httpClient
       .get<any>(environment.baseURL + '/api/get_category_news')
       .pipe(
@@ -104,4 +104,6 @@ export class LineService {
     return this._httpClient.post(
       `${environment.baseURL}api/put_zk_time`, data)
   }
+
+
 }

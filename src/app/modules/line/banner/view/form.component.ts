@@ -1,7 +1,7 @@
 
 
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule, Location, NgClass } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -66,25 +66,29 @@ export class NewsDetailComponent implements OnInit {
         public activatedRoute: ActivatedRoute,
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
+        private location: Location
 
     ) {
-            this.Id = this.activatedRoute.snapshot.params.id
-            
+        this.Id = this.activatedRoute.snapshot.params.id
+
     }
 
     ngOnInit() {
         this.GetById(this.Id)
     }
-    
 
-    GetById(id:any) {
+
+    GetById(id: any) {
         this._service.getNewsById(id).subscribe((resp: any) => {
             this.newsItem = resp.data
             this._changeDetectorRef.markForCheck()
-            
+
         })
     }
 
+    goBack(): void {
+        this.location.back();
+    }
 
 }
 

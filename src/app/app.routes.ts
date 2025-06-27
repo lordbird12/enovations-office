@@ -338,7 +338,6 @@ export const appRoutes: Route[] = [
 
                 ],
             },
-           
         ],
     },
     {

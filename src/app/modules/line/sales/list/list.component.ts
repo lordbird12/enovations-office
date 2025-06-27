@@ -108,6 +108,9 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
 
     // เพิ่มเมธอด editElement(element) และ deleteElement(element)
+    goToCalendar() {
+        this._router.navigate(['line/calendar-order/list']);
+    }
     editElement(element: any) {
         this._router.navigate(['line/view/booking/' + element.id]);
     }
