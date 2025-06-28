@@ -135,6 +135,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
         } catch (err) {
             console.error('❌ LINE Login Failed:', err);
+            alert(err)
             // 🔸 fallback redirect ไปสมัคร
             if (this.userIdFromLine) {
                 this._router.navigate(['/register'], {
