@@ -126,9 +126,10 @@ export class ListComponent implements OnInit, AfterViewInit {
             } else {
                 
                 // 🔸 ไม่เจอ user → ไปสมัคร
-                // this._router.navigate(['/register'], {
-                //     queryParams: { user_id: this.userIdFromLine },
-                // });
+                this._router.navigate(['/register'], {
+                    queryParams: { user_id: this.userIdFromLine },
+                });
+                return;
                 
             }
 
@@ -139,6 +140,7 @@ export class ListComponent implements OnInit, AfterViewInit {
                 this._router.navigate(['/register'], {
                     queryParams: { user_id: this.userIdFromLine },
                 });
+                return;
             }
         }
     }
