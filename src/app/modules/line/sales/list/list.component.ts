@@ -32,6 +32,7 @@ import { PictureComponent } from '../picture/picture.component';
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import liff from '@line/liff';
 import { LineService } from '../../line.service';
+import { firstValueFrom } from 'rxjs';
 @Component({
     selector: 'line-list-sales',
     templateUrl: './list.component.html',
@@ -111,19 +112,17 @@ export class ListComponent implements OnInit, AfterViewInit {
             this.pictureUrl = profile.pictureUrl;
             alert(this.userIdFromLine)
 
-            // 3. เรียก login API
-            this._lineService.lineLogin(this.userIdFromLine).subscribe((resp: any) => {
-
-                if (resp.status === true) {
-                    localStorage.setItem('user', JSON.stringify(resp.data));
-                    this.loadTable(); // หรือ redirect ไปหน้า dashboard
-                } else {
-                    // 4. ถ้ายังไม่สมัคร → ไปที่ register พร้อมแนบ user_id
-                    this._router.navigate(['/register'], {
-                        queryParams: { user_id: this.userIdFromLine }
-                    });
-                }
-            });
+            // 3. เรียก login API แล้ว await ให้เสร็จ
+            const resp: any = await firstValueFrom(this._lineService.lineLogin(this.userIdFromLine));
+            alert(resp.status)
+            if (resp.status === true) {
+                localStorage.setItem('user', JSON.stringify(resp.data));
+                this.loadTable();
+            } else {
+                this._router.navigate(['/register'], {
+                    queryParams: { user_id: this.userIdFromLine }
+                });
+            }
 
         } catch (err) {
             console.error('❌ LINE LIFF Error:', err);
