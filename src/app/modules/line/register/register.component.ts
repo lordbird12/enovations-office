@@ -41,7 +41,7 @@ export class LineRegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.userIdFromLine = this.activatedRoute.snapshot.queryParams['user_id'] // สมมุติจาก LINE SDK
-
+    alert(this.userIdFromLine)
     this.form = this.fb.group({
       user_no: [null, Validators.required]
     });
