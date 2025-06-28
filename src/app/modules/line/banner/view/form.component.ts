@@ -20,6 +20,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LineService } from '../../line.service';
+import liff from '@line/liff';
 @Component({
     selector: 'form-news-view',
     templateUrl: './form.component.html',
@@ -55,6 +56,9 @@ export class NewsDetailComponent implements OnInit {
     user: any
     pageType: any
     Id: any;
+    userIdFromLine: string = '';
+    displayName: string = '';
+    pictureUrl: string = '';
     /**
      * Constructor
      */
@@ -73,7 +77,8 @@ export class NewsDetailComponent implements OnInit {
 
     }
 
-    ngOnInit() {
+    async ngOnInit() {
+        await this.initializeLiff();
         this.GetById(this.Id)
     }
 
@@ -88,6 +93,31 @@ export class NewsDetailComponent implements OnInit {
 
     goBack(): void {
         this.location.back();
+    }
+
+    async initializeLiff(): Promise<void> {
+        try {
+            await liff.init({ liffId: '2007657331-oyjNGORd' }); // 🔴 ใส่ LIFF ID ของคุณตรงนี้
+
+            if (!liff.isLoggedIn()) {
+                liff.login(); // auto redirect ไป login
+                return;
+            } 
+
+            
+
+
+
+            const profile = await liff.getProfile();
+            this.userIdFromLine = profile.userId;
+            this.displayName = profile.displayName;
+            this.pictureUrl = profile.pictureUrl;
+
+            console.log('✅ LINE Profile:', profile);
+
+        } catch (err) {
+            console.error('❌ LINE LIFF Error:', err);
+        }
     }
 
 }

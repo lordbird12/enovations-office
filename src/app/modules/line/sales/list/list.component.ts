@@ -8,7 +8,7 @@ import {
     ViewChild,
     ViewEncapsulation,
 } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
@@ -30,7 +30,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FormReportComponent } from 'app/modules/admin/product/form-report/form-report.component';
 import { PictureComponent } from '../picture/picture.component';
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
-
+import liff from '@line/liff';
+import { LineService } from '../../line.service';
 @Component({
     selector: 'line-list-sales',
     templateUrl: './list.component.html',
@@ -71,37 +72,60 @@ export class ListComponent implements OnInit, AfterViewInit {
     dataRow: any[] = [];
     user: any
     selectedStatus: string = '';
+    form: FormGroup
+
+    userIdFromLine: string = '';
+    displayName: string = '';
+    pictureUrl: string = '';
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     constructor(
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
-        private _router: Router
+        private _lineService: LineService,
+        private _router: Router,
+        private fb: FormBuilder
     ) {
-        this.user = JSON.parse(localStorage.getItem('user'))
+        // this.user = JSON.parse(localStorage.getItem('user'))
+        this.form = this.fb.group({
+            user_id: [null]
+        })
     }
 
     async ngOnInit(): Promise<void> {
-        this.loadTable()
+        try {
+            await liff.init({ liffId: '2007657331-oyjNGORd' });
 
-        // try {
-        //     await liff.init({ liffId: environment.LIFF_OT });
-        //     this.liffInitialized = true;
+            // 1. ยังไม่ login → login พร้อมส่ง current url เป็น redirectUri
+            if (!liff.isLoggedIn()) {
+                liff.login({ redirectUri: window.location.href });
+                return;
+            }
 
-        //     if (liff.isLoggedIn()) {
+            // 2. login แล้ว → get profile
+            const profile = await liff.getProfile();
+            this.userIdFromLine = profile.userId;
+            this.displayName = profile.displayName;
+            this.pictureUrl = profile.pictureUrl;
 
-        //         this.profile = await liff.getProfile();
+            // 3. เรียก login API
+            this._lineService.lineLogin(this.userIdFromLine).subscribe((resp: any) => {
+                if (resp.status === true) {
+                    localStorage.setItem('user', JSON.stringify(resp.data));
+                    this.loadTable(); // หรือ redirect ไปหน้า dashboard
+                } else {
+                    // 4. ถ้ายังไม่สมัคร → ไปที่ register พร้อมแนบ user_id
+                    this._router.navigate(['/line/register'], {
+                        queryParams: { user_id: this.userIdFromLine }
+                    });
+                }
+            });
 
-        //         this.formData.get('line_id')?.setValue(this.profile?.userId);
-
-        //         this.getTypeOt();
-        //     } else {
-        //         liff.login();
-        //     }
-        // } catch (error) {
-        //     console.error('LIFF initialization failed', error);
-        // }
+        } catch (err) {
+            console.error('❌ LINE LIFF Error:', err);
+        }
     }
+
 
     ngAfterViewInit(): void {
         this._changeDetectorRef.detectChanges();

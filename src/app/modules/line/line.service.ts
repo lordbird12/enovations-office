@@ -105,5 +105,10 @@ export class LineService {
       `${environment.baseURL}api/put_zk_time`, data)
   }
 
+  lineLogin(user_id: any): Observable<any> {
+    return this._httpClient.post(environment.baseURL + 'api/login_line', {user_id: user_id});
+  }
+
+
 
 }
