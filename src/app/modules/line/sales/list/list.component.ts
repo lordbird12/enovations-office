@@ -117,7 +117,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             const resp: any = await firstValueFrom(
                 this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(5000))
             );
-            console.log(resp.status);
+           alert(resp.status)
             
             if (resp.status === true) {
                 // 🔸 สำเร็จ → บันทึก user แล้วทำงานต่อ
