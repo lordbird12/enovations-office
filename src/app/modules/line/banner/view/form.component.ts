@@ -104,10 +104,7 @@ export class NewsDetailComponent implements OnInit {
                 return;
             } 
 
-            
-
-
-
+    
             const profile = await liff.getProfile();
             this.userIdFromLine = profile.userId;
             this.displayName = profile.displayName;
@@ -121,6 +118,3 @@ export class NewsDetailComponent implements OnInit {
     }
 
 }
-
-
-
