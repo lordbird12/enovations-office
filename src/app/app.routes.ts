@@ -360,4 +360,22 @@ export const appRoutes: Route[] = [
             },
         ],
     },
+     {
+        path: '',
+        data: {
+            layout: 'empty',
+        },
+        component: LayoutComponent,
+        resolve: {
+            initialData: initialDataResolver,
+        },
+        children: [
+
+            {
+                path: 'register',
+                loadChildren: () =>
+                    import('app/modules/line/register/line-register.routing'),
+            },
+        ],
+    },
 ];

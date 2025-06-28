@@ -115,7 +115,7 @@ export class ListComponent implements OnInit, AfterViewInit {
                     this.loadTable(); // หรือ redirect ไปหน้า dashboard
                 } else {
                     // 4. ถ้ายังไม่สมัคร → ไปที่ register พร้อมแนบ user_id
-                    this._router.navigate(['/line/register'], {
+                    this._router.navigate(['/register'], {
                         queryParams: { user_id: this.userIdFromLine }
                     });
                 }
