@@ -32,7 +32,7 @@ import { PictureComponent } from '../picture/picture.component';
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import liff from '@line/liff';
 import { LineService } from '../../line.service';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 @Component({
     selector: 'line-list-sales',
     templateUrl: './list.component.html',
@@ -94,41 +94,52 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
 
     async ngOnInit(): Promise<void> {
-
         try {
+            // 🔸 1. Init LIFF
             await liff.init({ liffId: '2007657331-oyjNGORd' });
-            alert(1)
-            // 1. ยังไม่ login → login พร้อมส่ง current url เป็น redirectUri
+
+            // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
             if (!liff.isLoggedIn()) {
-                alert(2)
                 liff.login({ redirectUri: window.location.href });
                 return;
             }
-            alert(3)
-            // 2. login แล้ว → get profile
+
+            // 🔸 3. login แล้ว → get profile
             const profile = await liff.getProfile();
             this.userIdFromLine = profile.userId;
             this.displayName = profile.displayName;
             this.pictureUrl = profile.pictureUrl;
-            alert(this.userIdFromLine)
 
-            // 3. เรียก login API แล้ว await ให้เสร็จ
-            const resp: any = await firstValueFrom(this._lineService.lineLogin(this.userIdFromLine));
-            alert(resp.status)
+            // ✅ Debug
+            console.log('LINE userId:', this.userIdFromLine);
+
+            // 🔸 4. เรียก login API
+            const resp: any = await firstValueFrom(
+                this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(5000))
+            );
+
             if (resp.status === true) {
+                // 🔸 สำเร็จ → บันทึก user แล้วทำงานต่อ
                 localStorage.setItem('user', JSON.stringify(resp.data));
-                this.loadTable();
+                this.loadTable()
+                this._changeDetectorRef.markForCheck();
             } else {
+                // 🔸 ไม่เจอ user → ไปสมัคร
                 this._router.navigate(['/register'], {
-                    queryParams: { user_id: this.userIdFromLine }
+                    queryParams: { user_id: this.userIdFromLine },
                 });
             }
 
         } catch (err) {
-            console.error('❌ LINE LIFF Error:', err);
+            console.error('❌ LINE Login Failed:', err);
+            // 🔸 fallback redirect ไปสมัคร
+            if (this.userIdFromLine) {
+                this._router.navigate(['/register'], {
+                    queryParams: { user_id: this.userIdFromLine },
+                });
+            }
         }
     }
-
 
     ngAfterViewInit(): void {
         this._changeDetectorRef.detectChanges();
