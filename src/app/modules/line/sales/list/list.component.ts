@@ -100,7 +100,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
             // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
             if (!liff.isLoggedIn()) {
-                liff.login({ redirectUri: window.location.href });
+                // liff.login({ redirectUri: window.location.href });
                 return;
             }
 
@@ -117,19 +117,19 @@ export class ListComponent implements OnInit, AfterViewInit {
             const resp: any = await firstValueFrom(
                 this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(5000))
             );
-            alert(resp)
+            
             if (resp.status === true) {
                 // 🔸 สำเร็จ → บันทึก user แล้วทำงานต่อ
                 localStorage.setItem('user', JSON.stringify(resp.data));
                 this.loadTable()
                 this._changeDetectorRef.markForCheck();
             } else {
-                alert(2)
+                
                 // 🔸 ไม่เจอ user → ไปสมัคร
-                this._router.navigate(['/register'], {
-                    queryParams: { user_id: this.userIdFromLine },
-                });
-                return;
+                // this._router.navigate(['/register'], {
+                //     queryParams: { user_id: this.userIdFromLine },
+                // });
+                
             }
 
         } catch (err) {
