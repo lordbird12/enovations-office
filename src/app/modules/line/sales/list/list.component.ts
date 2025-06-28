@@ -93,6 +93,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
 
     async ngOnInit(): Promise<void> {
+        alert(1)
         try {
             await liff.init({ liffId: '2007657331-oyjNGORd' });
 
@@ -110,7 +111,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
             // 3. เรียก login API
             this._lineService.lineLogin(this.userIdFromLine).subscribe((resp: any) => {
-                alert(resp.status)
+                
                 if (resp.status === true) {
                     localStorage.setItem('user', JSON.stringify(resp.data));
                     this.loadTable(); // หรือ redirect ไปหน้า dashboard
