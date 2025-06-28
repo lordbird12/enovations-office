@@ -106,11 +106,11 @@ export class LineService {
   }
 
   lineLogin(user_id: any): Observable<any> {
-    return this._httpClient.post(environment.baseURL + 'api/login_line', {user_id: user_id});
+    return this._httpClient.post(environment.baseURL + '/api/login_line', {user_id: user_id});
   }
 
    lineRegister(data: any): Observable<any> {
-    return this._httpClient.post(environment.baseURL + 'api/registere_line', data);
+    return this._httpClient.post(environment.baseURL + '/api/registere_line', data);
   }
 
 
