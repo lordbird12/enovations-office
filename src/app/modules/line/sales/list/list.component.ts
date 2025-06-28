@@ -112,18 +112,19 @@ export class ListComponent implements OnInit, AfterViewInit {
 
             // ✅ Debug
             console.log('LINE userId:', this.userIdFromLine);
-            alert(this.userIdFromLine)
+
             // 🔸 4. เรียก login API
             const resp: any = await firstValueFrom(
                 this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(5000))
             );
-        
+            alert(resp)
             if (resp.status === true) {
                 // 🔸 สำเร็จ → บันทึก user แล้วทำงานต่อ
                 localStorage.setItem('user', JSON.stringify(resp.data));
                 this.loadTable()
                 this._changeDetectorRef.markForCheck();
             } else {
+                alert(2)
                 // 🔸 ไม่เจอ user → ไปสมัคร
                 this._router.navigate(['/register'], {
                     queryParams: { user_id: this.userIdFromLine },
