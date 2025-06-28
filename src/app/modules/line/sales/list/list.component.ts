@@ -93,25 +93,27 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
 
     async ngOnInit(): Promise<void> {
-      
+
         try {
             await liff.init({ liffId: '2007657331-oyjNGORd' });
-
+            alert(1)
             // 1. ยังไม่ login → login พร้อมส่ง current url เป็น redirectUri
             if (!liff.isLoggedIn()) {
+                alert(2)
                 liff.login({ redirectUri: window.location.href });
                 return;
             }
-
+            alert(3)
             // 2. login แล้ว → get profile
             const profile = await liff.getProfile();
             this.userIdFromLine = profile.userId;
             this.displayName = profile.displayName;
             this.pictureUrl = profile.pictureUrl;
+            alert(this.userIdFromLine)
 
             // 3. เรียก login API
             this._lineService.lineLogin(this.userIdFromLine).subscribe((resp: any) => {
-                  alert(resp.status)
+
                 if (resp.status === true) {
                     localStorage.setItem('user', JSON.stringify(resp.data));
                     this.loadTable(); // หรือ redirect ไปหน้า dashboard
