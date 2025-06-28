@@ -1,0 +1,34 @@
+<div class="min-h-screen flex flex-col bg-white text-gray-800 w-full">
+
+  <!-- ส่วนบน: Logo -->
+  <div class="flex justify-center items-center h-[25vh] bg-gray-50 shadow-sm">
+    <img src="assets/images/logo/enovation.png" alt="Logo" class="h-20 md:h-24 object-contain">
+  </div>
+
+  <!-- ส่วนกลาง: Input -->
+  <div class="flex-1 flex flex-col justify-center px-6">
+    <form [formGroup]="form" class="w-full max-w-sm mx-auto space-y-6">
+      <div>
+        <label for="user_no" class="block text-lg font-medium text-gray-700 mb-1">รหัสพนักงาน</label>
+        <mat-form-field appearance="outline" class="w-full">
+          <input matInput type="text" formControlName="user_no" id="user_no" placeholder="กรอกรหัสพนักงาน">
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+  <!-- ส่วนล่าง: ปุ่ม -->
+  <div class="px-6 py-6 bg-gray-50 shadow-inner">
+    <div class="w-full max-w-sm mx-auto">
+      <button
+        mat-flat-button
+        color="primary"
+        class="w-full py-3 rounded-lg text-base font-semibold shadow-md"
+        [disabled]="form.invalid"
+        (click)="onSubmit()">
+        ลงทะเบียน
+      </button>
+    </div>
+  </div>
+
+</div>

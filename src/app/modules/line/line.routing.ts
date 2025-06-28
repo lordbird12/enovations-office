@@ -8,6 +8,7 @@ import { ViewOrderComponent } from './sales/view/view.component';
 import { NewsComponent } from './banner/list/form.component';
 import { NewsDetailComponent } from './banner/view/form.component';
 import { CalendarOrderLineComponent } from './calendar/list/list.component';
+import { LineRegisterComponent } from './register/register.component';
 
 
 export default [
@@ -178,6 +179,10 @@ export default [
                     // tags      : () => inject(InventoryService).getTags(),
                     // vendors   : () => inject(InventoryService).getVendors(),
                 },
+            },
+            {
+                path: 'register',
+                component: LineRegisterComponent,
             },
         ],
     },
