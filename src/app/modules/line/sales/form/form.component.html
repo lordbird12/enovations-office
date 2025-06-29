@@ -53,9 +53,20 @@
                 </mat-form-field>
                 <div class="w-full p-2" *ngIf="this.type === 'Echocardiogram'">
                     <mat-form-field class="w-full">
+                        <mat-label>ประเภทเครื่อง</mat-label>
+                        <mat-select placeholder="" (selectionChange)="onSelectType($event.value)">
+                            <mat-option *ngFor="let item of productData" [value]="item.id">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    
+                </div>
+                <div class="w-full p-2" *ngIf="this.type === 'Echocardiogram'">
+                    <mat-form-field class="w-full">
                         <mat-label>Work Station</mat-label>
                         <mat-select [formControlName]="'work_station_id'" placeholder="">
-                            <mat-option *ngFor="let item of productData" [value]="item.id">
+                            <mat-option *ngFor="let item of filterWorkstation" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
                         </mat-select>
