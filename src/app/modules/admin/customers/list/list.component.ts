@@ -21,6 +21,7 @@ import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { PictureComponent } from '../../picture/picture.component';
+import { DialogImportForm } from 'app/shared/dialog-import/dialog.component';
 
 
 @Component({
@@ -178,6 +179,24 @@ export class ListComponent implements OnInit, AfterViewInit {
             dtInstance.ajax.reload();
         });
     }
+
+        openDialogImort(): void {
+            this.dialog
+                .open(DialogImportForm, {
+                    width: '600px',
+                    height: 'auto',
+    
+                    autoFocus: false,
+                    data: {
+                        type: 'Client'
+                    },
+                })
+                .afterClosed()
+                .subscribe(() => {
+                    // Go up twice because card routes are setup like this; "card/CARD_ID"
+                    // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
+                });
+        }
 }
 
 

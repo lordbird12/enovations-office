@@ -1,0 +1,31 @@
+<div mat-dialog-content class="p-6">
+  <div class="mb-4">
+    <h3 class="text-2xl font-bold text-gray-800">นำเข้าไฟล์ Excel</h3>
+    <p class="text-gray-500 text-sm mt-1">เลือกไฟล์ Excel (.xlsx, .xls) ที่คุณต้องการนำเข้าข้อมูล</p>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    <mat-form-field class="w-full" (click)="file_name.click()">
+      <div matPrefix class="bg-red-400 cursor-pointer pr-2">
+        <p>upload file |</p>
+      </div>
+      <button mat-icon-button matSuffix>
+        <mat-icon>attach_file</mat-icon>
+      </button>
+      <input #filenameInput type="text" readonly matInput />
+      <input type="file" hidden #file_name (change)="onSelects(file_name.files)" accept=".xlsx,.xls" />
+       <mat-hint>รองรับไฟล์ .xlsx และ .xls เท่านั้น</mat-hint>
+      <mat-error *ngIf="fileError">{{ fileError }}</mat-error>
+    </mat-form-field>
+  </div>
+</div>
+
+<div mat-dialog-actions class="flex justify-end gap-3 px-6 py-4 border-t border-gray-100">
+  <button mat-stroked-button color="warn" (click)="onClose()" class="px-5 py-2">
+    <mat-icon class="mr-1">close</mat-icon> ปิด
+  </button>
+
+  <button mat-flat-button color="primary" (click)="Submit()" [disabled]="!filenameInput.value" class="px-5 py-2">
+    <mat-icon class="mr-1">upload_file</mat-icon> นำเข้า
+  </button>
+</div>

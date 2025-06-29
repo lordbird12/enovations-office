@@ -21,13 +21,19 @@
                     <button class="px-6 ml-3" mat-flat-button [color]="'accent'" (click)="reset()">
                         ล้าง
                     </button>
-                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()" *ngIf="user.permission_id === 1 || user.permission_id === 3">
+                    <button class="px-6 ml-3" mat-flat-button color="accent" (click)="openDialogImort()">
+                        <mat-icon svgIcon="heroicons_outline:plus-small"></mat-icon>
+                        &nbsp; นำเข้าข้อมูล
+                    </button>
+                    <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()"
+                        *ngIf="user.permission_id === 1 || user.permission_id === 3">
                         <mat-icon>person_add</mat-icon>
                         &nbsp;
                         เพิ่มสินค้า
                     </button>
-                    
+
                 </div>
+
             </div>
         </div>
     </div>
@@ -111,7 +117,7 @@
                         <td>{{ item.code ? item.code : "-" }}</td>
                         <td>{{ item.name ? item.name: "-"}}</td>
                         <td>{{ item.detail ? item.serial_no : "-" }}</td>
-                        <td>{{ item.created_at !== null ? (item.created_at):  "-"}}</td>
+                        <td>{{ item.created_at !== null ? (item.created_at): "-"}}</td>
                     </tr>
                 </tbody>
                 <tbody *ngIf="dataRow?.length == 0">

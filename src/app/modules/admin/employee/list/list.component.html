@@ -12,13 +12,26 @@
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
                     รายการพนักงาน
                 </h2>
+        
                 <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    <!-- <button class="px-6 ml-3 bg-green-700 text-white" mat-flat-button 
+                        (click)="excelExport()">
+                        <mat-icon svgIcon="mat_solid:file_download"></mat-icon>
+                        &nbsp;{{ 'product.list.exportExcel' | transloco }}
+                    </button> -->
+                    <button class="px-6 ml-3" mat-flat-button color="accent"
+                        (click)="openDialogImort()">
+                        <mat-icon svgIcon="heroicons_outline:plus-small"></mat-icon>
+                        &nbsp; นำเข้าข้อมูล
+                    </button>
                     <button class="px-6 ml-3" mat-flat-button [color]="'primary'" (click)="addElement()">
-                        <mat-icon>person_add</mat-icon>
+                        <mat-icon svgIcon="heroicons_outline:plus-small"></mat-icon>
                         &nbsp;
-                        เพิ่มพนักงาน
+                        <!-- เพิ่มพนักงาน -->
+                        เพิ่มข้อมูล
                     </button>
                 </div>
+
             </div>
         </div>
     </div>

@@ -30,6 +30,7 @@ import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DialogImportForm } from 'app/shared/dialog-import/dialog.component';
 @Component({
     selector: 'employee-list-employee',
     templateUrl: './list.component.html',
@@ -72,7 +73,7 @@ export class ListComponent implements OnInit, AfterViewInit {
         private _service: PageService,
         private _router: Router,
         private _fuseConfirmationService: FuseConfirmationService,
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.loadTable();
@@ -188,7 +189,7 @@ export class ListComponent implements OnInit, AfterViewInit {
                     this.rerender();
                 });
             }
-            error: (err: any) => {};
+            error: (err: any) => { };
         });
     }
 
@@ -307,5 +308,22 @@ export class ListComponent implements OnInit, AfterViewInit {
     onImageError(event: Event) {
         const target = event.target as HTMLImageElement;
         target.src = "assets/images/no_image.png"; // Set your default image path here
+    }
+    openDialogImort(): void {
+        this.dialog
+            .open(DialogImportForm, {
+                width: '600px',
+                height: 'auto',
+
+                autoFocus: false,
+                data: {
+                    type: 'User'
+                },
+            })
+            .afterClosed()
+            .subscribe(() => {
+                // Go up twice because card routes are setup like this; "card/CARD_ID"
+                // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
+            });
     }
 }

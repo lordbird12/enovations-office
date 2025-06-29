@@ -30,6 +30,7 @@ import { PictureComponent } from '../../picture/picture.component';
 import { FormReportComponent } from '../form-report/form-report.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { CompanyDialogComponent } from '../adjust-dialog/dailog.component';
+import { DialogImportForm } from 'app/shared/dialog-import/dialog.component';
 
 @Component({
     selector: 'employee-list-product',
@@ -92,11 +93,11 @@ export class ListComponent implements OnInit, AfterViewInit {
             companie_id: '',
             area_id: '',
         })
-        console.log(this.user, 'user')  ;
-        
-     }
+        console.log(this.user, 'user');
 
-     getSuppliers(): void {
+    }
+
+    getSuppliers(): void {
         this._service.getSuppliers().subscribe((resp) => {
             this.itemSupplier = resp.data;
         });
@@ -120,7 +121,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             this.itemMC = resp.data;
         });
 
-        
+
 
     }
 
@@ -230,7 +231,7 @@ export class ListComponent implements OnInit, AfterViewInit {
                 dataTablesParameters.category_product_id = this.form.value.category_product_id;
                 dataTablesParameters.brand_id = this.form.value.brand_id;
                 dataTablesParameters.machine_model_id = this.form.value.machine_model_id;
-             
+
                 that._service
                     .getPage(dataTablesParameters)
                     .subscribe((resp: any) => {
@@ -291,7 +292,7 @@ export class ListComponent implements OnInit, AfterViewInit {
                     this.rerender();
                 });
             }
-            error: (err: any) => {};
+            error: (err: any) => { };
         });
     }
 
@@ -324,5 +325,21 @@ export class ListComponent implements OnInit, AfterViewInit {
         });
     }
 
+    openDialogImort(): void {
+        this.dialog
+            .open(DialogImportForm, {
+                width: '600px',
+                height: 'auto',
 
+                autoFocus: false,
+                data: {
+                    type: 'Product'
+                },
+            })
+            .afterClosed()
+            .subscribe(() => {
+                // Go up twice because card routes are setup like this; "card/CARD_ID"
+                // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
+            });
+    }
 }
