@@ -55,7 +55,7 @@
                     <mat-form-field class="w-full">
                         <mat-label>Work Station</mat-label>
                         <mat-select [formControlName]="'work_station_id'" placeholder="">
-                            <mat-option *ngFor="let item of machineFilter" [value]="item.id">
+                            <mat-option *ngFor="let item of productData" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
                         </mat-select>
