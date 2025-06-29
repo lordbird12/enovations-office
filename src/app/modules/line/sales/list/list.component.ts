@@ -144,7 +144,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
     // เพิ่มเมธอด editElement(element) และ deleteElement(element)
     goToCalendar() {
-        this._router.navigate(['line/calendar-order/list']);
+        this._router.navigate(['line/calendar-timeline']);
     }
     editElement(element: any) {
         this._router.navigate(['line/view/booking/' + element.id]);
@@ -160,11 +160,9 @@ export class ListComponent implements OnInit, AfterViewInit {
             this._router.navigate(['line/form/rc']);
         }
     }
-
     applySearch() {
         this.rerender()
     }
-
     pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0, total: 0 };
     loadTable(token: any): void {
         const that = this;
