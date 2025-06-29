@@ -89,15 +89,40 @@
                                     </mat-checkbox>
                                     <span class="font-medium">{{ product?.product?.name ?? '-' }}</span>
                                 </div>
-                                <div [ngClass]="{
+                                <!-- <div [ngClass]="{
                   'bg-yellow-100 text-yellow-800': product?.return_products === null,
                   'bg-blue-100 text-blue-800': product?.return_products?.status === 'waiting_approve',
                   'bg-green-100 text-green-800': product?.return_products?.status === 'approved'
                 }" class="text-md px-2 py-1 rounded-full">
                                     {{ getStatusText(product) }}
+                                </div> -->
+                                <div>
+                                    <span *ngIf="product?.return_products?.status === 'Ordered'"
+                                        class="bg-yellow-200 px-2 py-1 rounded-md text-yellow-800 text-md font-bold">
+                                        รออนุมัติ
+                                    </span>
+                                    <span *ngIf="product?.return_products?.status === 'Reject'"
+                                        class="bg-red-200 px-2 py-1 rounded-md text-red-800 text-md font-bold">
+                                        ไม่อนุมัติ
+                                    </span>
+                                    <span *ngIf="product?.return_products?.status === 'Confirm'"
+                                        class="bg-green-200 px-2 py-1 rounded-md text-green-800 text-md font-bold">
+                                        อนุมัติ
+                                    </span>
+                                    <span *ngIf="product?.return_products?.status === 'Approve'"
+                                        class="bg-green-200 px-2 py-1 rounded-md text-green-800 text-md font-bold">
+                                        รอรับของ
+                                    </span>
+                                    <span *ngIf="product?.return_products?.status === 'Finish'"
+                                        class="bg-blue-200 px-2 py-1 rounded-md text-blue-800 text-md font-bold">
+                                        รอคืน
+                                    </span>
+                                    <span *ngIf="product?.return_products?.status === 'Returned'"
+                                        class="bg-blue-200 px-2 py-1 rounded-md text-purple-800 text-md font-bold">
+                                        เสร็จสิ้น
+                                    </span>
                                 </div>
                             </div>
-
                             <div class="grid grid-cols-2 gap-2 text-md">
                                 <div>
                                     <p class="text-gray-500">Serial No.</p>
