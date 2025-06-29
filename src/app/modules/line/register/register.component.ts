@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LineService } from '../line.service';
 import liff from '@line/liff';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-line-register',
@@ -33,8 +34,10 @@ export class LineRegisterComponent implements OnInit {
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
     private _serviceLine: LineService,
-    private _router: Router
-  ) {}
+    private _router: Router,
+    private _fuseConfirmationService: FuseConfirmationService,
+
+  ) { }
 
   async ngOnInit(): Promise<void> {
     this.form = this.fb.group({
@@ -85,7 +88,28 @@ export class LineRegisterComponent implements OnInit {
         this._router.navigate(['line/list/booking']);
       },
       error: (err) => {
-        console.error('Register failed:', err);
+        this._fuseConfirmationService.open({
+          "title": "กรุณาระบุข้อมูล",
+          "message": err.error.message,
+          "icon": {
+            "show": true,
+            "name": "heroicons_outline:exclamation",
+            "color": "warning"
+          },
+          "actions": {
+            "confirm": {
+              "show": false,
+              "label": "ยืนยัน",
+              "color": "primary"
+            },
+            "cancel": {
+              "show": false,
+              "label": "ยกเลิก",
+
+            }
+          },
+          "dismissible": true
+        });
       },
       complete: () => {
         console.log('Request completed.');
