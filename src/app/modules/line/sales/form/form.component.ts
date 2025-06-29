@@ -365,7 +365,7 @@ export class FormComponent implements OnInit {
 
         // this.type = this.activatedRoute.snapshot.data.type
         this.type = this.activatedRoute.snapshot.queryParams['type']
- 
+
         this.pageType = this.activatedRoute.snapshot.data.page_type
 
         this.productData = this.activatedRoute.snapshot.data.products.data
@@ -1300,6 +1300,21 @@ export class FormComponent implements OnInit {
         this.filterWorkStation = products?.products
         console.log(this.filterWorkStation);
 
+    }
+
+    goHome() {
+        this._router.navigate(['/line/list/booking']);
+    }
+    newForm() {
+        this._router.navigate(['/line/form']);
+    }
+
+    goCalendar() {
+        this._router.navigate(['/line/calendar-timeline']);
+    }
+
+    goNews() {
+        this._router.navigate(['/line/news']);
     }
 }
 

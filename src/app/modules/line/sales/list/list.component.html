@@ -17,16 +17,16 @@
                     (click)="goToCalendar()"></mat-icon>
             </div>
             <!-- Action Buttons - Desktop Only -->
-            <div class="hidden sm:flex flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+            <div class=" sm:flex flex-row gap-2 sm:gap-3 w-full sm:w-auto">
                 <!-- Add Booking Button -->
                 <div class="relative flex-1 sm:flex-none">
-                    <button mat-button [matMenuTriggerFor]="menu" mat-flat-button [color]="'primary'"
-                        class="w-full sm:w-auto h-12 flex items-center justify-center gap-1 px-4">
-                        <mat-icon svgIcon="heroicons_outline:plus-circle" class="sm:mr-1"></mat-icon>
-                        <span class="truncate hidden xs:inline">เพิ่มการจอง</span>
-                    </button>
+                    <!-- <button  mat-flat-button [color]="'primary'" (click)="addForm()"
+                        class="w-fit sm:w-auto h-12 flex items-center justify-center gap-1 px-4">
+                        <span class="truncate xs:inline">เพิ่มการจอง</span>
+                    </button> -->
 
-                    <mat-menu #menu="matMenu" class="action-menu">
+
+                    <!-- <mat-menu #menu="matMenu" class="action-menu">
                         <button mat-menu-item (click)="addElement('Echocardiogram')" class="flex items-center gap-2">
                             <mat-icon svgIcon="heroicons_outline:heart"></mat-icon>
                             <span>Echocardiogram</span>
@@ -44,7 +44,26 @@
                             <mat-icon svgIcon="heroicons_outline:signal"></mat-icon>
                             <span>RC</span>
                         </button>
-                    </mat-menu>
+                    </mat-menu> -->
+                </div>
+                <div class="flex flex-row flex-wrap gap-2 justify-end">
+                    <!-- ปุ่มเพิ่มการจอง -->
+                    <button mat-flat-button color="primary" (click)="addForm()"
+                        class="h-12 px-4 flex items-center justify-center gap-1">
+                        <span class="truncate">เพิ่มการจอง</span>
+                    </button>
+
+                    <!-- ปุ่มปฏิทินของฉัน -->
+                    <button mat-flat-button color="accent" (click)="goToCalendar()"
+                        class="h-12 px-4 flex items-center justify-center gap-1">
+                        <span class="truncate">ปฏิทินของฉัน</span>
+                    </button>
+
+                    <!-- ปุ่มข่าวสาร -->
+                    <button mat-flat-button color="warn" (click)="openNews()"
+                        class="h-12 px-4 flex items-center justify-center gap-1">
+                        <span class="truncate">ข่าวสาร</span>
+                    </button>
                 </div>
             </div>
         </div>

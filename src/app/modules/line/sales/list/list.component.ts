@@ -160,6 +160,17 @@ export class ListComponent implements OnInit, AfterViewInit {
             this._router.navigate(['line/form/rc']);
         }
     }
+
+    addForm() {
+        this._router.navigate(['line/form']);
+    }
+
+    openMyCalendar() {
+        this._router.navigate(['line/calendar-timeline']);
+    }
+    openNews() {
+        this._router.navigate(['line/news']);
+    }
     applySearch() {
         this.rerender()
     }

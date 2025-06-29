@@ -97,6 +97,21 @@ export class NewsComponent implements OnInit {
         this._router.navigate(['line/news/' + id])
     }
 
+    goHome() {
+        this._router.navigate(['/line/list/booking']);
+    }
+    newForm() {
+        this._router.navigate(['/line/form']);
+    }
+
+    goCalendar() {
+        this._router.navigate(['/line/calendar-timeline']);
+    }
+
+    goNews() {
+        this._router.navigate(['/line/news']);
+    }
+
 
 }
 

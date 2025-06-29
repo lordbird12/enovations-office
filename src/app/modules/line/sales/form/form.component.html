@@ -10,7 +10,7 @@
     <div class="w-full bg-card rounded-lg p-2">
         <form [formGroup]="formData">
             <!-- Booking Information Section -->
-            <div class="mb-4">
+            <div class=" ">
                 <h3 class="text-lg font-bold text-gray-500 px-2 mb-2">
                     ข้อมูลการจอง
                 </h3>
@@ -60,7 +60,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    
+
                 </div>
                 <div class="w-full p-2">
                     <mat-form-field class="w-full">
@@ -71,7 +71,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    
+
                 </div>
                 <mat-form-field class="w-full p-2">
                     <mat-label>อุปกรณ์อื่นที่ต้องการ</mat-label>
@@ -85,7 +85,7 @@
             </div>
 
             <!-- Current Hospital Equipment Section -->
-            <div class="mb-4">
+            <div class=" ">
                 <h3 class="text-lg font-bold text-gray-500 px-2 mb-2">
                     ข้อมูลการใช้เครื่องปัจจุบันของโรงพยาบาล
                 </h3>
@@ -95,7 +95,7 @@
                     <input matInput placeholder="รุ่นที่ใช้อยู่" [formControlName]="'current_machine_model'">
                 </mat-form-field>
 
-                <div class="w-full p-2" >
+                <div class="w-full p-2">
                     <mat-form-field class="w-full">
                         <mat-label>Work Station</mat-label>
                         <input matInput placeholder="Work Station" [formControlName]="'current_work_station'">
@@ -110,7 +110,7 @@
             </div>
 
             <!-- Competitor Information Section -->
-            <div class="mb-4">
+            <div class=" ">
                 <h3 class="text-lg font-bold text-gray-500 px-2 mb-2">
                     ข้อมูลการเครื่องคู่แข่งที่นำเสนอ
                 </h3>
@@ -120,8 +120,7 @@
                     <input matInput placeholder="รุ่นที่นำเสนอ" [formControlName]="'competitor_model'">
                 </mat-form-field>
 
-                <div class="w-full p-2"
-                    >
+                <div class="w-full p-2">
                     <mat-form-field class="w-full">
                         <mat-label>หัวตรวจ</mat-label>
                         <input matInput placeholder="หัวตรวจ" [formControlName]="'competitor_transducer'">
@@ -136,7 +135,7 @@
             </div>
 
             <!-- Customer Information Section -->
-            <div class="mb-4">
+            <div class=" ">
                 <h3 class="text-lg font-bold text-gray-500 px-2 mb-2">
                     ข้อมูลลูกค้า
                 </h3>
@@ -197,7 +196,7 @@
             </div>
 
             <!-- Machine Models Section -->
-            <div class="w-full p-2 mb-4">
+            <div class="w-full p-2  ">
                 <h3 class="text-lg font-bold text-gray-500">รายการเครื่องที่ต้องการ</h3>
                 <div formArrayName="machine_models">
                     <div *ngFor="let machine of machineModels.controls; let i = index" [formGroupName]="i"
@@ -228,7 +227,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="w-full p-2 mb-4">
+            <div class="w-full p-2  ">
                 <h3 class="text-lg font-bold text-gray-500">รายการหัวตรวจที่ต้องการ</h3>
                 <div formArrayName="transducers">
                     <div *ngFor="let transducer of transducers.controls; let i = index" [formGroupName]="i"
@@ -261,7 +260,7 @@
         </form>
 
         <!-- Action Buttons -->
-        <div class="flex flex-col p-4">
+        <div class="flex flex-row p-4 gap-2 mb-10">
             <button class="w-full mb-2" mat-flat-button [color]="'primary'" (click)="onSubmit()">
                 บันทึก
             </button>
@@ -270,4 +269,25 @@
             </button>
         </div>
     </div>
+    <!-- ✅ Footer -->
+    <footer class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md z-50">
+        <div class="flex justify-around items-center h-14">
+            <button (click)="goHome()" class="flex flex-col items-center text-gray-600 hover:text-blue-600 text-xs">
+                <i class="fas fa-home text-lg"></i>
+                <span>หน้าแรก</span>
+            </button>
+            <button (click)="newForm()" class="flex flex-col items-center text-gray-600 hover:text-blue-600 text-xs">
+                <i class="fas fa-newspaper text-lg"></i>
+                <span>สร้างการจอง</span>
+            </button>
+            <button (click)="goCalendar()" class="flex flex-col items-center text-gray-600 hover:text-blue-600 text-xs">
+                <i class="fas fa-calendar-alt text-lg"></i>
+                <span>ปฏิทิน</span>
+            </button>
+            <button (click)="goNews()" class="flex flex-col items-center text-gray-600 hover:text-blue-600 text-xs">
+                <i class="fas fa-newspaper text-lg"></i>
+                <span>ข่าวสาร</span>
+            </button>
+        </div>
+    </footer>
 </div>

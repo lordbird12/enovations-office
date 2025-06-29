@@ -363,4 +363,22 @@ export class CalendarTimelineComponent implements OnInit {
         this.loadEvents(); // ดึงข้อมูลใหม่ตามปีที่เลือก
     }
 
+    
+
+
+    goHome() {
+        this._router.navigate(['/line/list/booking']);
+    }
+    newForm() {
+        this._router.navigate(['/line/form']);
+    }
+
+    goCalendar() {
+        this._router.navigate(['/line/calendar-timeline']);
+    }
+
+    goNews() {
+        this._router.navigate(['/line/news']);
+    }
+
 }
