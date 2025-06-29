@@ -1,0 +1,275 @@
+import { CommonModule, Location } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DateTime } from 'luxon';
+import { PageService } from '../page.service';
+
+interface TimelineEvent {
+    id: number;
+    title: string;
+    start: string; // 'YYYY-MM-DD'
+    end: string;   // 'YYYY-MM-DD'
+    color?: string;
+}
+
+@Component({
+    selector: 'app-calendar-timeline',
+    templateUrl: './calendar-timeline.component.html',
+    styleUrls: ['./calendar-timeline.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatFormFieldModule,
+    ]
+})
+export class CalendarTimelineComponent implements OnInit {
+    timelineEvents: TimelineEvent[] = [];
+    months: string[] = [];
+    displayMonthCount = 6;
+    user: any;
+    groupedTimelineEvents: { [month: string]: any[] } = {};
+    constructor(
+        private _changeDetectorRef: ChangeDetectorRef,
+        private _service: PageService,
+        private _router: Router,
+        private _activated: ActivatedRoute,
+        private location: Location
+    ) {
+        this.user = JSON.parse(localStorage.getItem('user'))
+    }
+
+    ngOnInit(): void {
+        this.generateMonths();
+        this.loadEvents();
+
+    }
+
+    generateMonths(): void {
+        const start = DateTime.now().startOf('month');
+        this.months = [];
+
+        for (let i = 0; i < this.displayMonthCount; i++) {
+            const month = start.plus({ months: i });
+            this.months.push(month.toFormat('yyyy-MM'));
+        }
+    }
+
+    loadEvents(): void {
+        const userId = this.user?.id;
+        this._service.getCalendarUser(userId).subscribe((resp: any) => {
+            const newEvents = resp.map((item: any) => {
+                let color = 'bg-gray-400'; // default
+                switch (item.status) {
+                    case 'Ordered':
+                        color = 'bg-yellow-500';
+                        break;
+                    case 'Reject':
+                        color = 'bg-red-500';
+                        break;
+                    case 'Confirm':
+                        color = 'bg-green-500';
+                        break;
+                    case 'Approve':
+                        color = 'bg-green-600';
+                        break;
+                    case 'Finish':
+                        color = 'bg-blue-500';
+                        break;
+                    case 'Returned':
+                        color = 'bg-purple-500';
+                        break;
+                }
+
+                return {
+                    id: item.id,
+                    title: item.request_purpose || 'ไม่ระบุ',
+                    start: item.start_date,
+                    end: item.end_date,
+                    reserve_ref_no: item.reserve_ref_no,
+                    request_purpose: item.request_purpose,
+                    color: color,
+                    status: item.status || 'กำลังดำเนินการ',
+                };
+            });
+
+            this.groupedTimelineEvents = {};
+
+            for (const event of newEvents) {
+                const monthKey = DateTime.fromISO(event.start).toFormat('yyyy-MM');
+                if (!this.groupedTimelineEvents[monthKey]) {
+                    this.groupedTimelineEvents[monthKey] = [];
+                }
+                this.groupedTimelineEvents[monthKey].push(event);
+            }
+
+            // 🔸 เรียงวันตาม start_date ภายในแต่ละเดือน
+            for (const monthKey in this.groupedTimelineEvents) {
+                this.groupedTimelineEvents[monthKey].sort((a, b) => {
+                    console.log(a.start);
+                    
+                    return DateTime.fromISO(a.start).toMillis() - DateTime.fromISO(b.start).toMillis();
+                });
+            }
+
+            this._changeDetectorRef.markForCheck();
+        });
+    }
+
+    // Original desktop functions
+    getSpanStyle(event: TimelineEvent): any {
+        const startMonth = DateTime.fromISO(event.start).toFormat('yyyy-MM');
+        const endMonth = DateTime.fromISO(event.end).toFormat('yyyy-MM');
+
+        const startIndex = this.months.indexOf(startMonth);
+        const endIndex = this.months.indexOf(endMonth);
+        const span = endIndex - startIndex + 1;
+
+        if (startIndex < 0 || endIndex < 0) return { display: 'none' };
+
+        return {
+            gridColumn: `${startIndex + 2} / span ${span}`
+        };
+    }
+
+    // New mobile-specific functions
+    getMonthAbbreviation(month: string): string {
+        return DateTime.fromFormat(month, 'yyyy-MM').toFormat('MMM');
+    }
+
+    getShortDate(date: string): string {
+        return DateTime.fromISO(date).toFormat('d MMM');
+    }
+
+    getEventDuration(event: TimelineEvent): string {
+        const start = DateTime.fromISO(event.start);
+        const end = DateTime.fromISO(event.end);
+        return `${start.toFormat('d')}-${end.toFormat('d MMM')}`;
+    }
+
+    getMobileProgressStyle(event: TimelineEvent): any {
+        const startDate = DateTime.fromISO(event.start);
+        const endDate = DateTime.fromISO(event.end);
+        const totalMonths = this.months.length;
+
+        // Calculate position and width as percentages
+        const firstMonth = DateTime.fromFormat(this.months[0], 'yyyy-MM').startOf('month');
+        const lastMonth = DateTime.fromFormat(this.months[this.months.length - 1], 'yyyy-MM').endOf('month');
+
+        const totalDays = lastMonth.diff(firstMonth, 'days').days;
+        const startOffset = startDate.diff(firstMonth, 'days').days;
+        const durationDays = endDate.diff(startDate, 'days').days;
+
+        const startPercent = Math.max(0, (startOffset / totalDays) * 100);
+        const widthPercent = Math.min(100, (durationDays / totalDays) * 100);
+
+        return {
+            'margin-left': `${startPercent}%`,
+            'width': `${widthPercent}%`
+        };
+    }
+    goBack() {
+        // Implement your back navigation logic here
+        this.location.back(); // Example using Location service
+    }
+
+    getMonths(): string[] {
+        return Object.keys(this.groupedTimelineEvents).sort((a, b) => a.localeCompare(b));
+    }
+
+    formatMonth(month: string): string {
+        // ใช้ Luxon เพื่อแสดงเดือนในรูปแบบสวยงาม เช่น "มิถุนายน 2025"
+        return DateTime.fromFormat(month, 'yyyy-MM').setLocale('th').toFormat('MMMM yyyy');
+    }
+
+    // Add these properties to your component
+    expandedMonths: Set<string> = new Set();
+    isAllExpanded: boolean = false;
+
+    // Replace getMonths() with this new method
+    getAllMonths(): { key: string, name: string }[] {
+        const currentYear = DateTime.now().year;
+        const months = [];
+
+        // Generate all 12 months for the current year
+        for (let i = 1; i <= 12; i++) {
+            const monthKey = `${currentYear}-${i.toString().padStart(2, '0')}`;
+            months.push({
+                key: monthKey,
+                name: DateTime.fromFormat(monthKey, 'yyyy-MM').setLocale('th').toFormat('MMMM yyyy')
+            });
+        }
+
+        return months;
+    }
+
+    getEventCount(monthKey: string): number {
+        return this.groupedTimelineEvents[monthKey]?.length || 0;
+    }
+
+    isMonthExpanded(monthKey: string): boolean {
+        return this.expandedMonths.has(monthKey);
+    }
+
+    toggleMonth(monthKey: string): void {
+        if (this.expandedMonths.has(monthKey)) {
+            this.expandedMonths.delete(monthKey);
+        } else {
+            this.expandedMonths.add(monthKey);
+        }
+    }
+
+    toggleExpandAll(): void {
+        if (this.isAllExpanded) {
+            this.expandedMonths.clear();
+        } else {
+            this.getAllMonths().forEach(month => {
+                if (this.getEventCount(month.key) > 0) {
+                    this.expandedMonths.add(month.key);
+                }
+            });
+        }
+        this.isAllExpanded = !this.isAllExpanded;
+    }
+
+    // Add this property
+    currentYear = DateTime.now().year;
+
+    // Add this method to calculate total events
+    getTotalEvents(): number {
+        return Object.values(this.groupedTimelineEvents).reduce((total, events) => total + events.length, 0);
+    }
+
+    formatMonthNumber(key: string | undefined): string {
+        if (!key) return '-';
+        try {
+            return DateTime.fromFormat(key, 'yyyy-MM').toFormat('M');
+        } catch (e) {
+            console.error('Invalid month key:', key, e);
+            return '-';
+        }
+    }
+
+    getStatusBadge(status: string): { label: string, colorClass: string } {
+        switch (status) {
+            case 'Ordered': return { label: 'รออนุมัติ', colorClass: 'bg-yellow-200 text-yellow-800' };
+            case 'Reject': return { label: 'ไม่อนุมัติ', colorClass: 'bg-red-200 text-red-800' };
+            case 'Confirm': return { label: 'อนุมัติ', colorClass: 'bg-green-200 text-green-800' };
+            case 'Approve': return { label: 'รอรับของ', colorClass: 'bg-green-200 text-green-800' };
+            case 'Finish': return { label: 'รอคืน', colorClass: 'bg-blue-200 text-blue-800' };
+            case 'Returned': return { label: 'เสร็จสิ้น', colorClass: 'bg-purple-200 text-purple-800' };
+            default: return { label: 'กำลังดำเนินการ', colorClass: 'bg-gray-200 text-gray-800' };
+        }
+    }
+
+
+    viewDetail(id: any) {
+        this._router.navigate(['/line/view/booking/' + id]); // นำทางไปยังหน้าที่กำหนด พร้อมพารามิเตอร์
+    }
+
+}

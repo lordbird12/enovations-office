@@ -9,6 +9,8 @@ import { NewsComponent } from './banner/list/form.component';
 import { NewsDetailComponent } from './banner/view/form.component';
 import { CalendarOrderLineComponent } from './calendar/list/list.component';
 import { LineRegisterComponent } from './register/register.component';
+import { CalendarComponent } from './sales/calendar/calendar.component';
+import { CalendarTimelineComponent } from './sales/calendar-timeline/calendar-timeline.component';
 
 
 export default [
@@ -183,6 +185,14 @@ export default [
             {
                 path: 'register',
                 component: LineRegisterComponent,
+            },
+            {
+                path: 'calendar-custom',
+                component: CalendarComponent,
+            },
+            {
+                path: 'calendar-timeline',
+                component: CalendarTimelineComponent,
             },
         ],
     },

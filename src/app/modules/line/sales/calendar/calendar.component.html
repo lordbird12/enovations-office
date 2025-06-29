@@ -1,0 +1,68 @@
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden w-full max-w-md mx-auto">
+    <!-- Calendar Header -->
+    <div class="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
+        <button (click)="prevMonth()"
+            class="p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Previous month">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+
+        <h2 class="text-lg font-medium text-gray-900">
+            {{ monthNames[currentMonth] }} {{ currentYear }}
+        </h2>
+
+        <button (click)="nextMonth()"
+            class="p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label="Next month">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Weekday Headers -->
+    <div class="grid grid-cols-7 mt-2 text-xs leading-6 text-center text-gray-500 font-medium">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="grid grid-cols-7 gap-px mt-2 text-sm bg-gray-200">
+        <ng-container *ngFor="let day of days">
+            <div *ngIf="day; else emptyDay"
+                class="bg-white h-12 flex flex-col items-center justify-center relative hover:bg-gray-50 transition-colors"
+                [ngClass]="{
+             'text-gray-900': day.isCurrentMonth,
+             'text-gray-400': !day.isCurrentMonth,
+             'font-semibold': day.isToday,
+             'bg-blue-50': day.isSelected,
+             'border-t-2 border-blue-500': day.isToday
+           }">
+
+                <span class="flex items-center justify-center w-8 h-8 rounded-full" [ngClass]="{
+                'bg-blue-600 text-white': day.isToday,
+                'hover:bg-gray-200': !day.isToday
+              }">
+                    {{ day.date.getDate() }}
+                </span>
+
+                <div *ngIf="day.hasEvent" class="absolute bottom-1 flex space-x-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                </div>
+            </div>
+
+            <ng-template #emptyDay>
+                <div class="bg-gray-50 h-12"></div>
+            </ng-template>
+        </ng-container>
+    </div>
+</div>
