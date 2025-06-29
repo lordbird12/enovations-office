@@ -2,7 +2,7 @@
     <!-- Header -->
     <div class="flex flex-col items-center p-4 border-b bg-card dark:bg-transparent">
         <h2 class="text-xl font-bold text-center">
-            {{ isForm ? 'สร้างใบจอง ' + (type ?? '-') : 'แก้ไขการจอง' }}
+            {{ isForm ? 'สร้างใบจอง ' + (type ?? '') : 'แก้ไขการจอง' }}
         </h2>
     </div>
 
@@ -51,7 +51,7 @@
                     <input matInput placeholder="Function Quatifications ที่หมอต้องการ"
                         [formControlName]="'function_qualifications'">
                 </mat-form-field>
-                <div class="w-full p-2" *ngIf="this.type === 'Echocardiogram'">
+                <div class="w-full p-2">
                     <mat-form-field class="w-full">
                         <mat-label>ประเภทเครื่อง</mat-label>
                         <mat-select placeholder="" (selectionChange)="onSelectType($event.value)">
@@ -62,7 +62,7 @@
                     </mat-form-field>
                     
                 </div>
-                <div class="w-full p-2" *ngIf="this.type === 'Echocardiogram'">
+                <div class="w-full p-2">
                     <mat-form-field class="w-full">
                         <mat-label>Work Station</mat-label>
                         <mat-select [formControlName]="'work_station_id'" placeholder="">
@@ -95,7 +95,7 @@
                     <input matInput placeholder="รุ่นที่ใช้อยู่" [formControlName]="'current_machine_model'">
                 </mat-form-field>
 
-                <div class="w-full p-2" *ngIf="this.type === 'Echocardiogram'">
+                <div class="w-full p-2" >
                     <mat-form-field class="w-full">
                         <mat-label>Work Station</mat-label>
                         <input matInput placeholder="Work Station" [formControlName]="'current_work_station'">
@@ -121,7 +121,7 @@
                 </mat-form-field>
 
                 <div class="w-full p-2"
-                    *ngIf="this.type === 'Echocardiogram' || this.type === 'Ultrasound Imaging' || this.type === 'rc'">
+                    >
                     <mat-form-field class="w-full">
                         <mat-label>หัวตรวจ</mat-label>
                         <input matInput placeholder="หัวตรวจ" [formControlName]="'competitor_transducer'">

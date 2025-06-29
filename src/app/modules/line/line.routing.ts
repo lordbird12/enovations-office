@@ -41,6 +41,23 @@ export default [
         component: PageComponent,
         children: [
             {
+                path: 'form',
+                component: FormComponent,
+                resolve: {
+                    products: () => inject(PageService).getProductEno(),
+                    user: () => inject(PageService).getUser(),
+                    client: () => inject(PageService).getClient(),
+                    machine_model: () => inject(PageService).getMachineModelAll(),
+                    // products  : () => inject(InventoryService).getProducts(),
+                    // tags      : () => inject(InventoryService).getTags(),
+                    // vendors   : () => inject(InventoryService).getVendors(),
+                },
+                data: {
+                    page_type: 'NEW',
+                    type: 'Echocardiogram'
+                }
+            },
+            {
                 path: 'form/echocardiogram',
                 component: FormComponent,
                 resolve: {

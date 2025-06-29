@@ -360,7 +360,10 @@ export class FormComponent implements OnInit {
 
         this.user = JSON.parse(localStorage.getItem('user'))
 
-        this.type = this.activatedRoute.snapshot.data.type
+        // this.type = this.activatedRoute.snapshot.data.type
+        this.type = this.activatedRoute.snapshot.queryParams['type']
+        console.log(this.type);
+        
         this.pageType = this.activatedRoute.snapshot.data.page_type
 
         this.productData = this.activatedRoute.snapshot.data.products.data
