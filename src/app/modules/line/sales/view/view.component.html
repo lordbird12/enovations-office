@@ -9,7 +9,7 @@
             <button class="px-6 bg-yellow-500" mat-flat-button color="primary" (click)="openDialogAddProduct()"
                 *ngIf="this.user?.team_role !== 'User'">จัดการเครื่อง</button>
             <button class="px-6 bg-green-700" mat-flat-button color="primary" (click)="openDialogApprove()"
-                *ngIf="this.user?.team_role !== 'User'">อััปเดทสถานะ</button>
+                *ngIf="this.user?.team_role !== 'User'">อัปเดทสถานะ</button>
             <button class="px-6" mat-flat-button color="primary" (click)="onEdit(formData.value.id)">แก้ไข</button>
             <button class="px-6" mat-flat-button color="accent" (click)="onBack()">ย้อนกลับ</button>
         </div>
