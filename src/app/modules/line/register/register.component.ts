@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LineService } from '../line.service';
-
+import liff from '@line/liff';
 
 @Component({
   selector: 'app-line-register',
@@ -24,7 +24,6 @@ import { LineService } from '../line.service';
     MatIconModule
   ]
 })
-
 export class LineRegisterComponent implements OnInit {
   form: FormGroup;
   userIdFromLine: string = '';
@@ -35,16 +34,38 @@ export class LineRegisterComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private _serviceLine: LineService,
     private _router: Router
-  ) {
+  ) {}
 
-  }
-
-  ngOnInit(): void {
-    this.userIdFromLine = this.activatedRoute.snapshot.queryParams['user_id'] // สมมุติจาก LINE SDK
-    alert(this.userIdFromLine)
+  async ngOnInit(): Promise<void> {
     this.form = this.fb.group({
       user_no: [null, Validators.required]
     });
+
+    this.userIdFromLine = this.activatedRoute.snapshot.queryParams['user_id'];
+
+    if (!this.userIdFromLine) {
+      await this.initLiff();
+    }
+
+    if (this.userIdFromLine) {
+      console.log('LINE User ID:', this.userIdFromLine);
+    } else {
+      alert('ไม่สามารถดึง user_id จาก LINE ได้');
+    }
+  }
+
+  async initLiff() {
+    try {
+      await liff.init({ liffId: '2007657331-oyjNGORd' }); // 👈 เปลี่ยนเป็น LIFF ID ของคุณ
+      if (liff.isLoggedIn()) {
+        const profile = await liff.getProfile();
+        this.userIdFromLine = profile.userId;
+      } else {
+        liff.login();
+      }
+    } catch (err) {
+      console.error('LIFF init error:', err);
+    }
   }
 
   onSubmit(): void {
@@ -57,18 +78,13 @@ export class LineRegisterComponent implements OnInit {
 
     this._serviceLine.lineRegister(payload).subscribe({
       next: (resp: any) => {
-        // ✅ เมื่อสำเร็จ
         console.log('Register success:', resp);
-        this._router.navigate(['line/list/booking'])
-        // ทำงานหลังจากบันทึกเรียบร้อย เช่น redirect หรือแจ้งเตือน
+        this._router.navigate(['line/list/booking']);
       },
       error: (err) => {
-        // ❌ เกิดข้อผิดพลาด
         console.error('Register failed:', err);
-        // แจ้งเตือนหรือแสดง error message
       },
       complete: () => {
-        // ✅ ทำงานเมื่อ Observable จบ (ไม่ค่อยใช้ในกรณี HTTP)
         console.log('Request completed.');
       }
     });
