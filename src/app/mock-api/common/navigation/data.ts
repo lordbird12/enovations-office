@@ -144,7 +144,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon: 'heroicons_mini:user-group',
                 link: '/admin/customers/list',
             },
-           
         ],
     },
 
