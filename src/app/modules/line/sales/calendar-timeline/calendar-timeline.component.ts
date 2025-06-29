@@ -6,6 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DateTime } from 'luxon';
 import { PageService } from '../page.service';
+import liff from '@line/liff';
+import { firstValueFrom, timeout } from 'rxjs';
+import { LineService } from '../../line.service';
 
 interface TimelineEvent {
     id: number;
@@ -34,21 +37,74 @@ export class CalendarTimelineComponent implements OnInit {
     displayMonthCount = 6;
     user: any;
     groupedTimelineEvents: { [month: string]: any[] } = {};
+    userIdFromLine: string = '';
+    displayName: string = '';
+    pictureUrl: string = '';
+    selectedYear: number = new Date().getFullYear();
+    allYears: number[] = []; // เช่น [2023, 2024, 2025]
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
         private _router: Router,
         private _activated: ActivatedRoute,
-        private location: Location
+        private location: Location,
+        private _lineService: LineService
     ) {
-        this.user = JSON.parse(localStorage.getItem('user'))
-    }
-
-    ngOnInit(): void {
-        this.generateMonths();
-        this.loadEvents();
 
     }
+
+
+    async ngOnInit(): Promise<void> {
+
+
+        try {
+            // 🔸 1. Init LIFF
+            await liff.init({ liffId: '2007657331-oyjNGORd' });
+
+            // // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
+            if (!liff.isLoggedIn()) {
+                liff.login({ redirectUri: window.location.href });
+                return;
+            }
+
+            // 🔸 3. login แล้ว → get profile
+            const profile = await liff.getProfile();
+            this.userIdFromLine = profile.userId;
+            this.displayName = profile.displayName;
+            this.pictureUrl = profile.pictureUrl;
+
+            // this.userIdFromLine = 'U2a2bcd2365d0be23f9ab13e75bd82717';
+            // ✅ Debug
+            console.log('LINE userId:', this.userIdFromLine);
+
+            // 🔸 4. เรียก login API
+            const resp: any = await firstValueFrom(
+                this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(1000))
+            );
+            localStorage.setItem('user', JSON.stringify(resp.data));
+            localStorage.setItem('token', resp.token);
+            const currentYear = new Date().getFullYear();
+            for (let y = currentYear - 2; y <= currentYear + 2; y++) {
+                this.allYears.push(y);
+            }
+            this.generateMonths();
+            this.loadEvents();
+
+            this._changeDetectorRef.markForCheck();
+
+        } catch (err) {
+            console.error('❌ LINE Login Failed:', err);
+            // 🔸 fallback redirect ไปสมัคร
+            if (this.userIdFromLine) {
+                this._router.navigate(['/register'], {
+                    queryParams: { user_id: this.userIdFromLine },
+                });
+                return;
+            }
+        }
+    }
+
+
 
     generateMonths(): void {
         const start = DateTime.now().startOf('month');
@@ -61,65 +117,66 @@ export class CalendarTimelineComponent implements OnInit {
     }
 
     loadEvents(): void {
+        this.user = JSON.parse(localStorage.getItem('user'));
         const userId = this.user?.id;
+        console.log(userId);
+        
         this._service.getCalendarUser(userId).subscribe((resp: any) => {
+             
+            const newEvents = resp
+                .map((item: any) => {
+                    let color = 'bg-gray-400';
+                    switch (item.status) {
+                        case 'Ordered': color = 'bg-yellow-500'; break;
+                        case 'Reject': color = 'bg-red-500'; break;
+                        case 'Confirm': color = 'bg-green-500'; break;
+                        case 'Approve': color = 'bg-green-600'; break;
+                        case 'Finish': color = 'bg-blue-500'; break;
+                        case 'Returned': color = 'bg-purple-500'; break;
+                    }
+
+                    return {
+                        id: item.id,
+                        title: item.code || 'ไม่ระบุ',
+                        start: item.start_date,
+                        end: item.end_date,
+                        code: item.code,
+                        reserve_ref_no: item.reserve_ref_no,
+                        request_purpose: item.request_purpose,
+                        color,
+                        status: item.status || 'กำลังดำเนินการ',
+                    };
+                })
+                .filter(event => DateTime.fromISO(event.start).year === +this.selectedYear);
             
-            const newEvents = resp.map((item: any) => {
-                let color = 'bg-gray-400'; // default
-                switch (item.status) {
-                    case 'Ordered':
-                        color = 'bg-yellow-500';
-                        break;
-                    case 'Reject':
-                        color = 'bg-red-500';
-                        break;
-                    case 'Confirm':
-                        color = 'bg-green-500';
-                        break;
-                    case 'Approve':
-                        color = 'bg-green-600';
-                        break;
-                    case 'Finish':
-                        color = 'bg-blue-500';
-                        break;
-                    case 'Returned':
-                        color = 'bg-purple-500';
-                        break;
-                }
-
-                return {
-                    id: item.id,
-                    title: item.code || 'ไม่ระบุ',
-                    start: item.start_date,
-                    end: item.end_date,
-                    code: item.code,
-                    reserve_ref_no: item.reserve_ref_no,
-                    request_purpose: item.request_purpose,
-                    color: color,
-                    status: item.status || 'กำลังดำเนินการ',
-                };
-            });
-
+            // 🟦 สร้าง 12 เดือนล่วงหน้า
             this.groupedTimelineEvents = {};
+            for (let month = 1; month <= 12; month++) {
+                const paddedMonth = month.toString().padStart(2, '0');
+                const monthKey = `${this.selectedYear}-${paddedMonth}`;
+                this.groupedTimelineEvents[monthKey] = [];
+            }
 
+            // 🟩 ใส่ข้อมูล event ลงในเดือนที่ตรงกัน
             for (const event of newEvents) {
                 const monthKey = DateTime.fromISO(event.start).toFormat('yyyy-MM');
-                if (!this.groupedTimelineEvents[monthKey]) {
-                    this.groupedTimelineEvents[monthKey] = [];
+                if (this.groupedTimelineEvents[monthKey]) {
+                    this.groupedTimelineEvents[monthKey].push(event);
                 }
-                this.groupedTimelineEvents[monthKey].push(event);
             }
 
-            // 🔸 เรียงวันตาม start_date ภายในแต่ละเดือน
-            for (const monthKey in this.groupedTimelineEvents) {
-                this.groupedTimelineEvents[monthKey].sort((a, b) => {
-                    return DateTime.fromISO(a.start).toMillis() - DateTime.fromISO(b.start).toMillis();
-                });
+            // 🔃 เรียงภายในเดือน
+            for (const key in this.groupedTimelineEvents) {
+                this.groupedTimelineEvents[key].sort((a, b) =>
+                    DateTime.fromISO(a.start).toMillis() - DateTime.fromISO(b.start).toMillis()
+                );
             }
-
-            this._changeDetectorRef.markForCheck();
+       
+            this._changeDetectorRef.detectChanges(); // แทน markForCheck ถ้าจำเป็น
         });
     }
+
+
 
     // Original desktop functions
     getSpanStyle(event: TimelineEvent): any {
@@ -191,22 +248,22 @@ export class CalendarTimelineComponent implements OnInit {
     expandedMonths: Set<string> = new Set();
     isAllExpanded: boolean = false;
 
-    // Replace getMonths() with this new method
     getAllMonths(): { key: string, name: string }[] {
-        const currentYear = DateTime.now().year;
         const months = [];
 
-        // Generate all 12 months for the current year
         for (let i = 1; i <= 12; i++) {
-            const monthKey = `${currentYear}-${i.toString().padStart(2, '0')}`;
+            const monthKey = `${this.selectedYear}-${i.toString().padStart(2, '0')}`;
             months.push({
                 key: monthKey,
-                name: DateTime.fromFormat(monthKey, 'yyyy-MM').setLocale('th').toFormat('MMMM yyyy')
+                name: DateTime.fromFormat(monthKey, 'yyyy-MM')
+                    .setLocale('th')
+                    .toFormat('MMMM yyyy')
             });
         }
 
         return months;
     }
+
 
     getEventCount(monthKey: string): number {
         return this.groupedTimelineEvents[monthKey]?.length || 0;
@@ -300,6 +357,10 @@ export class CalendarTimelineComponent implements OnInit {
     formatDateRange(startDate: string, endDate: string): string {
         // Implement date formatting
         return `${startDate} - ${endDate}`;
+    }
+    onYearChange() {
+        //  this.generateMonths();
+        this.loadEvents(); // ดึงข้อมูลใหม่ตามปีที่เลือก
     }
 
 }

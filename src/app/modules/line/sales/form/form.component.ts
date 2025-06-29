@@ -344,6 +344,9 @@ export class FormComponent implements OnInit {
     machineFilter: any[] = []
     user: any
     pageType: any
+    userIdFromLine: string = '';
+    displayName: string = '';
+    pictureUrl: string = '';
     /**
      * Constructor
      */
@@ -362,8 +365,7 @@ export class FormComponent implements OnInit {
 
         // this.type = this.activatedRoute.snapshot.data.type
         this.type = this.activatedRoute.snapshot.queryParams['type']
-        console.log(this.type);
-        
+ 
         this.pageType = this.activatedRoute.snapshot.data.page_type
 
         this.productData = this.activatedRoute.snapshot.data.products.data
@@ -383,14 +385,14 @@ export class FormComponent implements OnInit {
         this.clientData = this.activatedRoute.snapshot.data.client.data
         this.filterClient.next(this.clientData.slice());
 
-    
+
 
         const ids = this.user?.team?.team_prducts.map(product => product.category_product_id);
-        
-            this.mcData = this.activatedRoute.snapshot.data.machine_model.data
-            this.machineFilter = this.mcData.filter(item => ids.includes(item.category_product_id));
-            this.productDataFilter = this.productData.filter(item => ids.includes(item.id))
-            this.filterMachineModel.next(this.machineFilter.slice());
+
+        this.mcData = this.activatedRoute.snapshot.data.machine_model.data
+        this.machineFilter = this.mcData.filter(item => ids.includes(item.category_product_id));
+        this.productDataFilter = this.productData.filter(item => ids.includes(item.id))
+        this.filterMachineModel.next(this.machineFilter.slice());
         console.log(this.machineFilter);
 
         this.formData = this._fb.group({
@@ -1297,7 +1299,7 @@ export class FormComponent implements OnInit {
     onSelectType(products: any) {
         this.filterWorkStation = products?.products
         console.log(this.filterWorkStation);
-        
+
     }
 }
 
