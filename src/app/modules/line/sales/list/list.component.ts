@@ -127,7 +127,7 @@ export class ListComponent implements OnInit, AfterViewInit {
                 
                 // 🔸 ไม่เจอ user → ไปสมัคร
                 this._router.navigate(['/register'], {
-                    queryParams: { user_id: this.userIdFromLine },
+                    queryParams: { user_id: this.userIdFromLine,picture: this.pictureUrl },
                 });
                 return;
                 

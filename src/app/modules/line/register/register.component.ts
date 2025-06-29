@@ -27,7 +27,7 @@ import liff from '@line/liff';
 export class LineRegisterComponent implements OnInit {
   form: FormGroup;
   userIdFromLine: string = '';
-
+  imageFromLine: string = '';
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -42,6 +42,7 @@ export class LineRegisterComponent implements OnInit {
     });
 
     this.userIdFromLine = this.activatedRoute.snapshot.queryParams['user_id'];
+    this.imageFromLine = this.activatedRoute.snapshot.queryParams['picture'];
 
     if (!this.userIdFromLine) {
       await this.initLiff();
@@ -60,6 +61,7 @@ export class LineRegisterComponent implements OnInit {
       if (liff.isLoggedIn()) {
         const profile = await liff.getProfile();
         this.userIdFromLine = profile.userId;
+        this.imageFromLine = profile.pictureUrl;
       } else {
         liff.login();
       }
@@ -74,7 +76,7 @@ export class LineRegisterComponent implements OnInit {
     const payload = {
       user_id: this.userIdFromLine,
       user_no: this.form.value.user_no,
-      image: this.userIdFromLine
+      image: this.imageFromLine
     };
 
     this._serviceLine.lineRegister(payload).subscribe({
