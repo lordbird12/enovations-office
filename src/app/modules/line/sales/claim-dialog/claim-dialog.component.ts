@@ -176,7 +176,7 @@ export class ClaimDialogComponent implements OnInit {
                     next: (resp: any) => {
                         this.showFlashMessage('success');
                         this.dialogRef.close(resp);
-                        this._router.navigate(['admin/sales/list'])
+                        // this._router.navigate(['line/list'])
                     },
                     error: (err: any) => {
                         this.form.enable();

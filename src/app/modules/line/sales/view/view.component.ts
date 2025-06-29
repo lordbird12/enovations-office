@@ -359,17 +359,12 @@ export class ViewOrderComponent implements OnInit {
                         // tds: tDs
                     });
 
-                    console.log(this.formData.value);
-
                     this._changeDetectorRef.markForCheck();
 
                 });
 
                 const win_lose = this.activatedRoute.snapshot.data.winLose.data
                 this.winLose = win_lose.filter((resp: any) => resp.order_id === +this.Id)
-                console.log(this.Id);
-                console.log(this.winLose);
-
             });
         } else {
             const currentDateTime = DateTime.now();
@@ -1134,9 +1129,31 @@ export class ViewOrderComponent implements OnInit {
                 },
             })
             .afterClosed()
-            .subscribe(() => {
-                // Go up twice because card routes are setup like this; "card/CARD_ID"
-                // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
+            .subscribe((result) => {
+                if (result) {
+                    this.activatedRoute.params.subscribe(params => {
+                        this.isForm = false;
+                        const id = params.id;
+                        this.Id = id
+                        this._service.getById(id).subscribe((resp: any) => {
+                            this.itemData = resp.data;
+                            // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
+                            // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
+                            this.saleFilter.setValue(this.itemData.user?.name)
+                            this.clientFilter.setValue(this.itemData.client?.name)
+                            this.productFilter.setValue(this.itemData.product?.name)
+                            this.accessorieFilter.setValue(this.itemData.product?.name)
+                            this.workstationFilter.setValue(this.itemData.product?.name)
+                            this.formData.patchValue({
+                                ...this.itemData,
+                                created_at: DateTime.fromISO(this.itemData.created_at).toFormat('yyyy-MM-dd'),
+                            });
+                            this._changeDetectorRef.markForCheck();
+                        });
+                        const win_lose = this.activatedRoute.snapshot.data.winLose.data
+                        this.winLose = win_lose.filter((resp: any) => resp.order_id === +this.Id)
+                    });
+                }
             });
     }
     openDialogAddProduct(): void {
