@@ -89,7 +89,7 @@ export class LineRegisterComponent implements OnInit {
       },
       error: (err) => {
         this._fuseConfirmationService.open({
-          "title": "กรุณาระบุข้อมูล",
+          "title": "ไม่พบข้อมูลผู้ใช้งาน",
           "message": err.error.message,
           "icon": {
             "show": true,
