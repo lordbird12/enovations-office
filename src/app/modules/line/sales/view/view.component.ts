@@ -1158,6 +1158,9 @@ export class ViewOrderComponent implements OnInit {
             });
     }
     openDialogAddProduct(): void {
+
+        // this._router.navigate(['/line/product-management/' + this.Id])
+        // return;
         this._service.getMachineModelAll().subscribe((resp: any) => {
             const machine_model = resp.data
 

@@ -1,5 +1,5 @@
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { NgClass, CommonModule, DatePipe } from '@angular/common';
+import { NgClass, CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
     FormArray,
@@ -33,6 +33,7 @@ import { PageService } from '../page.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { DateTime } from 'luxon';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface OrderData {
     order_id: string;
@@ -42,9 +43,9 @@ interface OrderData {
 }
 
 @Component({
-    selector: 'app-dialog-add-product',
-    templateUrl: './dialog.component.html',
-    styleUrls: ['./dialog.component.scss'],
+    selector: 'app-product-management',
+    templateUrl: './form.component.html',
+    styleUrls: ['./form.component.scss'],
     standalone: true,
     imports: [
         MatIconModule,
@@ -67,7 +68,7 @@ interface OrderData {
         MatAutocompleteModule,
     ],
 })
-export class DialogAddProductComponent implements OnInit {
+export class ProductManagementComponent implements OnInit {
     form: FormGroup;
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     productFilter = new FormControl('');
@@ -83,17 +84,18 @@ export class DialogAddProductComponent implements OnInit {
     saleFilter = new FormControl('');
     filterSale: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
     saleData: any[] = [];
-
+    Id: any
     product_by_;
 
     constructor(
         private fb: FormBuilder,
         private _service: PageService,
-        private dialogRef: MatDialogRef<DialogAddProductComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,
-        private _fuseConfirmationService: FuseConfirmationService
+        private _fuseConfirmationService: FuseConfirmationService,
+        private _activateRoute: ActivatedRoute,
+        private _router: Router,
+        private location: Location
     ) {
-        console.log(this.data.order);
+        this.Id = this._activateRoute.snapshot.params.id;
         this._service.getUser().subscribe((resp: any) => {
             this.saleData = resp.data;
             this.filterSale.next(this.saleData.slice());
@@ -113,25 +115,29 @@ export class DialogAddProductComponent implements OnInit {
             this.initializeProductsForMachineModels();
             this.initializeProductsForTransducers();
         });
+        this._service.getById(this.Id).subscribe((resp: any) => {
+            const data = resp.data
+            this.form = this.fb.group({
+                order_id: [resp.order.id],
+                users: this.fb.array(
+                    data?.order?.order_users.map((user) =>
+                        this.createUserGroup(user)
+                    )
+                ),
+                machine_models: this.fb.array(
+                    data?.order?.machine_models.map((model) =>
+                        this.createMachineModelGroup(model)
+                    )
+                ),
+                transducers: this.fb.array(
+                    data?.order?.transducers.map((transducer) =>
+                        this.createTransducerGroup(transducer)
+                    )
+                ),
+            });
+        })
 
-        this.form = this.fb.group({
-            order_id: [data.order.id],
-            users: this.fb.array(
-                data?.order?.order_users.map((user) =>
-                    this.createUserGroup(user)
-                )
-            ),
-            machine_models: this.fb.array(
-                data?.order?.machine_models.map((model) =>
-                    this.createMachineModelGroup(model)
-                )
-            ),
-            transducers: this.fb.array(
-                data?.order?.transducers.map((transducer) =>
-                    this.createTransducerGroup(transducer)
-                )
-            ),
-        });
+
     }
 
     ngOnInit(): void {
@@ -268,9 +274,7 @@ export class DialogAddProductComponent implements OnInit {
         return this.form.get('transducers') as FormArray;
     }
 
-    closeDialog(): void {
-        this.dialogRef.close();
-    }
+
 
     //   addProduct(machineModelIndex: number, type: any): void {
     //     if (type === 'machine_model') {
@@ -297,45 +301,45 @@ export class DialogAddProductComponent implements OnInit {
     //   }
     addProduct(machineModelIndex: number, type: string): void {
         if (type === 'machine_model') {
-          const machineModel = this.machineModelsArray.at(machineModelIndex);
-          const modelId = machineModel.get('id').value;
+            const machineModel = this.machineModelsArray.at(machineModelIndex);
+            const modelId = machineModel.get('id').value;
 
-          // ถ้ายังไม่มี productsSubject สำหรับ machine model นี้ ให้สร้างใหม่
-          if (!machineModel['productsSubject']) {
-            machineModel['productsSubject'] = new ReplaySubject<any[]>(1);
-            if (this.machineProductsMap.has(modelId.toString())) {
-              machineModel['productsSubject'].next(this.machineProductsMap.get(modelId.toString()));
-            } else {
-              machineModel['productsSubject'].next([]);
+            // ถ้ายังไม่มี productsSubject สำหรับ machine model นี้ ให้สร้างใหม่
+            if (!machineModel['productsSubject']) {
+                machineModel['productsSubject'] = new ReplaySubject<any[]>(1);
+                if (this.machineProductsMap.has(modelId.toString())) {
+                    machineModel['productsSubject'].next(this.machineProductsMap.get(modelId.toString()));
+                } else {
+                    machineModel['productsSubject'].next([]);
+                }
             }
-          }
 
-          const productsArray = machineModel.get('products') as FormArray;
-          const formValue = {
-            product_id: ''
-          };
-          productsArray.push(this.createProductGroup(formValue));
+            const productsArray = machineModel.get('products') as FormArray;
+            const formValue = {
+                product_id: ''
+            };
+            productsArray.push(this.createProductGroup(formValue));
         } else {
-          const transducer = this.transducersArray.at(machineModelIndex);
-          const modelId = transducer.get('id').value;
+            const transducer = this.transducersArray.at(machineModelIndex);
+            const modelId = transducer.get('id').value;
 
-          // ถ้ายังไม่มี productsSubject สำหรับ transducer นี้ ให้สร้างใหม่
-          if (!transducer['productsSubject']) {
-            transducer['productsSubject'] = new ReplaySubject<any[]>(1);
-            if (this.machineProductsMap.has(modelId.toString())) {
-              transducer['productsSubject'].next(this.machineProductsMap.get(modelId.toString()));
-            } else {
-              transducer['productsSubject'].next([]);
+            // ถ้ายังไม่มี productsSubject สำหรับ transducer นี้ ให้สร้างใหม่
+            if (!transducer['productsSubject']) {
+                transducer['productsSubject'] = new ReplaySubject<any[]>(1);
+                if (this.machineProductsMap.has(modelId.toString())) {
+                    transducer['productsSubject'].next(this.machineProductsMap.get(modelId.toString()));
+                } else {
+                    transducer['productsSubject'].next([]);
+                }
             }
-          }
 
-          const productsArray = transducer.get('products') as FormArray;
-          const formValue = {
-            product_id: ''
-          };
-          productsArray.push(this.createProductGroup(formValue));
+            const productsArray = transducer.get('products') as FormArray;
+            const formValue = {
+                product_id: ''
+            };
+            productsArray.push(this.createProductGroup(formValue));
         }
-      }
+    }
 
     addTra(index: number): void {
         const data = this.transducersArray.at(index);
@@ -396,8 +400,8 @@ export class DialogAddProductComponent implements OnInit {
                 let formValue = this.form.value;
                 this._service.updateMachineModelProduct(formValue).subscribe({
                     next: (resp: any) => {
-                        this.dialogRef.close(resp);
-                        // this._router.navigate(['admin/sales/list'])
+                    
+                        this._router.navigate(['line/view/booking/' + this.Id ])
                     },
                     error: (err: any) => {
                         this._fuseConfirmationService.open({
@@ -571,5 +575,10 @@ export class DialogAddProductComponent implements OnInit {
                 }
             });
         }
+    }
+
+       goBack() {
+        // Implement your back navigation logic here
+        this.location.back(); // Example using Location service
     }
 }

@@ -12,6 +12,7 @@ import { LineRegisterComponent } from './register/register.component';
 import { CalendarComponent } from './sales/calendar/calendar.component';
 import { CalendarTimelineComponent } from './sales/calendar-timeline/calendar-timeline.component';
 import { AssessmentFormComponent } from './sales/assessment/assessment-form.component';
+import { ProductManagementComponent } from './sales/product-management/form.component';
 
 
 export default [
@@ -212,9 +213,14 @@ export default [
                 path: 'calendar-timeline',
                 component: CalendarTimelineComponent,
             },
-                {
+            {
                 path: 'rate/:id',
                 component: AssessmentFormComponent,
+            },
+
+              {
+                path: 'product-management/:id',
+                component: ProductManagementComponent,
             },
         ],
     },

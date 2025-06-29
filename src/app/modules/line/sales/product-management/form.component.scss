@@ -1,0 +1,7 @@
+@media screen and (max-width: 768px) {
+  ::ng-deep .custom-dialog-container {
+    width: 95vw !important;
+    height: auto !important;
+    max-height: 100vh !important;
+  }
+}
