@@ -63,9 +63,7 @@ export class CalendarTimelineComponent implements OnInit {
 
             // // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
             if (!liff.isLoggedIn()) {
-                const redirect = window.location.origin + window.location.pathname;
-                liff.login({ redirectUri: redirect });
-                // liff.login({ redirectUri: window.location.href });
+                liff.login({ redirectUri: window.location.href });
                 return;
             }
 
