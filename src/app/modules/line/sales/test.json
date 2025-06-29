@@ -1,0 +1,46 @@
+{
+    "reserve_ref_no": "A023455",
+    "calendar_date": null,
+    "budget": "100000",
+    "request_purpose": "Demo",
+    "user_id": null,
+    "function_qualifications": "^ท^ด^ส^อ^บ",
+    "work_station_id": 38,
+    "additional_equipment": "^ท^ด^ส^อ^บ",
+    "meeting_details": "^ท^ด^ส^อ^บ",
+    "current_machine_model": "^ท^ด^ส^อ^บ",
+    "current_work_station": "^ท^ด^ส^อ^บ",
+    "current_usage_problem": "^ท^ด^ส^อ^บ",
+    "competitor_model": "^ท^ด^ส^อ^บ",
+    "competitor_transducer": "^ท^ด^ส^อ^บ",
+    "customer_feedback": "^ท^ด^ส^อ^บ",
+    "client_id": 4,
+    "customer_type": "Private",
+    "province": "^อ^ำ^น^า^จ^เ^จ^ร^ิ^ญ",
+    "department": "Cardiology",
+    "floor": "19",
+    "kol_doctor": "^ท^ด^ส^อ^บ",
+    "additional_info": "^ท^ด^ส^อ^บ",
+    "status": null,
+    "create_by": null,
+    "update_by": null,
+    "start_date": "2025-06-29",
+    "end_date": "2025-06-30",
+    "machine_models": [
+        {
+            "machine_model_id": 36,
+            "machine_model_name": "LX9",
+            "qty": 1
+        }
+    ],
+    "transducers": [
+        {
+            "machine_model_id": 4,
+            "machine_model_name": "AFFINITI 50",
+            "qty": 1
+        }
+    ],
+    "memberIds": null,
+    "tds": null,
+     "client_name": null
+}

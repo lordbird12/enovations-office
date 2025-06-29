@@ -47,8 +47,13 @@ export class PageService {
     // -----------------------------------------------------------------------------------------------------
 
     create(data: FormData): Observable<any> {
+        const token = localStorage.getItem('token');
+        // สร้าง header ใหม่พร้อม token
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .post<any>(environment.baseURL + '/api/orders', data)
+            .post<any>(environment.baseURL + '/api/orders', data, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -65,7 +70,7 @@ export class PageService {
         });
 
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/orders/' + id, {headers})
+            .get<any>(environment.baseURL + '/api/orders/' + id, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -73,8 +78,12 @@ export class PageService {
             );
     }
     updateMachineModelProduct(data: FormData): Observable<any> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .post<any>(environment.baseURL + '/api/head_update_orders', data)
+            .post<any>(environment.baseURL + '/api/head_update_orders', data, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -83,8 +92,12 @@ export class PageService {
     }
 
     updateReturnProduct(data: FormData): Observable<any> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .post<any>(environment.baseURL + '/api/return', data)
+            .post<any>(environment.baseURL + '/api/return', data, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -92,8 +105,12 @@ export class PageService {
             );
     }
     updateStatusReturn(data: any): Observable<any> {
+            const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .post<any>(environment.baseURL + '/api/update_status_return', data)
+            .post<any>(environment.baseURL + '/api/update_status_return', data, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -101,8 +118,12 @@ export class PageService {
             );
     }
     payment_period(data: FormData): Observable<any> {
+            const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .post<any>(environment.baseURL + '/api/payment_period', data)
+            .post<any>(environment.baseURL + '/api/payment_period', data, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -110,8 +131,12 @@ export class PageService {
             );
     }
     claim(data: FormData): Observable<any> {
+            const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .post<any>(environment.baseURL + '/api/cleam', data)
+            .post<any>(environment.baseURL + '/api/cleam', data, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -119,8 +144,12 @@ export class PageService {
             );
     }
     udpateStatus(data: any): Observable<any> {
+            const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .post<any>(environment.baseURL + '/api/update_status_order', data)
+            .post<any>(environment.baseURL + '/api/update_status_order', data, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -129,8 +158,12 @@ export class PageService {
     }
 
     update(data: any, id: any): Observable<any> {
+            const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .put<any>(environment.baseURL + '/api/orders/' + id, data)
+            .put<any>(environment.baseURL + '/api/orders/' + id, data, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -139,15 +172,22 @@ export class PageService {
     }
 
     delete(id: any): Observable<any> {
+            const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient.delete<any>(
-            environment.baseURL + '/api/orders/' + id,
-            { headers: this.httpOptionsFormdata.headers }
+            environment.baseURL + '/api/orders/' + id, { headers }
         );
     }
 
     getOrder(): Observable<any> {
+            const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_orders')
+            .get<any>(environment.baseURL + '/api/get_orders', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -164,8 +204,12 @@ export class PageService {
             );
     }
     getWinLose(): Observable<any> {
+            const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_win_lost')
+            .get<any>(environment.baseURL + '/api/get_win_lost', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -189,7 +233,7 @@ export class PageService {
 
         // สร้าง header ใหม่พร้อม token
         const headers = new HttpHeaders({
-            Authorization: `Bearer ${token}`,   
+            Authorization: `Bearer ${token}`,
         });
 
         return this._httpClient
@@ -205,12 +249,12 @@ export class PageService {
             );
     }
 
-    getCalendarUser(id:any): Observable<any> {
+    getCalendarUser(id: any): Observable<any> {
         // ดึง token จาก localStorage
         const token = localStorage.getItem('token');
         // สร้าง header ใหม่พร้อม token
         const headers = new HttpHeaders({
-            Authorization: `Bearer ${token}`,   
+            Authorization: `Bearer ${token}`,
         });
 
         return this._httpClient
@@ -226,8 +270,11 @@ export class PageService {
     }
 
     getClient(): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_client')
+            .get<any>(environment.baseURL + '/api/get_client', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -235,8 +282,11 @@ export class PageService {
             );
     }
     getFinanace(): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_finance')
+            .get<any>(environment.baseURL + '/api/get_finance', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -244,8 +294,11 @@ export class PageService {
             );
     }
     getProduct($brand_model_id): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_product/' + $brand_model_id)
+            .get<any>(environment.baseURL + '/api/get_product/' + $brand_model_id, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -254,8 +307,11 @@ export class PageService {
     }
 
     getBrand(): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_brand')
+            .get<any>(environment.baseURL + '/api/get_brand', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -263,8 +319,11 @@ export class PageService {
             );
     }
     getCar(): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_product_all')
+            .get<any>(environment.baseURL + '/api/get_product_all', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -273,8 +332,11 @@ export class PageService {
     }
 
     getBrandModel($brand_id): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_brand_model/' + $brand_id)
+            .get<any>(environment.baseURL + '/api/get_brand_model/' + $brand_id, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -283,8 +345,11 @@ export class PageService {
     }
 
     getClaim(id: any): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_cleam/' + id)
+            .get<any>(environment.baseURL + '/api/get_cleam/' + id, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -293,8 +358,11 @@ export class PageService {
     }
 
     getUserByDepartment(id: any): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_user_by_department/' + id)
+            .get<any>(environment.baseURL + '/api/get_user_by_department/' + id, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -303,8 +371,11 @@ export class PageService {
     }
 
     getPromotion(): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_promotion')
+            .get<any>(environment.baseURL + '/api/get_promotion', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -312,8 +383,11 @@ export class PageService {
             );
     }
     getGarage(): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_garage')
+            .get<any>(environment.baseURL + '/api/get_garage', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -322,11 +396,14 @@ export class PageService {
     }
 
     getPageCustomer(dataTablesParameters: any): Observable<DataTablesResponse> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
             .post(
                 environment.baseURL + '/api/client_page',
                 dataTablesParameters,
-                this.httpOptionsFormdata
+                { headers }
             )
             .pipe(
                 switchMap((response: any) => {
@@ -336,11 +413,14 @@ export class PageService {
     }
 
     getPateProduct(dataTablesParameters: any): Observable<DataTablesResponse> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
             .post(
                 environment.baseURL + '/api/product_page',
                 dataTablesParameters,
-                this.httpOptionsFormdata
+                { headers }
             )
             .pipe(
                 switchMap((response: any) => {
@@ -349,8 +429,11 @@ export class PageService {
             );
     }
     customerCreate(data: FormData): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .post<any>(environment.baseURL + '/api/client', data)
+            .post<any>(environment.baseURL + '/api/client', data, { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -359,8 +442,11 @@ export class PageService {
     }
 
     getProductEno(): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_product_all')
+            .get<any>(environment.baseURL + '/api/get_product_all', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);
@@ -368,8 +454,11 @@ export class PageService {
             );
     }
     getMachineModelAll(): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_machine_model_all')
+            .get<any>(environment.baseURL + '/api/get_machine_model_all', { headers })
             .pipe(
                 tap((result) => {
                     this._data.next(result);

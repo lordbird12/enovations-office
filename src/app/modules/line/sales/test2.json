@@ -1,0 +1,46 @@
+{
+    "reserve_ref_no": "AVXCR",
+    "calendar_date": null,
+    "budget": "1000",
+    "request_purpose": "Demo",
+    "user_id": null,
+    "function_qualifications": "^ท^ด^ส^อ^บ",
+    "work_station_id": 93,
+    "additional_equipment": "^ท^ด^ส^อ^บ",
+    "meeting_details": "^ท^ด^ส^อ^บ",
+    "current_machine_model": "^ท^ด^ส^อ^บ",
+    "current_work_station": "^ท^ด^ส^อ^บ",
+    "current_usage_problem": "^ท^ด^ส^อ^บ",
+    "competitor_model": "^ท^ด^ส^อ^บ",
+    "competitor_transducer": "^ท^ด^ส^อ^บ",
+    "customer_feedback": "^ท^ด^ส^อ^บ",
+    "client_id": 1,
+    "customer_type": "Government",
+    "province": "^บ^ุ^ร^ี^ร^ั^ม^ย^์",
+    "department": "OR-CVT",
+    "floor": "^ท^ด^ส^อ^บ",
+    "kol_doctor": "^ท^ด^ส^อ^บ",
+    "additional_info": "^ท^ด^ส^อ^บ",
+    "status": null,
+    "create_by": null,
+    "update_by": null,
+    "start_date": "2025-07-07",
+    "end_date": "2025-07-09",
+    "machine_models": [
+        {
+            "machine_model_id": 35,
+            "machine_model_name": "LX3",
+            "qty": 1
+        }
+    ],
+    "transducers": [
+        {
+            "machine_model_id": 36,
+            "machine_model_name": "LX9",
+            "qty": 1
+        }
+    ],
+    "memberIds": null,
+    "tds": null,
+    "client_name": null
+}
