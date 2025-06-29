@@ -82,7 +82,7 @@ export class LineRegisterComponent implements OnInit {
     this._serviceLine.lineRegister(payload).subscribe({
       next: (resp: any) => {
         console.log('Register success:', resp);
-        // this._router.navigate(['line/list/booking']);
+        this._router.navigate(['line/list/booking']);
       },
       error: (err) => {
         console.error('Register failed:', err);
