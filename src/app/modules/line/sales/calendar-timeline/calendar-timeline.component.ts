@@ -63,6 +63,7 @@ export class CalendarTimelineComponent implements OnInit {
     loadEvents(): void {
         const userId = this.user?.id;
         this._service.getCalendarUser(userId).subscribe((resp: any) => {
+            
             const newEvents = resp.map((item: any) => {
                 let color = 'bg-gray-400'; // default
                 switch (item.status) {
@@ -88,9 +89,10 @@ export class CalendarTimelineComponent implements OnInit {
 
                 return {
                     id: item.id,
-                    title: item.request_purpose || 'ไม่ระบุ',
+                    title: item.code || 'ไม่ระบุ',
                     start: item.start_date,
                     end: item.end_date,
+                    code: item.code,
                     reserve_ref_no: item.reserve_ref_no,
                     request_purpose: item.request_purpose,
                     color: color,
@@ -111,8 +113,6 @@ export class CalendarTimelineComponent implements OnInit {
             // 🔸 เรียงวันตาม start_date ภายในแต่ละเดือน
             for (const monthKey in this.groupedTimelineEvents) {
                 this.groupedTimelineEvents[monthKey].sort((a, b) => {
-                    console.log(a.start);
-                    
                     return DateTime.fromISO(a.start).toMillis() - DateTime.fromISO(b.start).toMillis();
                 });
             }
@@ -270,6 +270,36 @@ export class CalendarTimelineComponent implements OnInit {
 
     viewDetail(id: any) {
         this._router.navigate(['/line/view/booking/' + id]); // นำทางไปยังหน้าที่กำหนด พร้อมพารามิเตอร์
+    }
+
+    activeTab: 'myBookings' | 'equipmentBookings' = 'myBookings';
+    selectedEquipment: string = '';
+    equipmentList: any[] = []; // Populate this with your equipment data
+    equipmentBookings: any[] = []; // Will hold filtered bookings by equipment
+
+    onEquipmentChange() {
+        // Filter bookings based on selected equipment
+        if (this.selectedEquipment) {
+            this.equipmentBookings = this.getBookingsByEquipment(this.selectedEquipment);
+        } else {
+            this.equipmentBookings = this.getAllEquipmentBookings();
+        }
+    }
+
+    // Add these methods to your component
+    getBookingsByEquipment(equipmentId: string): any[] {
+        // Implement your logic to filter bookings by equipment
+        return [];
+    }
+
+    getAllEquipmentBookings(): any[] {
+        // Implement your logic to get all equipment bookings
+        return [];
+    }
+
+    formatDateRange(startDate: string, endDate: string): string {
+        // Implement date formatting
+        return `${startDate} - ${endDate}`;
     }
 
 }
