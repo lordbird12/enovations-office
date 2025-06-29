@@ -55,7 +55,7 @@
                     <mat-form-field class="w-full">
                         <mat-label>ประเภทเครื่อง</mat-label>
                         <mat-select placeholder="" (selectionChange)="onSelectType($event.value)">
-                            <mat-option *ngFor="let item of productData" [value]="item.id">
+                            <mat-option *ngFor="let item of productData" [value]="item">
                                 {{item.name}}
                             </mat-option>
                         </mat-select>
