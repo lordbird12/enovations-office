@@ -136,7 +136,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             // 🔸 fallback redirect ไปสมัคร
             if (this.userIdFromLine) {
                 this._router.navigate(['/register'], {
-                    queryParams: { user_id: this.userIdFromLine },
+                    queryParams: { user_id: this.userIdFromLine, image: this.pictureUrl },
                 });
                 return;
             }
