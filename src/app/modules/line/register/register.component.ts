@@ -42,7 +42,7 @@ export class LineRegisterComponent implements OnInit {
     });
 
     this.userIdFromLine = this.activatedRoute.snapshot.queryParams['user_id'];
-    this.imageFromLine = this.activatedRoute.snapshot.queryParams['picture'];
+    this.imageFromLine = this.activatedRoute.snapshot.queryParams['image'];
 
     if (!this.userIdFromLine) {
       await this.initLiff();
