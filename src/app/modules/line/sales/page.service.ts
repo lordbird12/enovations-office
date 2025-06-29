@@ -55,6 +55,23 @@ export class PageService {
                 })
             );
     }
+
+    getById(id: any): Observable<any> {
+        const token = localStorage.getItem('token');
+
+        // สร้าง header ใหม่พร้อม token
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
+
+        return this._httpClient
+            .get<any>(environment.baseURL + '/api/orders/' + id, {headers})
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
     updateMachineModelProduct(data: FormData): Observable<any> {
         return this._httpClient
             .post<any>(environment.baseURL + '/api/head_update_orders', data)
@@ -128,16 +145,6 @@ export class PageService {
         );
     }
 
-    getById(id: any): Observable<any> {
-        return this._httpClient
-            .get<any>(environment.baseURL + '/api/orders/' + id)
-            .pipe(
-                tap((result) => {
-                    this._data.next(result);
-                })
-            );
-    }
-
     getOrder(): Observable<any> {
         return this._httpClient
             .get<any>(environment.baseURL + '/api/get_orders')
@@ -176,13 +183,13 @@ export class PageService {
      * @param search
      */
 
-    getPage(dataTablesParameters: any ): Observable<DataTablesResponse> {
+    getPage(dataTablesParameters: any): Observable<DataTablesResponse> {
         // ดึง token จาก localStorage
         const token = localStorage.getItem('token');
 
         // สร้าง header ใหม่พร้อม token
         const headers = new HttpHeaders({
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,   
         });
 
         return this._httpClient
@@ -198,6 +205,25 @@ export class PageService {
             );
     }
 
+    getCalendarUser(id:any): Observable<any> {
+        // ดึง token จาก localStorage
+        const token = localStorage.getItem('token');
+        // สร้าง header ใหม่พร้อม token
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,   
+        });
+
+        return this._httpClient
+            .get(
+                `${environment.baseURL}/api/get_order_by_sale_calendar/${id}`,
+                { headers } // ใช้ headers แบบ custom
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
 
     getClient(): Observable<any> {
         return this._httpClient

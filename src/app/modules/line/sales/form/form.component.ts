@@ -280,6 +280,7 @@ export class FormComponent implements OnInit {
     product_select: any;
     type: any = ''
     promotionData: any[] = [];
+    filterWorkStation: any[] = [];
 
     formData: FormGroup;
     formattedDateTime: string;
@@ -339,7 +340,7 @@ export class FormComponent implements OnInit {
     clientFilter = new FormControl('');
     filterClient: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
     clientData: any[] = [];
-
+    machineFilter: any[] = []
     user: any
     pageType: any
     /**
@@ -355,6 +356,8 @@ export class FormComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
 
     ) {
+
+        this.user = JSON.parse(localStorage.getItem('user'))
 
         this.type = this.activatedRoute.snapshot.data.type
         this.pageType = this.activatedRoute.snapshot.data.page_type
@@ -376,8 +379,15 @@ export class FormComponent implements OnInit {
         this.clientData = this.activatedRoute.snapshot.data.client.data
         this.filterClient.next(this.clientData.slice());
 
-        this.mcData = this.activatedRoute.snapshot.data.machine_model.data
-        this.filterMachineModel.next(this.mcData.slice());
+    
+
+        console.log(this.user?.team);
+        const ids = this.user?.team?.team_prducts.map(product => product.category_product_id);
+        console.log(ids);
+            this.mcData = this.activatedRoute.snapshot.data.machine_model.data
+            this.machineFilter = this.mcData.filter(item => ids.includes(item.category_product_id));
+            this.filterMachineModel.next(this.machineFilter.slice());
+        console.log(this.machineFilter);
 
         this.formData = this._fb.group({
             reserve_ref_no: null,
@@ -919,7 +929,7 @@ export class FormComponent implements OnInit {
         }
     }
 
-    onSelectMachineModel(event: any,type: any) {
+    onSelectMachineModel(event: any, type: any) {
         console.log(type);
 
         const selectedName = event.option.value;
@@ -1278,6 +1288,10 @@ export class FormComponent implements OnInit {
                 // Go up twice because card routes are setup like this; "card/CARD_ID"
                 // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
             });
+    }
+
+    onSelectType(products: any) {
+        this.filterWorkStation = products?.products
     }
 }
 

@@ -97,8 +97,7 @@ export class CalendarOrderLineComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    console.log(this.user);
-
+    this.getCalendar();
     if (this.user?.position_id === "1") {
       this._service.getById(this.user?.id).subscribe((resp: any) => {
         const events = resp.map((item) => ({
@@ -130,6 +129,28 @@ export class CalendarOrderLineComponent implements OnInit, AfterViewInit {
       .subscribe(() => {
         this._filterSale();
       });
+  }
+
+
+  getCalendar() {
+    console.log(this.user);
+    this._service.getCalendarUser(this.user?.id).subscribe((resp: any) => {
+      const events = resp.map((item) => ({
+
+        id: item.id,
+        // title: this.getNamesFromMachineModels(item.machine_models),
+        title: item.code,
+        start: item.start_date,
+        end: DateTime.fromISO(item.end_date).plus({ days: 1 }).toISODate() // เพิ่ม 1 วันให้ end_date
+
+      }));
+
+      this.calendarOptions = {
+        events: events,
+        eventClick: this.onEventClick.bind(this)
+      };
+      this._changeDetectorRef.markForCheck()
+    })
   }
 
   getNamesFromMachineModels(ArrayValue: any) {
@@ -201,15 +222,15 @@ export class CalendarOrderLineComponent implements OnInit, AfterViewInit {
           events: events,
           eventClick: this.onEventClick.bind(this)
         };
-     // ถ้ามี event ใน list ให้พาไปที่ event แรก
-     if (events.length > 0) {
-      const firstEventDate = events[0].start;
-      setTimeout(() => {
-        if (this.calendarComponent) {
-          this.calendarComponent.getApi().gotoDate(firstEventDate);
+        // ถ้ามี event ใน list ให้พาไปที่ event แรก
+        if (events.length > 0) {
+          const firstEventDate = events[0].start;
+          setTimeout(() => {
+            if (this.calendarComponent) {
+              this.calendarComponent.getApi().gotoDate(firstEventDate);
+            }
+          }, 100); // รอให้ calendar โหลดก่อน
         }
-      }, 100); // รอให้ calendar โหลดก่อน
-    }
 
         this._changeDetectorRef.markForCheck()
       })

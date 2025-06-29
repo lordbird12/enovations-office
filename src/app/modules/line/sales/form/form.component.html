@@ -5,7 +5,7 @@
             {{ isForm ? 'สร้างใบจอง ' + (type ?? '-') : 'แก้ไขการจอง' }}
         </h2>
     </div>
-    
+
     <!-- Main Form -->
     <div class="w-full bg-card rounded-lg p-2">
         <form [formGroup]="formData">
@@ -14,12 +14,12 @@
                 <h3 class="text-lg font-bold text-gray-500 px-2 mb-2">
                     ข้อมูลการจอง
                 </h3>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>เลขที่ใบยืม</mat-label>
                     <input matInput placeholder="เลขที่ใบยืม" [formControlName]="'reserve_ref_no'">
                 </mat-form-field>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>วันทีจอง</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
@@ -29,7 +29,7 @@
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>วัตถุประสงค์การขอ</mat-label>
                     <mat-select [formControlName]="'request_purpose'" placeholder="ระบุวัตถุประสงค์">
@@ -38,96 +38,98 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                
+
                 <div class="w-full p-2" *ngIf="this.formData.value.request_purpose === 'Demo'">
                     <mat-form-field class="w-full">
                         <mat-label>งบประมาณ</mat-label>
                         <input matInput placeholder="งบประมาณ" [formControlName]="'budget'">
                     </mat-form-field>
                 </div>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>Function Quatifications ที่หมอต้องการ</mat-label>
                     <input matInput placeholder="Function Quatifications ที่หมอต้องการ"
                         [formControlName]="'function_qualifications'">
                 </mat-form-field>
-                
                 <div class="w-full p-2" *ngIf="this.type === 'Echocardiogram'">
                     <mat-form-field class="w-full">
                         <mat-label>Work Station</mat-label>
-                        <input matInput placeholder="Work Station" [formControl]="workstationFilter"
-                            (click)="openDialogProduct('work')" readonly="">
+                        <mat-select [formControlName]="'work_station_id'" placeholder="">
+                            <mat-option *ngFor="let item of machineFilter" [value]="item.id">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
+                    
                 </div>
-                
                 <mat-form-field class="w-full p-2">
                     <mat-label>อุปกรณ์อื่นที่ต้องการ</mat-label>
-                    <input matInput placeholder="อุปกรณ์อื่นที่ต้องการ"
-                        [formControlName]="'additional_equipment'">
+                    <input matInput placeholder="อุปกรณ์อื่นที่ต้องการ" [formControlName]="'additional_equipment'">
                 </mat-form-field>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>วัน เวลา สถานที่นัดหมาย</mat-label>
                     <input matInput placeholder="อุปกรณ์อื่นที่ต้องการ" [formControlName]="'meeting_details'">
                 </mat-form-field>
             </div>
-            
+
             <!-- Current Hospital Equipment Section -->
             <div class="mb-4">
                 <h3 class="text-lg font-bold text-gray-500 px-2 mb-2">
                     ข้อมูลการใช้เครื่องปัจจุบันของโรงพยาบาล
                 </h3>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>รุ่นที่ใช้อยู่</mat-label>
                     <input matInput placeholder="รุ่นที่ใช้อยู่" [formControlName]="'current_machine_model'">
                 </mat-form-field>
-                
+
                 <div class="w-full p-2" *ngIf="this.type === 'Echocardiogram'">
                     <mat-form-field class="w-full">
                         <mat-label>Work Station</mat-label>
                         <input matInput placeholder="Work Station" [formControlName]="'current_work_station'">
                     </mat-form-field>
                 </div>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>ปัญหาหรือความต้องการที่ใช้อยู่</mat-label>
                     <input matInput placeholder="ปัญหาหรือความต้องการที่ใช้อยู่"
                         [formControlName]="'current_usage_problem'">
                 </mat-form-field>
             </div>
-            
+
             <!-- Competitor Information Section -->
             <div class="mb-4">
                 <h3 class="text-lg font-bold text-gray-500 px-2 mb-2">
                     ข้อมูลการเครื่องคู่แข่งที่นำเสนอ
                 </h3>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>รุ่นที่นำเสนอ</mat-label>
                     <input matInput placeholder="รุ่นที่นำเสนอ" [formControlName]="'competitor_model'">
                 </mat-form-field>
-                
-                <div class="w-full p-2" *ngIf="this.type === 'Echocardiogram' || this.type === 'Ultrasound Imaging' || this.type === 'rc'">
+
+                <div class="w-full p-2"
+                    *ngIf="this.type === 'Echocardiogram' || this.type === 'Ultrasound Imaging' || this.type === 'rc'">
                     <mat-form-field class="w-full">
                         <mat-label>หัวตรวจ</mat-label>
                         <input matInput placeholder="หัวตรวจ" [formControlName]="'competitor_transducer'">
                     </mat-form-field>
                 </div>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>Feedback ลูกค้า</mat-label>
                     <input matInput placeholder="ปัญหาหรือความต้องการที่ใช้อยู่"
                         [formControlName]="'customer_feedback'">
                 </mat-form-field>
             </div>
-            
+
             <!-- Customer Information Section -->
             <div class="mb-4">
                 <h3 class="text-lg font-bold text-gray-500 px-2 mb-2">
                     ข้อมูลลูกค้า
                 </h3>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>ชื่อโรงพยาบาล</mat-label>
                     <input matInput [formControl]="clientFilter" [matAutocomplete]="clientAutoComplete"
@@ -139,7 +141,7 @@
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>ประเภทโรงพยาบาล</mat-label>
                     <mat-select [formControlName]="'customer_type'" placeholder="">
@@ -148,7 +150,7 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>จังหวัด</mat-label>
                     <mat-select [formControlName]="'province'" placeholder="">
@@ -157,7 +159,7 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>แผนก</mat-label>
                     <mat-select [formControlName]="'department'" placeholder="">
@@ -166,24 +168,23 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>ชั้น</mat-label>
                     <input matInput placeholder="ชั้น" [formControlName]="'floor'">
                 </mat-form-field>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>แพทย์ KOL</mat-label>
                     <input matInput placeholder="แพทย์ KOL" [formControlName]="'kol_doctor'">
                 </mat-form-field>
-                
+
                 <mat-form-field class="w-full p-2">
                     <mat-label>ข้อมูลอื่น ๆ เพิ่มเติมที่ว่าจะช่วยให้ได้งาน</mat-label>
-                    <textarea matInput [placeholder]="''" [rows]="4"
-                        formControlName="additional_info"></textarea>
+                    <textarea matInput [placeholder]="''" [rows]="4" formControlName="additional_info"></textarea>
                 </mat-form-field>
             </div>
-            
+
             <!-- Machine Models Section -->
             <div class="w-full p-2 mb-4">
                 <h3 class="text-lg font-bold text-gray-500">รายการเครื่องที่ต้องการ</h3>
@@ -215,7 +216,7 @@
                     </mat-autocomplete>
                 </mat-form-field>
             </div>
-            
+
             <div class="w-full p-2 mb-4">
                 <h3 class="text-lg font-bold text-gray-500">รายการหัวตรวจที่ต้องการ</h3>
                 <div formArrayName="transducers">
@@ -247,7 +248,7 @@
                 </mat-form-field>
             </div>
         </form>
-        
+
         <!-- Action Buttons -->
         <div class="flex flex-col p-4">
             <button class="w-full mb-2" mat-flat-button [color]="'primary'" (click)="onSubmit()">
