@@ -110,7 +110,7 @@ export class LineService {
   }
 
    lineRegister(data: any): Observable<any> {
-    return this._httpClient.post(environment.baseURL + '/api/registere_line', data);
+    return this._httpClient.post(environment.baseURL + '/api/register_line', data);
   }
 
 
