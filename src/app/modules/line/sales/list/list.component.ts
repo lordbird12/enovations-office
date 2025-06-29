@@ -171,6 +171,9 @@ export class ListComponent implements OnInit, AfterViewInit {
     openNews() {
         this._router.navigate(['line/news']);
     }
+    openRate(id) {
+        this._router.navigate(['line/rate/' + id]);
+    }
     applySearch() {
         this.rerender()
     }

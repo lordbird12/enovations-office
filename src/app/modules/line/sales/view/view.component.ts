@@ -1431,7 +1431,7 @@ export class ViewOrderComponent implements OnInit {
         }
     }
 
-        goBack() {
+    goBack() {
         // Implement your back navigation logic here
         this.location.back(); // Example using Location service
     }

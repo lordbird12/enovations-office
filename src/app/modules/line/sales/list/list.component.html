@@ -94,6 +94,10 @@
                                 <mat-icon svgIcon="heroicons_solid:eye"></mat-icon>
                                 <span>รายละเอียด</span>
                             </button>
+                            <button mat-menu-item (click)="openRate(item.id)" *ngIf="item.status === 'Returned'">
+                               <mat-icon>rate_review</mat-icon>
+                                <span>Win/Lose</span>
+                            </button>
                             <button mat-menu-item (click)="deleteorder(item.id)">
                                 <mat-icon>delete</mat-icon>
                                 <span>ลบ</span>

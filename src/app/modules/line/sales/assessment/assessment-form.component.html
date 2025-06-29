@@ -1,0 +1,40 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <div
+        class="sticky top-0 z-10 bg-white px-4 py-3 border-b border-gray-200 shadow-sm flex justify-between items-center">
+        <button (click)="goBack()" class="flex items-center text-gray-600 hover:text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                    clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <h2 class="text-xl font-bold text-gray-800 flex items-center mx-auto">
+            ประเมินผลการสั่งซื้อ
+        </h2>
+    </div>
+    <div class="p-4 w-full max-w-md mx-auto bg-white rounded-lg shadow space-y-4" [formGroup]="form">
+
+
+        <!-- สถานะ Win / Lost -->
+        <mat-radio-group formControlName="status" class="flex flex-col gap-2">
+            <mat-radio-button value="Win" class="text-green-700">✔️ ชนะ (Win)</mat-radio-button>
+            <mat-radio-button value="Lost" class="text-red-700">❌ ไม่ชนะ (Lost)</mat-radio-button>
+        </mat-radio-group>
+
+        <!-- ช่องเหตุผล -->
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>เหตุผลเพิ่มเติม</mat-label>
+            <textarea matInput rows="4" class="text-sm" placeholder="กรอกเหตุผลที่เกี่ยวข้อง..." formControlName="note">
+    </textarea>
+        </mat-form-field>
+
+        <!-- ปุ่มบันทึก -->
+        <div class="flex justify-end">
+            <button mat-flat-button color="primary" (click)="onSubmit()"
+                class="w-fit">
+                บันทึก
+            </button>
+        </div>
+    </div>
+</div>

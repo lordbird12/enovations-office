@@ -61,6 +61,21 @@ export class PageService {
             );
     }
 
+    createWinLost(data: FormData): Observable<any> {
+        const token = localStorage.getItem('token');
+        // สร้าง header ใหม่พร้อม token
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
+        return this._httpClient
+            .post<any>(environment.baseURL + '/api/win_lost', data, { headers })
+            .pipe(
+                tap((result) => {
+                    this._data.next(result);
+                })
+            );
+    }
+
     getById(id: any): Observable<any> {
         const token = localStorage.getItem('token');
 

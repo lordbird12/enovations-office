@@ -11,6 +11,7 @@ import { CalendarOrderLineComponent } from './calendar/list/list.component';
 import { LineRegisterComponent } from './register/register.component';
 import { CalendarComponent } from './sales/calendar/calendar.component';
 import { CalendarTimelineComponent } from './sales/calendar-timeline/calendar-timeline.component';
+import { AssessmentFormComponent } from './sales/assessment/assessment-form.component';
 
 
 export default [
@@ -210,6 +211,10 @@ export default [
             {
                 path: 'calendar-timeline',
                 component: CalendarTimelineComponent,
+            },
+                {
+                path: 'rate/:id',
+                component: AssessmentFormComponent,
             },
         ],
     },
