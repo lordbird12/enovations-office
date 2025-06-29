@@ -123,7 +123,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             localStorage.setItem('user', JSON.stringify(resp.data));
             localStorage.setItem('token', resp.token);
 
-            this.loadTable();
+            this.loadTable(resp.token);
             // ✅ รอให้ Angular render DOM เสร็จ ก่อน trigger
             Promise.resolve().then(() => {
                 this.dtTrigger.next(this.dtOptions);
@@ -166,7 +166,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
 
     pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0, total: 0 };
-    loadTable(): void {
+    loadTable(token: any): void {
         const that = this;
         this.dtOptions = {
             pagingType: "full_numbers",

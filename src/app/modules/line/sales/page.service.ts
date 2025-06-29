@@ -176,9 +176,9 @@ export class PageService {
      * @param search
      */
 
-    getPage(dataTablesParameters: any): Observable<DataTablesResponse> {
+    getPage(dataTablesParameters: any ): Observable<DataTablesResponse> {
         // ดึง token จาก localStorage
-        const token = localStorage.getItem('user');
+        const token = localStorage.getItem('token');
 
         // สร้าง header ใหม่พร้อม token
         const headers = new HttpHeaders({
