@@ -382,8 +382,6 @@ export class DialogAddProductComponent implements OnInit {
     }
 
     saveData(): void {
-        console.log('form', this.form.value);
-
         const dialogRef = this._fuseConfirmationService.open({
             title: 'บันทึกข้อมูล',
             message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
@@ -408,10 +406,6 @@ export class DialogAddProductComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
                 let formValue = this.form.value;
-
-                // formValue.start_date = DateTime.fromISO(this.form.value.start_date).toFormat('yyyy-MM-dd')
-                // formValue.end_date = DateTime.fromISO(this.form.value.end_date).toFormat('yyyy-MM-dd')
-
                 this._service.updateMachineModelProduct(formValue).subscribe({
                     next: (resp: any) => {
                         this.dialogRef.close(resp);
@@ -446,25 +440,6 @@ export class DialogAddProductComponent implements OnInit {
         });
     }
 
-    //   protected _filterCar() {
-
-    //     if (!this.itemData.products) {
-    //       return;
-    //     }
-    //     let search = this.productFilter.value;
-    //     if (!search) {
-    //       // this.filterProduct.next(this.itemData.products.slice());
-    //       return;
-    //     } else {
-
-    //       search = search.toString().toLowerCase();
-    //     }
-    //     this.filterProduct.next(
-    //       this.itemData.products.filter(item =>
-    //         item.name.toLowerCase().includes(search)
-    //       )
-    //     );
-    //   }
     protected _filterCar() {
         if (!this.productData) {
             return;
