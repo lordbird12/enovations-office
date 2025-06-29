@@ -73,13 +73,14 @@ export class LineRegisterComponent implements OnInit {
 
     const payload = {
       user_id: this.userIdFromLine,
-      user_no: this.form.value.user_no
+      user_no: this.form.value.user_no,
+      image: this.userIdFromLine
     };
 
     this._serviceLine.lineRegister(payload).subscribe({
       next: (resp: any) => {
         console.log('Register success:', resp);
-        this._router.navigate(['line/list/booking']);
+        // this._router.navigate(['line/list/booking']);
       },
       error: (err) => {
         console.error('Register failed:', err);
