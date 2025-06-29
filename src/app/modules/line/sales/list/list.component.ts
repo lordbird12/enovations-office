@@ -255,6 +255,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
     set_status(status: string): void {
         this.selectedStatus = status;
+        this.currentStatus = status;
         this.rerender();
     }
 
@@ -290,5 +291,9 @@ export class ListComponent implements OnInit, AfterViewInit {
         // }, 200);
         this._changeDetectorRef.detectChanges();
     }
+
+    // ใน component.ts
+    currentStatus: string = '';
+
 
 }

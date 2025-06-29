@@ -1,6 +1,5 @@
 <div class="flex flex-col flex-auto min-w-0">
     <!-- Header -->
-    <!-- Loader -->
     <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
         <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
     </div>
@@ -14,47 +13,11 @@
                     class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
                     รายการจองเครื่อง
                 </h2>
-                <mat-icon svgIcon="heroicons_outline:calendar-days" class="icon-size-7" (click)="goToCalendar()"></mat-icon>
+                <mat-icon svgIcon="heroicons_outline:calendar-days" class="icon-size-7"
+                    (click)="goToCalendar()"></mat-icon>
             </div>
-            <!-- Action Buttons -->
-            <div class="flex    flex-row gap-2 sm:gap-3 w-full sm:w-auto">
-                <!-- Status Filter Dropdown -->
-                <div class="relative flex-1 sm:flex-none">
-                    <button mat-button [matMenuTriggerFor]="menu_status" mat-flat-button [color]="'primary'"
-                        class="w-full sm:w-auto h-12 flex items-center justify-center gap-1 px-4">
-                        <mat-icon svgIcon="heroicons_outline:adjustments-horizontal" class="sm:mr-1"></mat-icon>
-                        <span class="truncate hidden xs:inline">สถานะ</span>
-                        <mat-icon svgIcon="heroicons_outline:chevron-down" class="ml-1"></mat-icon>
-                    </button>
-
-                    <mat-menu #menu_status="matMenu" class="filter-menu bg-slate-100">
-                        <button mat-menu-item (click)="set_status('')" class="flex items-center gap-2">
-                            <mat-icon svgIcon="heroicons_outline:list-bullet"></mat-icon>
-                            <span>ทั้งหมด</span>
-                        </button>
-                        <button mat-menu-item (click)="set_status('Ordered')" class="flex items-center gap-2">
-                            <mat-icon svgIcon="heroicons_outline:clock" class="text-yellow-500"></mat-icon>
-                            <span>รออนุมัติ</span>
-                        </button>
-                        <button mat-menu-item (click)="set_status('Confirm')" class="flex items-center gap-2">
-                            <mat-icon svgIcon="heroicons_outline:check-circle" class="text-green-500"></mat-icon>
-                            <span>อนุมัติ</span>
-                        </button>
-                        <button mat-menu-item (click)="set_status('Reject')" class="flex items-center gap-2">
-                            <mat-icon svgIcon="heroicons_outline:x-circle" class="text-red-500"></mat-icon>
-                            <span>ไม่อนุมัติ</span>
-                        </button>
-                        <button mat-menu-item (click)="set_status('Finish')" class="flex items-center gap-2">
-                            <mat-icon svgIcon="heroicons_outline:arrow-path" class="text-blue-500"></mat-icon>
-                            <span>รอคืน</span>
-                        </button>
-                        <button mat-menu-item (click)="set_status('Returned')" class="flex items-center gap-2">
-                            <mat-icon svgIcon="heroicons_outline:check-badge" class="text-purple-500"></mat-icon>
-                            <span>เสร็จสิ้น</span>
-                        </button>
-                    </mat-menu>
-                </div>
-
+            <!-- Action Buttons - Desktop Only -->
+            <div class="hidden sm:flex flex-row gap-2 sm:gap-3 w-full sm:w-auto">
                 <!-- Add Booking Button -->
                 <div class="relative flex-1 sm:flex-none">
                     <button mat-button [matMenuTriggerFor]="menu" mat-flat-button [color]="'primary'"
@@ -177,7 +140,7 @@
             </div>
         </div>
         <!-- Pagination Section -->
-        <div class="flex flex-col items-center gap-2 mt-6 text-gray-700 text-sm">
+        <div class="flex flex-col items-center gap-2 mt-6 text-gray-700 text-sm mb-20">
             <div class="text-center">
                 แสดงหน้า <span class="font-semibold">{{ pages.current_page }}</span>
                 จาก <span class="font-semibold">{{ pages.last_page }}</span>
@@ -205,7 +168,7 @@
         <!-- Desktop Table View -->
         <div class="hidden sm:block relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
             <div class="flex flex-col flex-auto p-5 sm:overflow-y-auto">
-                <table datatable  [dtTrigger]="dtTrigger"  [dtOptions]="dtOptions" id="booking-list"
+                <table datatable [dtTrigger]="dtTrigger" [dtOptions]="dtOptions" id="booking-list"
                     class="table row-border hover w-full bg-white whitespace-nowrap">
                     <thead>
                         <tr>
@@ -290,4 +253,41 @@
             </div>
         </div>
     </div>
+
+    <!-- Mobile Bottom Tab Bar - Sticky -->
+    <nav class="sm:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50">
+        <div class="flex justify-between items-center h-16 px-2">
+            <!-- Tab Buttons -->
+            <button (click)="set_status('')" class="flex-1 flex flex-col items-center justify-center h-full px-2"
+                [ngClass]="{'text-primary-600 border-t-2 border-primary-600': currentStatus === ''}">
+                <mat-icon svgIcon="heroicons_outline:list-bullet" class="icon-size-6"></mat-icon>
+                <span class="text-xs mt-1">ทั้งหมด</span>
+            </button>
+
+            <button (click)="set_status('Ordered')" class="flex-1 flex flex-col items-center justify-center h-full px-2"
+                [ngClass]="{'text-yellow-600 border-t-2 border-yellow-600': currentStatus === 'Ordered'}">
+                <mat-icon svgIcon="heroicons_outline:clock" class="icon-size-6"></mat-icon>
+                <span class="text-xs mt-1">รออนุมัติ</span>
+            </button>
+
+            <button (click)="set_status('Confirm')" class="flex-1 flex flex-col items-center justify-center h-full px-2"
+                [ngClass]="{'text-green-600 border-t-2 border-green-600': currentStatus === 'Confirm'}">
+                <mat-icon svgIcon="heroicons_outline:check-circle" class="icon-size-6"></mat-icon>
+                <span class="text-xs mt-1">อนุมัติ</span>
+            </button>
+
+            <button (click)="set_status('Finish')" class="flex-1 flex flex-col items-center justify-center h-full px-2"
+                [ngClass]="{'text-blue-600 border-t-2 border-blue-600': currentStatus === 'Finish'}">
+                <mat-icon svgIcon="heroicons_outline:arrow-path" class="icon-size-6"></mat-icon>
+                <span class="text-xs mt-1">รอคืน</span>
+            </button>
+
+            <button (click)="set_status('Returned')"
+                class="flex-1 flex flex-col items-center justify-center h-full px-2"
+                [ngClass]="{'text-purple-600 border-t-2 border-purple-600': currentStatus === 'Returned'}">
+                <mat-icon svgIcon="heroicons_outline:check-badge" class="icon-size-6"></mat-icon>
+                <span class="text-xs mt-1">เสร็จสิ้น</span>
+            </button>
+        </div>
+    </nav>
 </div>
