@@ -98,21 +98,21 @@ export class ListComponent implements OnInit, AfterViewInit {
 
         try {
             // 🔸 1. Init LIFF
-            // await liff.init({ liffId: '2007657331-oyjNGORd' });
+            await liff.init({ liffId: '2007657331-oyjNGORd' });
 
             // // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
-            // if (!liff.isLoggedIn()) {
-            //     // liff.login({ redirectUri: window.location.href });
-            //     return;
-            // }
+            if (!liff.isLoggedIn()) {
+                liff.login({ redirectUri: window.location.href });
+                return;
+            }
 
             // 🔸 3. login แล้ว → get profile
-            // const profile = await liff.getProfile();
-            // this.userIdFromLine = profile.userId;
-            // this.displayName = profile.displayName;
-            // this.pictureUrl = profile.pictureUrl;
+            const profile = await liff.getProfile();
+            this.userIdFromLine = profile.userId;
+            this.displayName = profile.displayName;
+            this.pictureUrl = profile.pictureUrl;
 
-            this.userIdFromLine = 'U2a2bcd2365d0be23f9ab13e75bd82717';
+            // this.userIdFromLine = 'U2a2bcd2365d0be23f9ab13e75bd82717';
             // ✅ Debug
             console.log('LINE userId:', this.userIdFromLine);
 
