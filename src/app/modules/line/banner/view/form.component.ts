@@ -78,7 +78,7 @@ export class NewsDetailComponent implements OnInit {
     }
 
     async ngOnInit() {
-        await this.initializeLiff();
+        // await this.initializeLiff();
         this.GetById(this.Id)
     }
 
@@ -94,27 +94,4 @@ export class NewsDetailComponent implements OnInit {
     goBack(): void {
         this.location.back();
     }
-
-    async initializeLiff(): Promise<void> {
-        try {
-            await liff.init({ liffId: '2007657331-oyjNGORd' }); // 🔴 ใส่ LIFF ID ของคุณตรงนี้
-
-            if (!liff.isLoggedIn()) {
-                liff.login(); // auto redirect ไป login
-                return;
-            } 
-
-    
-            const profile = await liff.getProfile();
-            this.userIdFromLine = profile.userId;
-            this.displayName = profile.displayName;
-            this.pictureUrl = profile.pictureUrl;
-
-            console.log('✅ LINE Profile:', profile);
-
-        } catch (err) {
-            console.error('❌ LINE LIFF Error:', err);
-        }
-    }
-
 }
