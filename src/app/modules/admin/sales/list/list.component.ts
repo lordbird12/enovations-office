@@ -29,6 +29,7 @@ import { Router } from '@angular/router';
 import { PictureComponent } from '../../picture/picture.component';
 import { FormReportComponent } from '../../product/form-report/form-report.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'employee-list-sales',
@@ -59,6 +60,7 @@ import { MatMenuModule } from '@angular/material/menu';
 export class ListComponent implements OnInit, AfterViewInit {
     @ViewChild(DataTableDirective)
     dtElement!: DataTableDirective;
+    dtTrigger: Subject<any> = new Subject();
     isLoading: boolean = false;
     dtOptions: DataTables.Settings = {};
     positions: any[];
@@ -82,6 +84,9 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.dtTrigger.next(this.dtOptions);
+        }, 200);
         this._changeDetectorRef.detectChanges();
     }
 
@@ -90,7 +95,7 @@ export class ListComponent implements OnInit, AfterViewInit {
         this._router.navigate(['admin/sales/view/' + element.id]);
     }
     addElement(data: any) {
-        if(data === 'Echocardiogram') {
+        if (data === 'Echocardiogram') {
             this._router.navigate(['admin/sales/form/echocardiogram']);
         } else if (data === 'Ultrasound Imaging') {
             this._router.navigate(['admin/sales/form/ultrasound-imaging']);
@@ -120,21 +125,21 @@ export class ListComponent implements OnInit, AfterViewInit {
                     this.dataRow = resp.data;
                     console.log(this.dataRow)
                     this.pages.current_page = resp.current_page;
-                        this.pages.last_page = resp.last_page;
-                        this.pages.per_page = resp.per_page;
-                        if (resp.current_page > 1) {
-                            this.pages.begin =
-                                resp.per_page * resp.current_page - 1;
-                        } else {
-                            this.pages.begin = 0;
-                        }
+                    this.pages.last_page = resp.last_page;
+                    this.pages.per_page = resp.per_page;
+                    if (resp.current_page > 1) {
+                        this.pages.begin =
+                            resp.per_page * resp.current_page - 1;
+                    } else {
+                        this.pages.begin = 0;
+                    }
 
-                        callback({
-                            recordsTotal: resp.total,
-                            recordsFiltered: resp.total,
-                            data: [],
-                        });
-                        this._changeDetectorRef.markForCheck();
+                    callback({
+                        recordsTotal: resp.total,
+                        recordsFiltered: resp.total,
+                        data: [],
+                    });
+                    this._changeDetectorRef.markForCheck();
                 });
             },
             columns: [
@@ -148,6 +153,9 @@ export class ListComponent implements OnInit, AfterViewInit {
             ],
         };
     }
+
+    
+
 
     deleteElement() {
         // เขียนโค้ดสำหรับการลบออกองคุณ
@@ -197,9 +205,9 @@ export class ListComponent implements OnInit, AfterViewInit {
 
     rerender(): void {
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.ajax.reload();
+            dtInstance.ajax.reload();
         });
-      }
+    }
 
     deleteorder(id: any) {
         this._service.delete(id).subscribe({

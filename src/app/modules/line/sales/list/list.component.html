@@ -205,7 +205,7 @@
         <!-- Desktop Table View -->
         <div class="hidden sm:block relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
             <div class="flex flex-col flex-auto p-5 sm:overflow-y-auto">
-                <table datatable [dtOptions]="dtOptions" id="booking-list"
+                <table datatable  [dtTrigger]="dtTrigger"  [dtOptions]="dtOptions" id="booking-list"
                     class="table row-border hover w-full bg-white whitespace-nowrap">
                     <thead>
                         <tr>

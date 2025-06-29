@@ -177,11 +177,19 @@ export class PageService {
      */
 
     getPage(dataTablesParameters: any): Observable<DataTablesResponse> {
+        // ดึง token จาก localStorage
+        const token = localStorage.getItem('user');
+
+        // สร้าง header ใหม่พร้อม token
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
+
         return this._httpClient
             .post(
-                environment.baseURL + '/api/orders_page',
+                `${environment.baseURL}/api/orders_page`,
                 dataTablesParameters,
-                this.httpOptionsFormdata
+                { headers } // ใช้ headers แบบ custom
             )
             .pipe(
                 switchMap((response: any) => {
@@ -189,6 +197,7 @@ export class PageService {
                 })
             );
     }
+
 
     getClient(): Observable<any> {
         return this._httpClient

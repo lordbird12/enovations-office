@@ -32,7 +32,7 @@ import { PictureComponent } from '../picture/picture.component';
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import liff from '@line/liff';
 import { LineService } from '../../line.service';
-import { firstValueFrom, timeout } from 'rxjs';
+import { firstValueFrom, Subject, timeout } from 'rxjs';
 @Component({
     selector: 'line-list-sales',
     templateUrl: './list.component.html',
@@ -66,6 +66,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     @ViewChild(DataTableDirective)
     dtElement!: DataTableDirective;
+    dtTrigger: Subject<any> = new Subject();
     isLoading: boolean = false;
     dtOptions: DataTables.Settings = {};
     positions: any[];
@@ -94,48 +95,44 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
 
     async ngOnInit(): Promise<void> {
+
         try {
             // 🔸 1. Init LIFF
-            await liff.init({ liffId: '2007657331-oyjNGORd' });
+            // await liff.init({ liffId: '2007657331-oyjNGORd' });
 
-            // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
-            if (!liff.isLoggedIn()) {
-                // liff.login({ redirectUri: window.location.href });
-                return;
-            }
+            // // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
+            // if (!liff.isLoggedIn()) {
+            //     // liff.login({ redirectUri: window.location.href });
+            //     return;
+            // }
 
             // 🔸 3. login แล้ว → get profile
-            const profile = await liff.getProfile();
-            this.userIdFromLine = profile.userId;
-            this.displayName = profile.displayName;
-            this.pictureUrl = profile.pictureUrl;
+            // const profile = await liff.getProfile();
+            // this.userIdFromLine = profile.userId;
+            // this.displayName = profile.displayName;
+            // this.pictureUrl = profile.pictureUrl;
 
+            this.userIdFromLine = 'U2a2bcd2365d0be23f9ab13e75bd82717';
             // ✅ Debug
             console.log('LINE userId:', this.userIdFromLine);
 
             // 🔸 4. เรียก login API
             const resp: any = await firstValueFrom(
-                this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(5000))
+                this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(1000))
             );
-            
-            if (resp.status === true) {
-                // 🔸 สำเร็จ → บันทึก user แล้วทำงานต่อ
-                localStorage.setItem('user', JSON.stringify(resp.data));
-                this.loadTable()
-                this._changeDetectorRef.markForCheck();
-            } else {
-                
-                // 🔸 ไม่เจอ user → ไปสมัคร
-                this._router.navigate(['/register'], {
-                    queryParams: { user_id: this.userIdFromLine,picture: this.pictureUrl },
-                });
-                return;
-                
-            }
+            localStorage.setItem('user', JSON.stringify(resp.data));
+            localStorage.setItem('token', resp.token);
+
+            this.loadTable();
+            // ✅ รอให้ Angular render DOM เสร็จ ก่อน trigger
+            Promise.resolve().then(() => {
+                this.dtTrigger.next(this.dtOptions);
+            });
+
+            this._changeDetectorRef.markForCheck();
 
         } catch (err) {
             console.error('❌ LINE Login Failed:', err);
-            alert(JSON.stringify(err))
             // 🔸 fallback redirect ไปสมัคร
             if (this.userIdFromLine) {
                 this._router.navigate(['/register'], {
@@ -145,11 +142,6 @@ export class ListComponent implements OnInit, AfterViewInit {
             }
         }
     }
-
-    ngAfterViewInit(): void {
-        this._changeDetectorRef.detectChanges();
-    }
-
     // เพิ่มเมธอด editElement(element) และ deleteElement(element)
     goToCalendar() {
         this._router.navigate(['line/calendar-order/list']);
@@ -293,4 +285,12 @@ export class ListComponent implements OnInit, AfterViewInit {
     getPageRange(): void {
 
     }
+
+    ngAfterViewInit(): void {
+        // setTimeout(() => {
+        //     this.dtTrigger.next(this.dtOptions);
+        // }, 200);
+        this._changeDetectorRef.detectChanges();
+    }
+
 }
