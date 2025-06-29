@@ -432,6 +432,7 @@ export class FormComponent implements OnInit {
     }
 
     ngOnInit() {
+        alert(this.pageType);
         if (this.pageType === 'EDIT') {
             this.activatedRoute.params.subscribe(params => {
                 this.isForm = false;
