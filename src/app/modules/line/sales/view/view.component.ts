@@ -1,5 +1,5 @@
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule, Location, NgClass } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -276,6 +276,7 @@ export class ViewOrderComponent implements OnInit {
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
         private _snackBar: MatSnackBar,
+        private location: Location
 
     ) {
         this.user = JSON.parse(localStorage.getItem('user'))
@@ -1428,6 +1429,11 @@ export class ViewOrderComponent implements OnInit {
             default:
                 return 'รอคืน';
         }
+    }
+
+        goBack() {
+        // Implement your back navigation logic here
+        this.location.back(); // Example using Location service
     }
 }
 

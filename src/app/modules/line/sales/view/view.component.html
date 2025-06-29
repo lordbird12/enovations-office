@@ -1,20 +1,44 @@
 <div class="flex flex-col flex-auto min-w-0">
-    <!-- Header -->
+    <!-- Header with back button -->
     <div
-        class="flex flex-col sm:flex-row items-center justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
-        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-            {{ type ? 'รายละเอียดใบจอง ' + type : 'รายละเอียดการจอง' }}
+        class="sticky top-0 z-10 bg-white px-4 py-3 border-b border-gray-200 shadow-sm flex justify-between items-center">
+        <button (click)="goBack()" class="flex items-center text-gray-600 hover:text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                    clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <h2 class="text-xl font-bold text-gray-800 flex items-center mx-auto">
+            รายละเอียดการจอง {{formData.value.code}}
         </h2>
         <div class="flex flex-row flex-wrap gap-2 mt-2 md:mt-0">
-            <button class="px-6 bg-yellow-500" mat-flat-button color="primary" (click)="openDialogAddProduct()"
-                *ngIf="this.user?.team_role !== 'User'">จัดการเครื่อง</button>
-            <button class="px-6 bg-green-700" mat-flat-button color="primary" (click)="openDialogApprove()"
-                *ngIf="this.user?.team_role !== 'User'">อัปเดทสถานะ</button>
-            <button class="px-6" mat-flat-button color="primary" (click)="onEdit(formData.value.id)">แก้ไข</button>
-            <button class="px-6" mat-flat-button color="accent" (click)="onBack()">ย้อนกลับ</button>
+            <!-- Main Menu Button -->
+            <mat-icon svgIcon="heroicons_outline:bars-3" [matMenuTriggerFor]="actionMenu"></mat-icon>
+
+            <!-- Menu List -->
+            <mat-menu #actionMenu="matMenu">
+                <button mat-menu-item *ngIf="user?.team_role !== 'User'" (click)="openDialogAddProduct()">
+                    <mat-icon>build</mat-icon>
+                    <span>จัดการเครื่อง</span>
+                </button>
+                <button mat-menu-item *ngIf="user?.team_role !== 'User'" (click)="openDialogApprove()">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>อัปเดทสถานะ</span>
+                </button>
+                <button mat-menu-item (click)="onEdit(formData.value.id)"
+                    *ngIf="user?.id === itemData?.user_id || user?.team_role === 'Boss'">
+                    <mat-icon>edit</mat-icon>
+                    <span>แก้ไข</span>
+                </button>
+                <button mat-menu-item (click)="onBack()">
+                    <mat-icon>arrow_back</mat-icon>
+                    <span>ย้อนกลับ</span>
+                </button>
+            </mat-menu>
         </div>
     </div>
-
     <!-- Main Content -->
     <div class="flex-auto p-6 sm:p-10">
         <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-3">
@@ -30,8 +54,32 @@
                 <p><strong>อุปกรณ์เพิ่มเติม:</strong> {{ formData.value.additional_equipment }}</p>
                 <p><strong>วัน เวลา สถานที่นัดหมาย:</strong> {{ formData.value.meeting_details }}</p>
                 <p><strong>วันที่ขอ:</strong> {{ formData.value.created_at | date:'dd-MM-yyyy' }}</p>
-                <p><strong>สถานะ:</strong> <span
-                        class="bg-green-50 rounded-md text-md px-2 mb-2 mx-2 py-1 text-green-400 font-semibold">{{formData.value.status}}</span>
+                <p><strong>สถานะ:</strong>
+                    &nbsp;
+                    <span *ngIf="formData.value.status === 'Ordered'"
+                        class="bg-yellow-200 p-1 rounded-md text-yellow-800 font-normal">
+                        รออนุมัติ
+                    </span>
+                    <span *ngIf="formData.value.status === 'Reject'"
+                        class="bg-red-200 p-1 rounded-md text-red-800 font-normal">
+                        ไม่อนุมัติ
+                    </span>
+                    <span *ngIf="formData.value.status === 'Confirm'"
+                        class="bg-green-200 p-1 rounded-md text-green-800 font-normal text-center">
+                        อนุมัติ
+                    </span>
+                    <span *ngIf="formData.value.status === 'Approve'"
+                        class="bg-green-200 p-1 rounded-md text-green-800 font-normal text-center">
+                        รอรับของ
+                    </span>
+                    <span *ngIf="formData.value.status === 'Finish'"
+                        class="bg-blue-200 p-1 rounded-md text-blue-800 font-normal text-center">
+                        รอคืน
+                    </span>
+                    <span *ngIf="formData.value.status === 'Returned'"
+                        class="bg-blue-200 p-1 rounded-md text-purple-800 font-normal text-center">
+                        เสร็จสิ้น
+                    </span>
                 </p>
             </div>
             <!-- ข้อมูลโรงพยาบาล -->
@@ -175,7 +223,7 @@
                                 <div class="flex items-center">
                                     <mat-checkbox [(ngModel)]="product.selected"
                                         (change)="onSelectMultipleTransducerProducts($event, product)" color="primary"
-                                        [disabled]="product?.return_products?.status === 'approved' || (product?.return_products?.status === 'waiting_approve' && this.user?.team_role !== 'User')"
+                                        [disabled]="product?.return_products?.status === 'approved' || (product?.return_products?.status === 'waiting_approve' && user?.team_role !== 'User')"
                                         class="mr-2">
                                     </mat-checkbox>
                                     <span class="font-medium">{{ product?.product?.name ?? '-' }}</span>
