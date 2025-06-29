@@ -1165,6 +1165,9 @@ export class ViewOrderComponent implements OnInit {
                     maxHeight: '100vh',
                     width: '80vh',
                     maxWidth: '100vh',
+                    autoFocus: false, // ป้องกัน keyboard เด้งทันที
+                    restoreFocus: false, // ป้องกันการพยายาม focus กลับหลังปิด dialog
+                    panelClass: 'custom-dialog-container',
                     data: {
                         order: this.itemData,
                         product: machine_model
