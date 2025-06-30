@@ -115,7 +115,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             // this.userIdFromLine = 'U2a2bcd2365d0be23f9ab13e75bd82717';
             // ✅ Debug
             console.log('LINE userId:', this.userIdFromLine);
-
+            alert(this.userIdFromLine)
             // 🔸 4. เรียก login API
             const resp: any = await firstValueFrom(
                 this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(1000))
@@ -132,6 +132,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             this._changeDetectorRef.markForCheck();
 
         } catch (err) {
+            alert(err)
             console.error('❌ LINE Login Failed:', err);
             // 🔸 fallback redirect ไปสมัคร
             if (this.userIdFromLine) {
