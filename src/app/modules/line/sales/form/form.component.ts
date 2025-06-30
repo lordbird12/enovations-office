@@ -423,6 +423,7 @@ export class FormComponent implements OnInit {
             update_by: null,
             start_date: null,
             end_date: null,
+            application_special_list: 'Yes',
             machine_models: this._fb.array([]),
             transducers: this._fb.array([]),
             memberIds: [],

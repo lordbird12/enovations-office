@@ -413,7 +413,8 @@ export class FormComponent implements OnInit {
             transducers: this._fb.array([]),
             memberIds: [],
             tds: [],
-            client_name: null
+            client_name: null,
+            application_special_list: 'Yes'
         });
     }
 

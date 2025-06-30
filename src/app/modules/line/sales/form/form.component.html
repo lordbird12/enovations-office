@@ -185,7 +185,7 @@
                 </div>
                 <div class="w-full p-2">
                     <mat-form-field class="w-full">
-                        <mat-label>Work Station</mat-label>
+                        <mat-label>รุ่นเครื่อง</mat-label>
                         <mat-select [formControlName]="'work_station_id'" placeholder="">
                             <mat-option *ngFor="let item of filterWorkStation" [value]="item.id">
                                 {{item.name}}
@@ -253,6 +253,17 @@
                     <input matInput placeholder="ปัญหาหรือความต้องการที่ใช้อยู่"
                         [formControlName]="'customer_feedback'">
                 </mat-form-field>
+            </div>
+
+            <div class="w-full px-6 mb-6 md:mb-0 mt-2">
+                <span class="text-xl font-bold text-gray-500">Application Specialist</span>
+                <div class="md:min-w-full px-3 mb-6 md:mb-0">
+                    <mat-radio-group aria-label="Select an option" formControlName="application_special_list">
+                        <!-- <mat-label></mat-label> -->
+                        <mat-radio-button value="Yes">ต้องการ</mat-radio-button>
+                        <mat-radio-button value="No">ไม่ต้องการ</mat-radio-button>
+                    </mat-radio-group>
+                </div>
             </div>
 
 
