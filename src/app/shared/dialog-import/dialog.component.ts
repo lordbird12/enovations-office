@@ -104,12 +104,10 @@ export class DialogImportForm implements OnInit {
     confirmation.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
         const formData = new FormData();
-        console.log(this.Formfiles);
-
-        formData.append('files', this.Formfiles);
+        formData.append('file', this.Formfiles);
         // เรียก API อัปโหลด
         if (this.data.type === 'Product') {
-          const path = 'upload_product'
+          const path = 'import_products'
           this._Service.uploadImport(formData, path).subscribe({
             next: (resp: any) => {
               console.log('อัปโหลดสำเร็จ', resp);
@@ -124,7 +122,7 @@ export class DialogImportForm implements OnInit {
             }
           });
         } else if (this.data.type === 'Client') {
-          const path = 'upload_client'
+          const path = 'import_clients'
           this._Service.uploadImport(formData, path).subscribe({
             next: (resp: any) => {
               console.log('อัปโหลดสำเร็จ', resp);
@@ -139,7 +137,7 @@ export class DialogImportForm implements OnInit {
             }
           });
         } else if (this.data.type === 'User') {
-          const path = 'upload_user'
+          const path = 'import_users'
           this._Service.uploadImport(formData, path).subscribe({
             next: (resp: any) => {
               console.log('อัปโหลดสำเร็จ', resp);

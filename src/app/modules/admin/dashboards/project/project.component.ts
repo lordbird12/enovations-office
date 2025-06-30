@@ -11,9 +11,16 @@ import { Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { ProjectService } from 'app/modules/admin/dashboards/project/project.service';
+import { DateTime } from 'luxon';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 import { Subject, takeUntil } from 'rxjs';
 
+interface CalendarDay {
+    date: DateTime;
+    isCurrentMonth: boolean;
+    isToday: boolean;
+    hasBooking: boolean;
+}
 @Component({
     selector: 'project',
     templateUrl: './project.component.html',
@@ -49,10 +56,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
     selectedProject: string = 'ACME Corp. Backend App';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-    calendarDays = Array.from({ length: 30 }, (_, i) => ({
-        date: i + 1,
-        hasEvent: [3, 5, 12, 18].includes(i + 1),
-    }));
+
+
+    currentMonth: DateTime = DateTime.now();
+    calendarDays: CalendarDay[] = [];
+    bookings: string[] = []; // ['2025-06-01', '2025-06-14'] กำหนดวันที่มีการจอง
 
     /**
      * Constructor
@@ -76,7 +84,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-
+        this.generateCalendar()
         // เช็คว่าถ้ากดปิดไปแล้ววันนี้จะไม่แสดงอีก
         if (!this._projectService.hasClosedToday()) {
             this.loadTable();
@@ -105,6 +113,32 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 },
             },
         };
+    }
+
+    generateCalendar(): void {
+        const firstDayOfMonth = this.currentMonth.startOf('month');
+        const startOfCalendar = firstDayOfMonth.startOf('week'); // วันอาทิตย์
+        const endOfCalendar = this.currentMonth.endOf('month').endOf('week');
+
+        const days: CalendarDay[] = [];
+        let currentDay = startOfCalendar;
+
+        while (currentDay <= endOfCalendar) {
+            days.push({
+                date: currentDay,
+                isCurrentMonth: currentDay.month === this.currentMonth.month,
+                isToday: currentDay.hasSame(DateTime.now(), 'day'),
+                hasBooking: this.bookings.includes(currentDay.toISODate() ?? ''),
+            });
+            currentDay = currentDay.plus({ days: 1 });
+        }
+
+        this.calendarDays = days;
+    }
+
+    goToPreviousMonth(): void {
+        this.currentMonth = this.currentMonth.minus({ months: 1 });
+        this.generateCalendar();
     }
 
     /**
@@ -521,5 +555,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
             }
         );
     }
+
+
+    goToNextMonth(): void {
+        this.currentMonth = this.currentMonth.plus({ months: 1 });
+        this.generateCalendar();
+    }
+
+    getMonthLabel(): string {
+        return this.currentMonth.toFormat('LLLL yyyy'); // เช่น "มิถุนายน 2025"
+    }
+
 
 }
