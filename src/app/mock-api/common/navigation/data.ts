@@ -56,21 +56,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
 
         ],
     },
-   
+
     {
         id: 'products',
         title: 'จัดการคลังและสินค้า',
         subtitle: 'ขัอมูลเกี่ยวกับระบบ',
         type: 'group',
         icon: 'heroicons_outline:home',
-        
+
         children: [
             {
-                id: 'products.brand',
-                title: 'ยี่ห้อ',
+                id: 'products.category-product',
+                title: 'ประเภทสินค้า',
                 type: 'basic',
-                icon: 'heroicons_outline:building-office-2',
-                link: '/admin/brand/list',
+                icon: 'heroicons_outline:cube',
+                link: '/admin/category-product/list',
                 hidden: () => {
                     // const storedPermission = JSON.parse(localStorage.getItem('permission'));
                     var user = JSON.parse(localStorage.getItem('user'))
@@ -82,11 +82,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 },
             },
             {
-                id: 'products.category-product',
-                title: 'ประเภทสินค้า',
+                id: 'products.brand',
+                title: 'ยี่ห้อ',
                 type: 'basic',
-                icon: 'heroicons_outline:cube',
-                link: '/admin/category-product/list',
+                icon: 'heroicons_outline:building-office-2',
+                link: '/admin/brand/list',
                 hidden: () => {
                     // const storedPermission = JSON.parse(localStorage.getItem('permission'));
                     var user = JSON.parse(localStorage.getItem('user'))
@@ -113,7 +113,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                     }
                 },
             },
-           
+
         ],
     },
     {
