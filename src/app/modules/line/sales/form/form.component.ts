@@ -386,14 +386,14 @@ export class FormComponent implements OnInit {
         this.filterClient.next(this.clientData.slice());
 
 
+        if (this.user) {
+            const ids = this.user?.team?.team_prducts.map(product => product.category_product_id);
+            this.mcData = this.activatedRoute.snapshot.data.machine_model.data
+            this.machineFilter = this.mcData.filter(item => ids.includes(item.category_product_id));
+            this.productDataFilter = this.productData.filter(item => ids.includes(item.id))
+            this.filterMachineModel.next(this.machineFilter.slice());
+        }
 
-        const ids = this.user?.team?.team_prducts.map(product => product.category_product_id);
-
-        this.mcData = this.activatedRoute.snapshot.data.machine_model.data
-        this.machineFilter = this.mcData.filter(item => ids.includes(item.category_product_id));
-        this.productDataFilter = this.productData.filter(item => ids.includes(item.id))
-        this.filterMachineModel.next(this.machineFilter.slice());
-        console.log(this.machineFilter);
 
         this.formData = this._fb.group({
             reserve_ref_no: null,
