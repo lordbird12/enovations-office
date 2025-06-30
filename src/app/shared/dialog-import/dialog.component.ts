@@ -16,6 +16,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { FuseConfigService } from '@fuse/services/config';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { PageService } from './page.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-dialog-patho',
   standalone: true,
@@ -44,6 +45,7 @@ export class DialogImportForm implements OnInit {
     private _router: Router,
     private _fb: FormBuilder,
     private _fuseConfirmationService: FuseConfirmationService,
+    private toastr: ToastrService
   ) {
     this.uploadPic = this._fb.group({
       files: ''
@@ -113,11 +115,14 @@ export class DialogImportForm implements OnInit {
               console.log('อัปโหลดสำเร็จ', resp);
               // this.icdData = resp?.response?.data || [];
               this.fileUploaded = true;
+              this.toastr.success('สำเร็จ')
+              this.dialogRef.close(resp)
               // เก็บข้อมูลกลับมาใช้ เช่น URL หรือชื่อไฟล์
               // this.form.patchValue({ uploadedFile: resp.url });
             },
             error: (err) => {
               console.error('อัปโหลดล้มเหลว', err);
+              
               this.fileError = 'เกิดข้อผิดพลาดขณะอัปโหลด';
             }
           });
@@ -128,6 +133,8 @@ export class DialogImportForm implements OnInit {
               console.log('อัปโหลดสำเร็จ', resp);
               // this.icdData = resp?.response?.data || [];
               this.fileUploaded = true;
+              this.toastr.success('สำเร็จ')
+              this.dialogRef.close(resp)
               // เก็บข้อมูลกลับมาใช้ เช่น URL หรือชื่อไฟล์
               // this.form.patchValue({ uploadedFile: resp.url });
             },
@@ -143,6 +150,8 @@ export class DialogImportForm implements OnInit {
               console.log('อัปโหลดสำเร็จ', resp);
               // this.icdData = resp?.response?.data || [];
               this.fileUploaded = true;
+              this.toastr.success('สำเร็จ')
+              this.dialogRef.close(resp)
               // เก็บข้อมูลกลับมาใช้ เช่น URL หรือชื่อไฟล์
               // this.form.patchValue({ uploadedFile: resp.url });
             },

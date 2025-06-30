@@ -192,7 +192,10 @@ export class ListComponent implements OnInit, AfterViewInit {
                     },
                 })
                 .afterClosed()
-                .subscribe(() => {
+                .subscribe((resp: any) => {
+                    if(resp){
+                        this.rerender()
+                    }
                     // Go up twice because card routes are setup like this; "card/CARD_ID"
                     // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
                 });
