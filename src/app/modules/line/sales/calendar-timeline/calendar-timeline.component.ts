@@ -94,7 +94,7 @@ export class CalendarTimelineComponent implements OnInit {
             this._changeDetectorRef.markForCheck();
 
         } catch (err) {
-            alert(err)
+            alert(JSON.stringify(err, null, 2));
             console.error('❌ LINE Login Failed:', err);
             // 🔸 fallback redirect ไปสมัคร
             if (this.userIdFromLine) {
