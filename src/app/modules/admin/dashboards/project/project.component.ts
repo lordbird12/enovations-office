@@ -21,6 +21,33 @@ interface CalendarDay {
     isToday: boolean;
     hasBooking: boolean;
 }
+interface BookingItem {
+    status: string;
+    // หรือใส่ partial แบบนี้ถ้าไม่อยากประกาศทั้งหมด
+    [key: string]: any;
+}
+
+interface StatusSummary {
+    Ordered: number;
+    Approve: number;
+    Reject: number;
+    Confirm: number;
+    Finish: number;
+    Returned: number;
+    Total: number;
+}
+
+interface DepartmentItem {
+    id: number;
+    name: string;
+    products: any[];
+}
+
+interface ProductCount {
+    name: string;
+    count: number;
+}
+
 @Component({
     selector: 'project',
     templateUrl: './project.component.html',
@@ -41,7 +68,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     dtElement!: DataTableDirective;
     isLoading: boolean = false;
     dtOptions: DataTables.Settings = {};
-
+    bookingData: BookingItem[] = [];
+    summary!: StatusSummary;
     showPopup = false;
     popupData: any;
     chartGithubIssues: ApexOptions = {};
@@ -56,7 +84,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     selectedProject: string = 'ACME Corp. Backend App';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-
+    departments: DepartmentItem[] = [];
+    productCounts: ProductCount[] = [];
 
     currentMonth: DateTime = DateTime.now();
     calendarDays: CalendarDay[] = [];
@@ -85,6 +114,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         this.generateCalendar()
+        this._projectService.getOrderStatus().subscribe((resp: any) => {
+            this.bookingData = resp.data; // จากที่คุณส่งมา: res.data คือ array
+            this.summary = this.countStatus(this.bookingData);
+
+
+        })
+
+        this._projectService.getProductCategory().subscribe((resp: any) => {
+            this.departments = resp.data;
+            this.productCounts = this.countProductsByType(this.departments);
+            console.log(this.productCounts, 'productCounts');
+        })
         // เช็คว่าถ้ากดปิดไปแล้ววันนี้จะไม่แสดงอีก
         if (!this._projectService.hasClosedToday()) {
             this.loadTable();
@@ -566,5 +607,78 @@ export class ProjectComponent implements OnInit, OnDestroy {
         return this.currentMonth.toFormat('LLLL yyyy'); // เช่น "มิถุนายน 2025"
     }
 
+    countStatus(data: BookingItem[]): StatusSummary {
+        const summary: StatusSummary = {
+            Ordered: 0,
+            Approve: 0,
+            Reject: 0,
+            Confirm: 0,
+            Finish: 0,
+            Returned: 0,
+            Total: 0
+        };
+
+        for (const item of data) {
+            const status = item.status;
+            if (status in summary) {
+                summary[status as keyof StatusSummary]++;
+            }
+            summary.Total++;
+        }
+
+        return summary;
+    }
+
+    countProductsByType(data: DepartmentItem[]): ProductCount[] {
+        return data.map(item => ({
+            name: item.name,
+            count: item.products?.length || 0
+        }));
+    }
+
+    getIconBgColor(name: string): string {
+        switch (name) {
+            case 'Echocardiogram':
+                return 'bg-blue-100';
+            case 'Ultrasound Imaging':
+                return 'bg-green-100';
+            case 'RC':
+                return 'bg-yellow-100';
+            case 'EC':
+                return 'bg-purple-100';
+            default:
+                return 'bg-gray-100';
+        }
+    }
+
+    getIconColor(name: string): string {
+        switch (name) {
+            case 'Echocardiogram':
+                return 'text-blue-600';
+            case 'Ultrasound Imaging':
+                return 'text-green-600';
+            case 'RC':
+                return 'text-yellow-600';
+            case 'EC':
+                return 'text-purple-600';
+            default:
+                return 'text-gray-600';
+        }
+    }
+
+    getTextColor(name: string): string {
+        switch (name) {
+            case 'Echocardiogram':
+                return 'text-blue-600';
+            case 'Ultrasound Imaging':
+                return 'text-green-600';
+            case 'RC':
+                return 'text-yellow-600';
+            case 'EC':
+                return 'text-purple-600';
+            default:
+                return 'text-gray-600';
+        }
+    }
 
 }

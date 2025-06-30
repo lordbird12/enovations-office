@@ -60,5 +60,16 @@ export class ProjectService {
             dataTablesParameters,
         );
     }
+
+     getOrderStatus(): Observable<any> {
+        return this._httpClient.get(
+            environment.baseURL + '/api/get_orders',
+        );
+    }
+     getProductCategory(): Observable<any> {
+        return this._httpClient.get(
+            environment.baseURL + '/api/get_product_all',
+        );
+    }
     
 }
