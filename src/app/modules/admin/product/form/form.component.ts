@@ -62,19 +62,6 @@ import { J } from '@fullcalendar/core/internal-common';
 })
 export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
     formFieldHelpers: string[] = ['fuse-mat-dense'];
-    fixedSubscriptInput: FormControl = new FormControl('', [
-        Validators.required,
-    ]);
-    dynamicSubscriptInput: FormControl = new FormControl('', [
-        Validators.required,
-    ]);
-    fixedSubscriptInputWithHint: FormControl = new FormControl('', [
-        Validators.required,
-    ]);
-    dynamicSubscriptInputWithHint: FormControl = new FormControl('', [
-        Validators.required,
-    ]);
-
     item1Data: any = [];
     item2Data: any = [];
     subCategory: any = [];
@@ -144,6 +131,7 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
             status: '',
             book: '',
             qty: '',
+            machine_type: ['machine']
 
         });
     
