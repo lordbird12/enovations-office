@@ -59,31 +59,32 @@ export class CalendarTimelineComponent implements OnInit {
 
         try {
             // 🔸 1. Init LIFF
-            await liff.init({ liffId: '2000224105-e5P1wVY9' });
+            // await liff.init({ liffId: '2000224105-e5P1wVY9' });
 
-            // // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
-            if (!liff.isLoggedIn()) {
-                const redirect = window.location.origin + window.location.pathname;
-                liff.login({ redirectUri: redirect });
-                return;
-            }
+            // // // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
+            // if (!liff.isLoggedIn()) {
+            //     const redirect = window.location.origin + window.location.pathname;
+            //     liff.login({ redirectUri: redirect });
+            //     return;
+            // }
 
-            // 🔸 3. login แล้ว → get profile
-            const profile = await liff.getProfile();
-            this.userIdFromLine = profile.userId;
-            this.displayName = profile.displayName;
-            this.pictureUrl = profile.pictureUrl;
+            // // 🔸 3. login แล้ว → get profile
+            // const profile = await liff.getProfile();
+            // this.userIdFromLine = profile.userId;
+            // this.displayName = profile.displayName;
+            // this.pictureUrl = profile.pictureUrl;
 
             // this.userIdFromLine = 'U2a2bcd2365d0be23f9ab13e75bd82717';
             // ✅ Debug
+            this.userIdFromLine = localStorage.getItem('token')
             console.log('LINE userId:', this.userIdFromLine);
 
             // 🔸 4. เรียก login API
-            const resp: any = await firstValueFrom(
-                this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(1000))
-            );
-            localStorage.setItem('user', JSON.stringify(resp.data));
-            localStorage.setItem('token', resp.token);
+            // const resp: any = await firstValueFrom(
+            //     this._lineService.lineLogin(this.userIdFromLine).pipe(timeout(1000))
+            // );
+            // localStorage.setItem('user', JSON.stringify(resp.data));
+            // localStorage.setItem('token', resp.token);
             const currentYear = new Date().getFullYear();
             for (let y = currentYear - 2; y <= currentYear + 2; y++) {
                 this.allYears.push(y);
