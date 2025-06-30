@@ -59,7 +59,7 @@ export class CalendarTimelineComponent implements OnInit {
 
         try {
             // 🔸 1. Init LIFF
-            await liff.init({ liffId: '2007657331-oyjNGORd' });
+            await liff.init({ liffId: '2000224105-e5P1wVY9' });
 
             // // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
             if (!liff.isLoggedIn()) {
@@ -94,6 +94,7 @@ export class CalendarTimelineComponent implements OnInit {
             this._changeDetectorRef.markForCheck();
 
         } catch (err) {
+            alert(err)
             console.error('❌ LINE Login Failed:', err);
             // 🔸 fallback redirect ไปสมัคร
             if (this.userIdFromLine) {
