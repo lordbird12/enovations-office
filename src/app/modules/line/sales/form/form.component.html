@@ -54,7 +54,10 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-
+                <mat-form-field class="w-full p-2" *ngIf="formData.value.department === 'อื่น ๆ'">
+                    <mat-label>ระบุแผนก</mat-label>
+                    <input matInput placeholder="ระบุแผนก" [formControlName]="'department_remark'">
+                </mat-form-field>
                 <mat-form-field class="w-full p-2">
                     <mat-label>ชั้น</mat-label>
                     <input matInput placeholder="ชั้น" [formControlName]="'floor'">
