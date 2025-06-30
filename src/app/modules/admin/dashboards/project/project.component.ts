@@ -49,6 +49,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
     selectedProject: string = 'ACME Corp. Backend App';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+    calendarDays = Array.from({ length: 30 }, (_, i) => ({
+        date: i + 1,
+        hasEvent: [3, 5, 12, 18].includes(i + 1),
+    }));
+
     /**
      * Constructor
      */
@@ -60,7 +65,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
         this.user = JSON.parse(localStorage.getItem('user'));
         console.log(this.user);
-        
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -516,5 +521,5 @@ export class ProjectComponent implements OnInit, OnDestroy {
             }
         );
     }
-    
+
 }
