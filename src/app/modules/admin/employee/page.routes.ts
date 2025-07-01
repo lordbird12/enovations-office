@@ -16,13 +16,6 @@ export default [
             {
                 path     : 'list',
                 component: ListComponent,
-                resolve  : {
-                    // brands    : () => inject(InventoryService).getBrands(),
-                    // categories: () => inject(InventoryService).getCategories(),
-                    // products  : () => inject(InventoryService).getProducts(),
-                    // tags      : () => inject(InventoryService).getTags(),
-                    // vendors   : () => inject(InventoryService).getVendors(),
-                },
             },
         ],
     },
@@ -33,24 +26,10 @@ export default [
             {
                 path     : 'form',
                 component: FormComponent,
-                resolve  : {
-                    // brands    : () => inject(InventoryService).getBrands(),
-                    // categories: () => inject(InventoryService).getCategories(),
-                    // products  : () => inject(InventoryService).getProducts(),
-                    // tags      : () => inject(InventoryService).getTags(),
-                    // vendors   : () => inject(InventoryService).getVendors(),
-                },
             },
             {
                 path     : 'edit/:id',
                 component: FormComponent,
-                resolve  : {
-                    // brands    : () => inject(InventoryService).getBrands(),
-                    // categories: () => inject(InventoryService).getCategories(),
-                    // products  : () => inject(InventoryService).getProducts(),
-                    // tags      : () => inject(InventoryService).getTags(),
-                    // vendors   : () => inject(InventoryService).getVendors(),
-                },
             },
         ],
     },

@@ -142,9 +142,11 @@ export class FormComponent implements OnInit {
             this.positions = response.positions.data;
             this.teams = response.teams.data;
         if(this.Id) {
-            
+
             this._service.getById(this.Id).subscribe((resp: any)=>{
                 this.itemData = resp.data;
+                console.log(this.itemData);
+                
                 this.addForm.patchValue({
                     ...this.itemData,
                     permission_id: this.itemData.permission_id,
