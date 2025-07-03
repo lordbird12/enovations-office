@@ -33,6 +33,7 @@ import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import liff from '@line/liff';
 import { LineService } from '../../line.service';
 import { firstValueFrom, Subject, timeout } from 'rxjs';
+import { CalendarTimelineComponent } from '../calendar-timeline/calendar-timeline.component';
 @Component({
     selector: 'line-list-sales',
     templateUrl: './list.component.html',
@@ -58,7 +59,9 @@ import { firstValueFrom, Subject, timeout } from 'rxjs';
         MatTableModule,
         DataTablesModule,
         MatMenuModule,
-        MatDividerModule
+        MatDividerModule,
+        CalendarTimelineComponent,
+
     ],
 })
 export class ListComponent implements OnInit, AfterViewInit {
@@ -75,7 +78,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     user: any
     selectedStatus: string = '';
     form: FormGroup
-
+    departmentId: any = ''
     userIdFromLine: string = '';
     displayName: string = '';
     pictureUrl: string = '';
@@ -112,7 +115,11 @@ export class ListComponent implements OnInit, AfterViewInit {
             // this.displayName = profile.displayName;
             // this.pictureUrl = profile.pictureUrl;
 
-            this.userIdFromLine = 'U2a2bcd2365d0be23f9ab13e75bd82717';
+            //sale
+            // this.userIdFromLine = 'U2a2bcd2365d0be23f9ab13e75bd82717';
+
+            //marketing
+            this.userIdFromLine = 'U25ee1621c27e19dc3f95d880db531e39'
             // ✅ Debug
             console.log('LINE userId:', this.userIdFromLine);
 
@@ -122,8 +129,11 @@ export class ListComponent implements OnInit, AfterViewInit {
             );
             localStorage.setItem('user', JSON.stringify(resp.data));
             localStorage.setItem('token', resp.token);
-
+            
             this.loadTable(resp.token);
+            const user = JSON.parse(localStorage.getItem('user'))
+            this.departmentId = user?.department_id
+            
             // ✅ รอให้ Angular render DOM เสร็จ ก่อน trigger
             Promise.resolve().then(() => {
                 this.dtTrigger.next(this.dtOptions);

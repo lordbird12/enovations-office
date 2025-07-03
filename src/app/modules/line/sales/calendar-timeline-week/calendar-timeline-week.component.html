@@ -1,0 +1,31 @@
+<div class="w-full p-4">
+    <!-- Header -->
+    <!-- calendar.component.html -->
+    <div class="p-2">
+        <full-calendar [plugins]="calendarPlugins" [initialView]="'timeGridWeek'" 
+            [events]="calendarEvents"
+            ></full-calendar>
+    </div>
+
+    <!-- ✅ Footer -->
+    <footer class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md z-50">
+        <div class="flex justify-around items-center h-14">
+            <button (click)="goHome()" class="flex flex-col items-center text-gray-600 hover:text-blue-600 text-xs">
+                <i class="fas fa-home text-lg"></i>
+                <span>หน้าแรก</span>
+            </button>
+            <button (click)="newForm()" class="flex flex-col items-center text-gray-600 hover:text-blue-600 text-xs">
+                <i class="fas fa-newspaper text-lg"></i>
+                <span>สร้างการจอง</span>
+            </button>
+            <button (click)="goCalendar()" class="flex flex-col items-center text-gray-600 hover:text-blue-600 text-xs">
+                <i class="fas fa-calendar-alt text-lg"></i>
+                <span>ปฏิทิน</span>
+            </button>
+            <button (click)="goNews()" class="flex flex-col items-center text-gray-600 hover:text-blue-600 text-xs">
+                <i class="fas fa-newspaper text-lg"></i>
+                <span>ข่าวสาร</span>
+            </button>
+        </div>
+    </footer>
+</div>

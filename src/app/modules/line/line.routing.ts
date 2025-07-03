@@ -13,6 +13,7 @@ import { CalendarComponent } from './sales/calendar/calendar.component';
 import { CalendarTimelineComponent } from './sales/calendar-timeline/calendar-timeline.component';
 import { AssessmentFormComponent } from './sales/assessment/assessment-form.component';
 import { ProductManagementComponent } from './sales/product-management/form.component';
+import { CalendarTimelineWeekComponent } from './sales/calendar-timeline-week/calendar-timeline-week.component';
 
 
 export default [
@@ -212,6 +213,10 @@ export default [
             {
                 path: 'calendar-timeline',
                 component: CalendarTimelineComponent,
+            },
+             {
+                path: 'calendar-week',
+                component: CalendarTimelineWeekComponent,
             },
             {
                 path: 'rate/:id',
