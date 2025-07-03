@@ -101,25 +101,25 @@ export class ListComponent implements OnInit, AfterViewInit {
 
         try {
             // 🔸 1. Init LIFF
-            // await liff.init({ liffId: '2007657331-oyjNGORd' });
+            await liff.init({ liffId: '2007657331-oyjNGORd' });
             
-            // // // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
-            // if (!liff.isLoggedIn()) {
-            //     liff.login({ redirectUri: window.location.href });
-            //     return;
-            // }
+            // // 🔸 2. ถ้ายังไม่ login → login แล้วกลับมาหน้าเดิม
+            if (!liff.isLoggedIn()) {
+                liff.login({ redirectUri: window.location.href });
+                return;
+            }
 
-            // // 🔸 3. login แล้ว → get profile
-            // const profile = await liff.getProfile();
-            // this.userIdFromLine = profile.userId;
-            // this.displayName = profile.displayName;
-            // this.pictureUrl = profile.pictureUrl;
+            // 🔸 3. login แล้ว → get profile
+            const profile = await liff.getProfile();
+            this.userIdFromLine = profile.userId;
+            this.displayName = profile.displayName;
+            this.pictureUrl = profile.pictureUrl;
 
             //sale
             // this.userIdFromLine = 'U2a2bcd2365d0be23f9ab13e75bd82717';
 
             //marketing
-            this.userIdFromLine = 'U25ee1621c27e19dc3f95d880db531e39'
+            // this.userIdFromLine = 'U25ee1621c27e19dc3f95d880db531e39'
             // ✅ Debug
             console.log('LINE userId:', this.userIdFromLine);
 

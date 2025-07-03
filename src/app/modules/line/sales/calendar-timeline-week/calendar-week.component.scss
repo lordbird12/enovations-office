@@ -1,0 +1,20 @@
+/* calendar-week.component.scss */
+
+.calendar-container {
+  padding: 1rem;
+  font-size: 0.85rem;
+
+  ::ng-deep .fc {
+    font-family: 'Inter', sans-serif;
+  }
+
+  @media (max-width: 640px) {
+    ::ng-deep .fc .fc-timegrid-slot-label {
+      font-size: 0.65rem;
+    }
+
+    ::ng-deep .fc .fc-toolbar-title {
+      font-size: 1rem;
+    }
+  }
+}
