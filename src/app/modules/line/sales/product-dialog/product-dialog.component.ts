@@ -21,7 +21,7 @@ import moment from 'moment';
 import { DataTablesModule } from 'angular-datatables';
 
 @Component({
-    selector: 'app-product-dialog',
+    selector: 'app-product-dialog-line',
     templateUrl: './product-dialog.component.html',
     styleUrls: ['./product-dialog.component.scss'],
     encapsulation: ViewEncapsulation.None,

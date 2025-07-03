@@ -31,7 +31,7 @@ interface OrderData {
 }
 
 @Component({
-  selector: 'app-dialog-return-product-wait-approved',
+  selector: 'app-dialog-return-product-wait-approved-line',
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss'],
   standalone: true,

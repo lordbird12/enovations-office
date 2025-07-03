@@ -21,7 +21,7 @@ import moment from 'moment';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-claim-dialog',
+    selector: 'app-claim-dialog-line',
     templateUrl: './claim-dialog.component.html',
     styleUrls: ['./claim-dialog.component.scss'],
     encapsulation: ViewEncapsulation.None,

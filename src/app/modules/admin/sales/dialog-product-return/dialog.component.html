@@ -29,7 +29,6 @@
                 <div class="w-full md:min-w-full">
                     <ngx-dropzone class="w-full h-32" accept="image/*" (change)="onSelectsPC($event, i)">
                         <ngx-dropzone-label>Select Image</ngx-dropzone-label>
-
                         <div *ngIf="filesPC[i]">
                             <ngx-dropzone-image-preview [file]="filesPC[i]" [removable]="true"
                                 (removed)="onRemoveImagePC(i)">

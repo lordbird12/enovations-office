@@ -81,8 +81,7 @@ export class DialogReturnProductComponent implements OnInit {
     private toastr: ToastrService
   ) {
 
-    console.log(this.data);
-    
+
     this.form = this.fb.group({
       order_id: [data.order.id],
       reserve_ref_no: data.order.reserve_ref_no,

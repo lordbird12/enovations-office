@@ -31,7 +31,7 @@ interface OrderData {
 }
 
 @Component({
-  selector: 'app-dialog-return-product',
+  selector: 'app-dialog-return-product-line',
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss'],
   standalone: true,

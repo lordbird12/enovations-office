@@ -22,7 +22,7 @@ import { debounceTime, map, Observable, of, Subject, switchMap, takeUntil } from
 // import { BriefPlanService } from 'app/modules/admin/marketing/brief-plan/brief-plan.service';
 
 @Component({
-    selector: 'picture-sales',
+    selector: 'pictures-sales',
     templateUrl: './picture.component.html',
     // encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
