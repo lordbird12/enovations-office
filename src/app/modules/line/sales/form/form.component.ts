@@ -110,7 +110,7 @@ export class FormComponent implements OnInit {
         'อื่น ๆ'
     ];
 
-  provinces: string[] = [
+    provinces: string[] = [
         'กรุงเทพมหานคร',
         'อำนาจเจริญ',
         'อ่างทอง',
@@ -308,14 +308,16 @@ export class FormComponent implements OnInit {
         this.clientData = this.activatedRoute.snapshot.data.client.data
         this.filterClient.next(this.clientData.slice());
 
+        this.mcData = this.activatedRoute.snapshot.data.machine_model.data
+        this.filterMachineModel.next(this.machineFilter.slice());
 
-        if (this.user?.team?.team_product) {
-            const ids = this.user?.team?.team_prducts.map(product => product.category_product_id);
-            this.mcData = this.activatedRoute.snapshot.data.machine_model.data
-            this.machineFilter = this.mcData.filter(item => ids.includes(item.category_product_id));
-            this.productDataFilter = this.productData.filter(item => ids.includes(item.id))
-            this.filterMachineModel.next(this.machineFilter.slice());
-        }
+        // if (this.user?.team?.team_product) {
+        //     const ids = this.user?.team?.team_prducts.map(product => product.category_product_id);
+        //     this.mcData = this.activatedRoute.snapshot.data.machine_model.data
+        //     this.machineFilter = this.mcData.filter(item => ids.includes(item.category_product_id));
+        //     this.productDataFilter = this.productData.filter(item => ids.includes(item.id))
+        //     this.filterMachineModel.next(this.machineFilter.slice());
+        // }
 
 
         this.formData = this._fb.group({
@@ -1226,9 +1228,7 @@ export class FormComponent implements OnInit {
     }
 
     onSelectType(products: any) {
-        this.filterWorkStation = products?.products
-        console.log(this.filterWorkStation);
-
+        this.filterWorkStation = this.mcData.filter(item => item.category_product_id === products.id)
     }
 
     goHome() {
