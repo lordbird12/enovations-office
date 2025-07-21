@@ -421,6 +421,11 @@ export class FormComponent implements OnInit {
 
 
         }
+        this.clientFilter.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+                this._filterClient();
+            });
         this.saleFilter.valueChanges
             .pipe(takeUntil(this._onDestroy))
             .subscribe(() => {
