@@ -389,6 +389,8 @@ export class FormComponent implements OnInit {
             user_id: null,
             function_qualifications: null,
             work_station_id: null,
+            work_station_required: 'no_need',
+            work_station_detail: '',
             additional_equipment: null,
             meeting_details: null,
             current_machine_model: null,
@@ -436,6 +438,14 @@ export class FormComponent implements OnInit {
                     this.formData.patchValue({
                         ...this.itemData,
 
+                    });
+                    const hasWorkStation = !!this.itemData?.work_station_id;
+                    const workstationName = hasWorkStation
+                        ? this.workstationData.find(item => item.id === this.itemData.work_station_id)?.name ?? ''
+                        : this.itemData?.work_station_detail ?? '';
+                    this.formData.patchValue({
+                        work_station_required: hasWorkStation ? 'need' : 'no_need',
+                        work_station_detail: workstationName || '',
                     });
                     for (let index = 0; index < this.itemData.machine_models.length; index++) {
                         const element = this.itemData.machine_models[index];
@@ -519,6 +529,14 @@ export class FormComponent implements OnInit {
             .pipe(takeUntil(this._onDestroy))
             .subscribe(() => {
                 this._filterMachineModel();
+            });
+        this.formData.get('work_station_required')?.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe((value) => {
+                if (value !== 'need') {
+                    this.formData.get('work_station_detail')?.setValue('', { emitEvent: false });
+                    this.formData.get('work_station_id')?.setValue(null, { emitEvent: false });
+                }
             });
     }
 
@@ -1329,6 +1347,3 @@ export class FormComponent implements OnInit {
             });
     }
 }
-
-
-
