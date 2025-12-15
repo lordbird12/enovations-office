@@ -29,11 +29,11 @@
                         [svgIcon]="'heroicons_solid:x-mark'"></mat-icon>
                 </button>
             </div>
-            <div class="text-lg font-medium leading-10">Notifications</div>
+            <div class="text-lg font-medium leading-10">การแจ้งเตือน</div>
             <div class="ml-auto">
                 <button
                     mat-icon-button
-                    [matTooltip]="'Mark all as read'"
+                    [matTooltip]="'ทำเครื่องหมายว่าอ่านแล้วทั้งหมด'"
                     [disabled]="unreadCount === 0"
                     (click)="markAllAsRead()">
                     <mat-icon
@@ -85,7 +85,7 @@
                             class="w-6 h-6 min-h-6"
                             mat-icon-button
                             (click)="toggleRead(notification)"
-                            [matTooltip]="notification.read ? 'Mark as unread' : 'Mark as read'">
+                            [matTooltip]="notification.read ? 'ทำเครื่องหมายว่ายังไม่อ่าน' : 'ทำเครื่องหมายว่าอ่านแล้ว'">
                             <span
                                 class="w-2 h-2 rounded-full"
                                 [ngClass]="{'bg-gray-400 dark:bg-gray-500 sm:opacity-0 sm:group-hover:opacity-100': notification.read,
@@ -96,7 +96,7 @@
                             class="w-6 h-6 min-h-6 sm:opacity-0 sm:group-hover:opacity-100"
                             mat-icon-button
                             (click)="delete(notification)"
-                            [matTooltip]="'Remove'">
+                            [matTooltip]="'ลบ'">
                             <mat-icon
                                 class="icon-size-4"
                                 [svgIcon]="'heroicons_solid:x-mark'"></mat-icon>
@@ -121,7 +121,7 @@
                         <img
                             class="shrink-0 w-8 h-8 mr-4 rounded-full overflow-hidden object-cover object-center"
                             [src]="notification.image"
-                            [alt]="'Notification image'">
+                            [alt]="'รูปการแจ้งเตือน'">
                     </ng-container>
                     <!-- Title, description & time -->
                     <div class="flex flex-col flex-auto">
@@ -150,8 +150,8 @@
                             class="text-primary-700 dark:text-primary-50"
                             [svgIcon]="'heroicons_outline:bell'"></mat-icon>
                     </div>
-                    <div class="mt-5 text-2xl font-semibold tracking-tight">No notifications</div>
-                    <div class="w-full max-w-60 mt-1 text-md text-center text-secondary">When you have notifications, they will appear here.</div>
+                    <div class="mt-5 text-2xl font-semibold tracking-tight">ไม่มีการแจ้งเตือน</div>
+                    <div class="w-full max-w-60 mt-1 text-md text-center text-secondary">เมื่อมีการแจ้งเตือน จะแสดงที่นี่</div>
                 </div>
             </ng-container>
 

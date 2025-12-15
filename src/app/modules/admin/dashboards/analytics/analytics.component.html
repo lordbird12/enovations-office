@@ -5,21 +5,21 @@
         <!-- Title and action buttons -->
         <div class="flex items-center justify-between w-full">
             <div>
-                <div class="text-3xl font-semibold tracking-tight leading-8">Analytics dashboard</div>
-                <div class="font-medium tracking-tight text-secondary">Monitor metrics, check reports and review performance</div>
+                <div class="text-3xl font-semibold tracking-tight leading-8">แดชบอร์ดวิเคราะห์</div>
+                <div class="font-medium tracking-tight text-secondary">ติดตามตัวชี้วัด ตรวจสอบรายงาน และประเมินผลการดำเนินงาน</div>
             </div>
             <div class="flex items-center ml-6">
                 <button class="hidden sm:inline-flex" mat-stroked-button>
                     <mat-icon
                         class="icon-size-5"
                         [svgIcon]="'heroicons_solid:cog-8-tooth'"></mat-icon>
-                    <span class="ml-2">Settings</span>
+                    <span class="ml-2">ตั้งค่า</span>
                 </button>
                 <button class="hidden sm:inline-flex ml-3" mat-flat-button [color]="'primary'">
                     <mat-icon
                         class="icon-size-5"
                         [svgIcon]="'heroicons_solid:arrow-up-tray'"></mat-icon>
-                    <span class="ml-2">Export</span>
+                    <span class="ml-2">ส่งออก</span>
                 </button>
 
                 <!-- Actions menu (visible on xs) -->
@@ -28,8 +28,8 @@
                         <mat-icon [svgIcon]="'heroicons_outline:ellipsis-vertical'"></mat-icon>
                     </button>
                     <mat-menu #actionsMenu="matMenu">
-                        <button mat-menu-item>Export</button>
-                        <button mat-menu-item>Settings</button>
+                        <button mat-menu-item>ส่งออก</button>
+                        <button mat-menu-item>ตั้งค่า</button>
                     </mat-menu>
                 </div>
             </div>
@@ -40,14 +40,14 @@
             <div class="sm:col-span-2 lg:col-span-3 dark flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                 <div class="flex items-center justify-between mt-10 ml-10 mr-6 sm:mr-10">
                     <div class="flex flex-col">
-                        <div class="mr-4 text-2xl md:text-3xl font-semibold tracking-tight leading-7">Visitors Overview</div>
-                        <div class="font-medium text-secondary">Number of unique visitors</div>
+                        <div class="mr-4 text-2xl md:text-3xl font-semibold tracking-tight leading-7">ภาพรวมผู้เข้าชม</div>
+                        <div class="font-medium text-secondary">จำนวนผู้เข้าชมที่ไม่ซ้ำ</div>
                     </div>
                     <div class="ml-2">
                         <mat-button-toggle-group class="hidden sm:inline-flex border-none space-x-1" value="this-year" #visitorsYearSelector="matButtonToggleGroup">
-                            <mat-button-toggle class="px-1.5 rounded-full overflow-hidden border-none font-medium" value="last-year">Last Year
+                            <mat-button-toggle class="px-1.5 rounded-full overflow-hidden border-none font-medium" value="last-year">ปีที่แล้ว
                             </mat-button-toggle>
-                            <mat-button-toggle class="px-1.5 rounded-full overflow-hidden border-none font-medium" value="this-year">This Year
+                            <mat-button-toggle class="px-1.5 rounded-full overflow-hidden border-none font-medium" value="this-year">ปีนี้
                             </mat-button-toggle>
                         </mat-button-toggle-group>
                         <div class="sm:hidden">
@@ -55,8 +55,8 @@
                                 <mat-icon [svgIcon]="'heroicons_outline:ellipsis-vertical'"></mat-icon>
                             </button>
                             <mat-menu #visitorsMenu="matMenu">
-                                <button mat-menu-item>This Year</button>
-                                <button mat-menu-item>Last Year</button>
+                                <button mat-menu-item>ปีนี้</button>
+                                <button mat-menu-item>ปีที่แล้ว</button>
                             </mat-menu>
                         </div>
                     </div>
@@ -69,15 +69,15 @@
             <!-- Conversions -->
             <div class="sm:col-span-2 lg:col-span-1 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                 <div class="flex items-start justify-between m-6 mb-0">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Conversions</div>
+                    <div class="text-lg font-medium tracking-tight leading-6 truncate">อัตราเปลี่ยนเป็นลูกค้า</div>
                     <div class="ml-2">
                         <button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button [matMenuTriggerFor]="conversionMenu">
-                            <span class="font-medium text-sm text-secondary">30 days</span>
+                            <span class="font-medium text-sm text-secondary">30 วัน</span>
                         </button>
                         <mat-menu #conversionMenu="matMenu">
-                            <button mat-menu-item>30 days</button>
-                            <button mat-menu-item>3 months</button>
-                            <button mat-menu-item>9 months</button>
+                            <button mat-menu-item>30 วัน</button>
+                            <button mat-menu-item>3 เดือน</button>
+                            <button mat-menu-item>9 เดือน</button>
                         </mat-menu>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                         <mat-icon class="icon-size-5 text-red-500" [svgIcon]="'heroicons_mini:arrow-trending-down'"></mat-icon>
                         <div class="flex items-center ml-1 lg:ml-0 lg:mt-0.5 text-md leading-none whitespace-nowrap text-secondary">
                             <span class="font-medium text-red-500">2%</span>
-                            <span class="ml-1">below target</span>
+                            <span class="ml-1">ต่ำกว่าเป้าหมาย</span>
                         </div>
                     </div>
                 </div>
@@ -99,15 +99,15 @@
             <!-- Impressions -->
             <div class="flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden">
                 <div class="flex items-start justify-between m-6 mb-0">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Impressions</div>
+                    <div class="text-lg font-medium tracking-tight leading-6 truncate">การแสดงผล</div>
                     <div class="ml-2">
                         <button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button [matMenuTriggerFor]="impressionsMenu">
-                            <span class="font-medium text-sm text-secondary">30 days</span>
+                            <span class="font-medium text-sm text-secondary">30 วัน</span>
                         </button>
                         <mat-menu #impressionsMenu="matMenu">
-                            <button mat-menu-item>30 days</button>
-                            <button mat-menu-item>3 months</button>
-                            <button mat-menu-item>9 months</button>
+                            <button mat-menu-item>30 วัน</button>
+                            <button mat-menu-item>3 เดือน</button>
+                            <button mat-menu-item>9 เดือน</button>
                         </mat-menu>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                         <mat-icon class="icon-size-5 text-red-500" [svgIcon]="'heroicons_mini:arrow-trending-down'"></mat-icon>
                         <div class="flex items-center ml-1 lg:ml-0 lg:mt-0.5 text-md leading-none whitespace-nowrap text-secondary">
                             <span class="font-medium text-red-500">4%</span>
-                            <span class="ml-1">below target</span>
+                            <span class="ml-1">ต่ำกว่าเป้าหมาย</span>
                         </div>
                     </div>
                 </div>

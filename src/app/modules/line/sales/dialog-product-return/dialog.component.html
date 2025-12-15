@@ -18,7 +18,7 @@
         <div *ngFor="let product of productsArray.controls; let i = index" [formGroupName]="i"
             class="border p-4 rounded-lg shadow-sm">
             <p><strong>ชื่อสินค้า:</strong> {{ data.product[i].product.name }}</p>
-            <p><strong>Serial No:</strong> {{ data.product[i].product.serial_no }}</p>
+            <p><strong>หมายเลขซีเรียล:</strong> {{ data.product[i].product.serial_no }}</p>
 
             <mat-form-field class="w-full">
                 <mat-label>หมายเหตุสินค้า</mat-label>
@@ -28,7 +28,7 @@
             <div class="flex flex-col md:flex-row w-full">
                 <div class="w-full md:min-w-full">
                     <ngx-dropzone class="w-full h-32" accept="image/*" (change)="onSelectsPC($event, i)">
-                        <ngx-dropzone-label>Select Image</ngx-dropzone-label>
+                        <ngx-dropzone-label>เลือกภาพ</ngx-dropzone-label>
 
                         <div *ngIf="filesPC[i]">
                             <ngx-dropzone-image-preview [file]="filesPC[i]" [removable]="true"

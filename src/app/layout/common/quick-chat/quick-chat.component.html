@@ -16,7 +16,7 @@
                             class="icon-size-6"
                             [svgIcon]="'heroicons_outline:chat-bubble-left-right'"></mat-icon>
                     </div>
-                    <div class="text-lg font-medium text-secondary">Team Chat</div>
+                    <div class="text-lg font-medium text-secondary">แชททีม</div>
                     <button
                         class="ml-auto mr-4"
                         mat-icon-button>
@@ -33,7 +33,7 @@
                             <img
                                 class="w-full h-full rounded-full object-cover"
                                 [src]="chat.contact.avatar"
-                                alt="Contact avatar"/>
+                                alt="รูปผู้ติดต่อ"/>
                         </ng-container>
                         <ng-container *ngIf="!chat.contact.avatar">
                             <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
@@ -76,7 +76,7 @@
                                     <img
                                         class="w-full h-full rounded-full object-cover"
                                         [src]="chat.contact.avatar"
-                                        alt="Contact avatar"/>
+                                        alt="รูปผู้ติดต่อ"/>
                                 </ng-container>
                                 <ng-container *ngIf="!chat.contact.avatar">
                                     <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
@@ -157,6 +157,7 @@
                             <textarea
                                 matInput
                                 cdkTextareaAutosize
+                                placeholder="พิมพ์ข้อความ..."
                                 #messageInput></textarea>
                         </mat-form-field>
                         <div class="flex items-center h-11 my-px ml-4">
@@ -180,7 +181,7 @@
         <mat-icon
             class="icon-size-24"
             [svgIcon]="'heroicons_outline:chat-bubble-bottom-center-text'"></mat-icon>
-        <div class="mt-4 text-xl text-center font-medium tracking-tight text-secondary">Select a conversation</div>
+        <div class="mt-4 text-xl text-center font-medium tracking-tight text-secondary">เลือกการสนทนา</div>
     </div>
 </ng-template>
 

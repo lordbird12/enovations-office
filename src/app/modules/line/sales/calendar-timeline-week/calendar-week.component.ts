@@ -2,7 +2,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import timeGridPlugin from '@fullcalendar/timegrid';
 import { CalendarOptions } from '@fullcalendar/core';
 
 // ✅ ต้อง register plugin ก่อนใช้
@@ -20,10 +19,10 @@ import { CalendarOptions } from '@fullcalendar/core';
 })
 export class CalendarWeekComponent {
     calendarOptions: CalendarOptions = {
-        plugins: [timeGridPlugin],
+        
         initialView: 'timeGridWeek',
         nowIndicator: true,
-        allDaySlot: false,
+
         headerToolbar: {
             left: 'prev,next today',
             center: 'title',

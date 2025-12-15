@@ -124,11 +124,11 @@ export class AuthUnlockSessionComponent implements OnInit
                     },
                 });
 
-                // Set the alert
-                this.alert = {
-                    type   : 'error',
-                    message: 'Invalid password',
-                };
+                    // Set the alert
+                    this.alert = {
+                        type   : 'error',
+                        message: 'รหัสผ่านไม่ถูกต้อง',
+                    };
 
                 // Show the alert
                 this.showAlert = true;

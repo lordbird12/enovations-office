@@ -8,7 +8,7 @@
           <img *ngIf="imageFromLine; else noImage" [src]="imageFromLine"
             class="w-full h-full object-cover rounded-full" />
           <ng-template #noImage>
-            <img src="assets/images/no_image.png" class="w-full h-full object-cover rounded-full" alt="no image" />
+            <img src="assets/images/no_image.png" class="w-full h-full object-cover rounded-full" alt="ไม่มีรูปภาพ" />
           </ng-template>
         </div>
       </div>
@@ -41,6 +41,6 @@
       [disabled]="form.invalid" (click)="onSubmit()">
       ลงทะเบียน
     </button>
-    <p class="text-center text-gray-400 text-xs mt-4">© 2023 Enovation Co., Ltd.</p>
+    <p class="text-center text-gray-400 text-xs mt-4">© 2023 Enovation Co., Ltd. สงวนลิขสิทธิ์</p>
   </div>
 </div>

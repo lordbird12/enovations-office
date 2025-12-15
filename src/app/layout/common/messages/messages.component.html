@@ -29,12 +29,12 @@
                         [svgIcon]="'heroicons_solid:x-mark'"></mat-icon>
                 </button>
             </div>
-            <div class="text-lg font-medium leading-10">Messages</div>
+            <div class="text-lg font-medium leading-10">ข้อความ</div>
             <div class="ml-auto">
                 <button
                     mat-icon-button
                     [disabled]="unreadCount === 0"
-                    [matTooltip]="'Mark all as read'"
+                    [matTooltip]="'ทำเครื่องหมายว่าอ่านแล้วทั้งหมด'"
                     (click)="markAllAsRead()">
                     <mat-icon
                         class="icon-size-5 text-current"
@@ -85,7 +85,7 @@
                             class="w-6 h-6 min-h-6"
                             mat-icon-button
                             (click)="toggleRead(message)"
-                            [matTooltip]="message.read ? 'Mark as unread' : 'Mark as read'">
+                            [matTooltip]="message.read ? 'ทำเครื่องหมายว่ายังไม่อ่าน' : 'ทำเครื่องหมายว่าอ่านแล้ว'">
                             <span
                                 class="w-2 h-2 rounded-full"
                                 [ngClass]="{'bg-gray-400 dark:bg-gray-500 sm:opacity-0 sm:group-hover:opacity-100': message.read,
@@ -96,7 +96,7 @@
                             class="w-6 h-6 min-h-6 sm:opacity-0 sm:group-hover:opacity-100"
                             mat-icon-button
                             (click)="delete(message)"
-                            [matTooltip]="'Remove'">
+                            [matTooltip]="'ลบ'">
                             <mat-icon
                                 class="icon-size-4"
                                 [svgIcon]="'heroicons_solid:x-mark'"></mat-icon>
@@ -120,7 +120,7 @@
                         <img
                             class="shrink-0 w-8 h-8 mr-4 rounded-full overflow-hidden object-cover object-center"
                             [src]="message.image"
-                            [alt]="'Message image'">
+                            [alt]="'รูปข้อความ'">
                     </ng-container>
                     <!-- Title, description & time -->
                     <div class="flex flex-col flex-auto">
@@ -149,8 +149,8 @@
                             class="text-primary-700 dark:text-primary-50"
                             [svgIcon]="'heroicons_outline:inbox'"></mat-icon>
                     </div>
-                    <div class="mt-5 text-2xl font-semibold tracking-tight">No messages</div>
-                    <div class="w-full max-w-60 mt-1 text-md text-center text-secondary">When you have messages, they will appear here.</div>
+                    <div class="mt-5 text-2xl font-semibold tracking-tight">ไม่มีข้อความ</div>
+                    <div class="w-full max-w-60 mt-1 text-md text-center text-secondary">เมื่อมีข้อความ ข้อความจะแสดงที่นี่</div>
                 </div>
             </ng-container>
         </div>

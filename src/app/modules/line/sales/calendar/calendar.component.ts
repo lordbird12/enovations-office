@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PageService } from '../page.service';
 import { DateTime } from 'luxon';
-import { event } from 'jquery';
 
 interface CalendarDay {
     date: Date;
@@ -43,8 +42,8 @@ export class CalendarComponent implements OnInit {
     user: any;
     // Month names for display
     monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
+        'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+        'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม',
     ];
 
     events: CalendarEvent[] = [
@@ -183,7 +182,6 @@ export class CalendarComponent implements OnInit {
             }).flat();
 
             this.events = events;
-            console.log(this.events);
             
             this.generateCalendar();
             this._changeDetectorRef.markForCheck();

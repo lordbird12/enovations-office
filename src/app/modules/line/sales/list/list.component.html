@@ -96,7 +96,7 @@
                             </button>
                             <button mat-menu-item (click)="openRate(item.id)" *ngIf="item.status === 'Returned'">
                                <mat-icon>rate_review</mat-icon>
-                                <span>Win/Lose</span>
+                                <span>ชนะ/แพ้</span>
                             </button>
                             <button mat-menu-item (click)="deleteorder(item.id)">
                                 <mat-icon>delete</mat-icon>
@@ -197,7 +197,7 @@
                         <tr>
                             <th class="w-[100px]">จัดการ</th>
                             <th class="w-[10px]">ลำดับ</th>
-                            <th>Document No.</th>
+                            <th>เลขที่เอกสาร</th>
                             <th>วัตถุประสงค์</th>
                             <th>ผู้จอง</th>
                             <th>ลูกค้า</th>

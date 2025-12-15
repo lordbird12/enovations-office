@@ -7,12 +7,12 @@
             </div>
 
             <!-- Title -->
-            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Sign up</div>
+            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">สมัครสมาชิก</div>
             <div class="flex items-baseline mt-0.5 font-medium">
-                <div>Already have an account?</div>
+                <div>มีบัญชีอยู่แล้ว?</div>
                 <a
                     class="ml-1 text-primary-500 hover:underline"
-                    [routerLink]="['/sign-in']">Sign in
+                    [routerLink]="['/sign-in']">เข้าสู่ระบบ
                 </a>
             </div>
 
@@ -35,34 +35,34 @@
 
                 <!-- Name field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Full name</mat-label>
+                    <mat-label>ชื่อ-นามสกุล</mat-label>
                     <input
                         id="name"
                         matInput
                         [formControlName]="'name'">
                     <mat-error *ngIf="signUpForm.get('name').hasError('required')">
-                        Full name is required
+                        กรุณากรอกชื่อ-นามสกุล
                     </mat-error>
                 </mat-form-field>
 
                 <!-- Email field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Email address</mat-label>
+                    <mat-label>อีเมล</mat-label>
                     <input
                         id="email"
                         matInput
                         [formControlName]="'email'">
                     <mat-error *ngIf="signUpForm.get('email').hasError('required')">
-                        Email address is required
+                        กรุณากรอกอีเมล
                     </mat-error>
                     <mat-error *ngIf="signUpForm.get('email').hasError('email')">
-                        Please enter a valid email address
+                        กรุณากรอกอีเมลให้ถูกต้อง
                     </mat-error>
                 </mat-form-field>
 
                 <!-- Password field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Password</mat-label>
+                    <mat-label>รหัสผ่าน</mat-label>
                     <input
                         id="password"
                         matInput
@@ -84,13 +84,13 @@
                             [svgIcon]="'heroicons_solid:eye-slash'"></mat-icon>
                     </button>
                     <mat-error>
-                        Password is required
+                        กรุณากรอกรหัสผ่าน
                     </mat-error>
                 </mat-form-field>
 
                 <!-- Company field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Company</mat-label>
+                    <mat-label>บริษัท</mat-label>
                     <input
                         id="company-confirm"
                         matInput
@@ -103,15 +103,15 @@
                         class="-ml-2"
                         [color]="'primary'"
                         [formControlName]="'agreements'">
-                        <span>I agree with</span>
+                        <span>ฉันยอมรับ</span>
                         <a
                             class="ml-1 text-primary-500 hover:underline"
-                            [routerLink]="['./']">Terms
+                            [routerLink]="['./']">ข้อกำหนดการใช้งาน
                         </a>
-                        <span>and</span>
+                        <span>และ</span>
                         <a
                             class="ml-1 text-primary-500 hover:underline"
-                            [routerLink]="['./']">Privacy Policy
+                            [routerLink]="['./']">นโยบายความเป็นส่วนตัว
                         </a>
                     </mat-checkbox>
                 </div>
@@ -124,7 +124,7 @@
                     [disabled]="signUpForm.disabled"
                     (click)="signUp()">
                     <span *ngIf="!signUpForm.disabled">
-                        Create your free account
+                        สร้างบัญชี
                     </span>
                     <mat-progress-spinner
                         *ngIf="signUpForm.disabled"
@@ -159,12 +159,12 @@
         <!-- Content -->
         <div class="z-10 relative w-full max-w-2xl">
             <div class="text-7xl font-bold leading-none text-gray-100">
-                <div>Welcome to</div>
-                <div>our community</div>
+                <div>ยินดีต้อนรับสู่</div>
+                <div>ระบบสำนักงาน</div>
             </div>
             <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400">
-                Fuse helps developers to build organized and well coded dashboards full of beautiful and rich modules.
-                Join us and start building your application today.
+                ระบบช่วยให้การทำงานเป็นระเบียบและติดตามข้อมูลได้ง่ายขึ้น
+                พร้อมโมดูลการใช้งานที่ครบถ้วนสำหรับงานสำนักงาน
             </div>
             <div class="flex items-center mt-8">
                 <div class="flex flex-0 items-center -space-x-1.5">
@@ -181,7 +181,7 @@
                         class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
                         src="assets/images/avatars/male-16.jpg">
                 </div>
-                <div class="ml-4 font-medium tracking-tight text-gray-400">More than 17k people joined us, it's your turn</div>
+                <div class="ml-4 font-medium tracking-tight text-gray-400">พร้อมใช้งานสำหรับทีมของคุณ</div>
             </div>
         </div>
     </div>

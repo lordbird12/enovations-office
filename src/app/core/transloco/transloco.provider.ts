@@ -12,16 +12,12 @@ export const provideTransloco = (): Array<Provider | EnvironmentProviders> =>
             useValue: translocoConfig({
                 availableLangs      : [
                     {
-                        id   : 'en',
-                        label: 'English',
-                    },
-                    {
-                        id   : 'tr',
-                        label: 'Turkish',
+                        id   : 'th',
+                        label: 'ไทย',
                     },
                 ],
-                defaultLang         : 'en',
-                fallbackLang        : 'en',
+                defaultLang         : 'th',
+                fallbackLang        : 'th',
                 reRenderOnLangChange: true,
                 prodMode            : true,
             }),

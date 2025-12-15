@@ -104,7 +104,7 @@ export class AuthResetPasswordComponent implements OnInit
                     // Set the alert
                     this.alert = {
                         type   : 'success',
-                        message: 'Your password has been reset.',
+                        message: 'รีเซ็ตรหัสผ่านเรียบร้อยแล้ว',
                     };
                 },
                 (response) =>
@@ -112,7 +112,7 @@ export class AuthResetPasswordComponent implements OnInit
                     // Set the alert
                     this.alert = {
                         type   : 'error',
-                        message: 'Something went wrong, please try again.',
+                        message: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
                     };
                 },
             );

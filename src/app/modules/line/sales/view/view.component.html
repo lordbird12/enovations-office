@@ -50,7 +50,7 @@
                 <p><strong>วัตถุประสงค์:</strong> {{ formData.value.request_purpose ?? '-' }}</p>
                 <p *ngIf="formData.value.request_purpose === 'Demo'"><strong>งบประมาณ:</strong> {{ formData.value.budget
                     ?? 0 }}</p>
-                <p><strong>Function Qualifications:</strong> {{ formData.value.function_qualifications }}</p>
+                <p><strong>คุณสมบัติการใช้งาน:</strong> {{ formData.value.function_qualifications }}</p>
                 <p><strong>อุปกรณ์เพิ่มเติม:</strong> {{ formData.value.additional_equipment }}</p>
                 <p><strong>วัน เวลา สถานที่นัดหมาย:</strong> {{ formData.value.meeting_details }}</p>
                 <p><strong>วันที่ขอ:</strong> {{ formData.value.created_at | date:'dd-MM-yyyy' }}</p>
@@ -86,12 +86,12 @@
             <div class="bg-card p-6 rounded-xl shadow-md space-y-2">
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลการใช้เครื่องปัจจุบันของโรงพยาบาล</h3>
                 <p><strong>รุ่นที่ใช้อยู่:</strong> {{ formData.value.current_machine_model }}</p>
-                <p><strong>Work Station:</strong> {{ formData.value.current_work_station }}</p>
+                <p><strong>จุดใช้งาน:</strong> {{ formData.value.current_work_station }}</p>
                 <p><strong>ปัญหาหรือความต้องการ:</strong> {{ formData.value.current_usage_problem }}</p>
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลการเครื่องคู่แข่งที่นำเสนอ</h3>
                 <p><strong>รุ่นที่นำเสนอ:</strong> {{ formData.value.competitor_model }}</p>
                 <p><strong>หัวตรวจ:</strong> {{ formData.value.competitor_transducer }}</p>
-                <p><strong>Feddback ลูกค้า:</strong> {{ formData.value.customer_feedback }}</p>
+                <p><strong>ความคิดเห็นลูกค้า:</strong> {{ formData.value.customer_feedback }}</p>
             </div>
 
             <!-- ข้อมูลโรงพยาบาล -->
@@ -173,7 +173,7 @@
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-md">
                                 <div>
-                                    <p class="text-gray-500">Serial No.</p>
+                                    <p class="text-gray-500">หมายเลขซีเรียล</p>
                                     <p>{{ product?.product?.serial_no ?? '-' }}</p>
                                 </div>
                             </div>
@@ -239,7 +239,7 @@
 
                             <div class="grid grid-cols-2 gap-2 text-md">
                                 <div>
-                                    <p class="text-gray-500">Serial No.</p>
+                                    <p class="text-gray-500">หมายเลขซีเรียล</p>
                                     <p>{{ product?.product?.serial_no ?? '-' }}</p>
                                 </div>
                             </div>
@@ -291,7 +291,7 @@
 
             <!-- Win & Lose Section -->
             <div class="bg-white rounded-xl shadow-md p-4">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">Win & lose</h3>
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">ผลชนะ/แพ้</h3>
                 <div class="space-y-3">
                     <div *ngFor="let item of winLose" class="border rounded-lg p-3">
                         <div class="flex justify-between items-center">

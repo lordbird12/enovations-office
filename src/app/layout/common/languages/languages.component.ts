@@ -1,4 +1,4 @@
-import { NgFor, NgTemplateOutlet } from '@angular/common';
+import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -13,7 +13,7 @@ import { take } from 'rxjs';
     changeDetection: ChangeDetectionStrategy.OnPush,
     exportAs       : 'languages',
     standalone     : true,
-    imports        : [MatButtonModule, MatMenuModule, NgTemplateOutlet, NgFor],
+    imports        : [MatButtonModule, MatMenuModule, NgTemplateOutlet, NgFor, NgIf],
 })
 export class LanguagesComponent implements OnInit, OnDestroy
 {
@@ -56,8 +56,7 @@ export class LanguagesComponent implements OnInit, OnDestroy
 
         // Set the country iso codes for languages for flags
         this.flagCodes = {
-            'en': 'us',
-            'tr': 'tr',
+            'th': 'th',
         };
     }
 

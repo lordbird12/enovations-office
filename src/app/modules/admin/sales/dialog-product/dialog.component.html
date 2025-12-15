@@ -1,4 +1,4 @@
-<h2 mat-dialog-title class="mx-auto text-2xl text-center font-semibold">เพิ่มสินค้า</h2>
+<h2 mat-dialog-title class="mx-auto text-2xl text-center font-semibold">จัดการเครื่อง</h2>
 <mat-dialog-content [formGroup]="form" class="space-y-6 p-4 w-full max-w-lg mx-auto md:max-w-2xl items-center">
     <!-- Users Section -->
     <h3 class="text-lg font-medium">พนักงาน
@@ -33,7 +33,7 @@
             </mat-autocomplete>
         </mat-form-field>
     </div>
-    <h3 class="text-xl font-medium">Machine Models</h3>
+    <h3 class="text-xl font-medium">เลือกเครื่อง</h3>
     <div formArrayName="machine_models" class="space-y-4">
         <div *ngFor="let model of machineModelsArray.controls; let i = index" [formGroupName]="i"
             class="border p-4 rounded-lg shadow-sm">
@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <h3 class="text-xl font-medium">Transducer</h3>
+    <h3 class="text-xl font-medium">เลือกหัวตรวจ</h3>
     <div formArrayName="transducers" class="space-y-4">
         <div *ngFor="let model of transducersArray.controls; let i = index" [formGroupName]="i"
             class="border p-4 rounded-lg shadow-sm">

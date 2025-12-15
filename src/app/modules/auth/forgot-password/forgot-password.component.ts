@@ -97,7 +97,7 @@ export class AuthForgotPasswordComponent implements OnInit
                     // Set the alert
                     this.alert = {
                         type   : 'success',
-                        message: 'Password reset sent! You\'ll receive an email if you are registered on our system.',
+                        message: 'ส่งลิงก์รีเซ็ตรหัสผ่านแล้ว หากอีเมลนี้มีในระบบ คุณจะได้รับอีเมลแจ้งเตือน',
                     };
                 },
                 (response) =>
@@ -105,7 +105,7 @@ export class AuthForgotPasswordComponent implements OnInit
                     // Set the alert
                     this.alert = {
                         type   : 'error',
-                        message: 'Email does not found! Are you sure you are already a member?',
+                        message: 'ไม่พบอีเมลในระบบ กรุณาตรวจสอบอีกครั้ง',
                     };
                 },
             );

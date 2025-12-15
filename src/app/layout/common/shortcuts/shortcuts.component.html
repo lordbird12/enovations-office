@@ -22,11 +22,11 @@
                 </button>
             </div>
             <div class="flex items-center text-lg font-medium leading-10">
-                <span class="">Shortcuts</span>
+                <span class="">ทางลัด</span>
                 <ng-container *ngIf="mode !== 'view'">
                     <span class="ml-1">
-                        <ng-container *ngIf="mode === 'add'">- Add new</ng-container>
-                        <ng-container *ngIf="mode === 'modify' || mode === 'edit'">- Editing</ng-container>
+                        <ng-container *ngIf="mode === 'add'">- เพิ่มใหม่</ng-container>
+                        <ng-container *ngIf="mode === 'modify' || mode === 'edit'">- แก้ไข</ng-container>
                     </span>
                 </ng-container>
             </div>
@@ -38,7 +38,7 @@
                     <button
                         mat-icon-button
                         (click)="changeMode('modify')"
-                        [matTooltip]="'Enter edit mode'">
+                        [matTooltip]="'เข้าสู่โหมดแก้ไข'">
                         <mat-icon
                             class="icon-size-5 text-current"
                             [svgIcon]="'heroicons_solid:pencil-square'"></mat-icon>
@@ -47,7 +47,7 @@
                     <button
                         mat-icon-button
                         (click)="newShortcut()"
-                        [matTooltip]="'Add shortcut'">
+                        [matTooltip]="'เพิ่มทางลัด'">
                         <mat-icon
                             class="icon-size-5 text-current"
                             [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
@@ -60,7 +60,7 @@
                     <button
                         mat-icon-button
                         (click)="changeMode('view')"
-                        [matTooltip]="'Exit edit mode'">
+                        [matTooltip]="'ออกจากโหมดแก้ไข'">
                         <mat-icon
                             class="icon-size-5 text-current"
                             [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
@@ -73,7 +73,7 @@
                     <button
                         mat-icon-button
                         (click)="changeMode('view')"
-                        [matTooltip]="'Cancel'">
+                        [matTooltip]="'ยกเลิก'">
                         <mat-icon
                             class="icon-size-5 text-current"
                             [svgIcon]="'heroicons_solid:x-circle'"></mat-icon>
@@ -86,7 +86,7 @@
                     <button
                         mat-icon-button
                         (click)="changeMode('modify')"
-                        [matTooltip]="'Cancel'">
+                        [matTooltip]="'ยกเลิก'">
                         <mat-icon
                             class="icon-size-5 text-current"
                             [svgIcon]="'heroicons_solid:x-circle'"></mat-icon>
@@ -153,8 +153,8 @@
                                 class="text-primary-700 dark:text-primary-50"
                                 [svgIcon]="'heroicons_outline:bookmark'"></mat-icon>
                         </div>
-                        <div class="mt-5 text-2xl font-semibold tracking-tight">No shortcuts</div>
-                        <div class="w-full max-w-60 mt-1 text-md text-center text-secondary">When you have shortcuts, they will appear here.</div>
+                        <div class="mt-5 text-2xl font-semibold tracking-tight">ไม่มีทางลัด</div>
+                        <div class="w-full max-w-60 mt-1 text-md text-center text-secondary">เมื่อมีทางลัด จะแสดงที่นี่</div>
                     </div>
                 </ng-container>
             </ng-container>
@@ -165,27 +165,27 @@
                     class="p-6"
                     [formGroup]="shortcutForm">
                     <mat-form-field class="w-full">
-                        <mat-label>Label</mat-label>
+                        <mat-label>ชื่อ</mat-label>
                         <input
                             matInput
                             [formControlName]="'label'"
                             required>
                     </mat-form-field>
                     <mat-form-field class="w-full">
-                        <mat-label>Description</mat-label>
+                        <mat-label>คำอธิบาย</mat-label>
                         <input
                             matInput
                             [formControlName]="'description'">
                     </mat-form-field>
                     <mat-form-field class="w-full">
-                        <mat-label>Icon</mat-label>
+                        <mat-label>ไอคอน</mat-label>
                         <input
                             matInput
                             [formControlName]="'icon'"
                             required>
                     </mat-form-field>
                     <mat-form-field class="w-full">
-                        <mat-label>Link</mat-label>
+                        <mat-label>ลิงก์</mat-label>
                         <input
                             matInput
                             [formControlName]="'link'"
@@ -194,7 +194,7 @@
                     <mat-slide-toggle
                         [color]="'primary'"
                         [formControlName]="'useRouter'">
-                        Use router for the link
+                        ใช้ RouterLink สำหรับลิงก์
                     </mat-slide-toggle>
                     <!-- Actions -->
                     <div class="flex items-center justify-end mt-4">
@@ -204,7 +204,7 @@
                             mat-flat-button
                             type="button"
                             (click)="delete()">
-                            Delete
+                            ลบ
                         </button>
                         <button
                             mat-flat-button
@@ -212,8 +212,8 @@
                             [disabled]="!shortcutForm.valid"
                             type="button"
                             (click)="save()">
-                            <ng-container *ngIf="mode === 'add'">Add</ng-container>
-                            <ng-container *ngIf="mode === 'edit'">Update</ng-container>
+                            <ng-container *ngIf="mode === 'add'">เพิ่ม</ng-container>
+                            <ng-container *ngIf="mode === 'edit'">บันทึก</ng-container>
                         </button>
                     </div>
                 </form>

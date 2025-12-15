@@ -5,7 +5,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'admin',
         title: 'จัดการระบบ',
-        subtitle: 'ขัอมูลเกี่ยวกับระบบ',
+        subtitle: 'ข้อมูลเกี่ยวกับระบบ',
         type: 'group',
         icon: 'heroicons_outline:home',
         hidden: () => {
@@ -60,7 +60,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'products',
         title: 'จัดการคลังและสินค้า',
-        subtitle: 'ขัอมูลเกี่ยวกับระบบ',
+        subtitle: 'ข้อมูลเกี่ยวกับระบบ',
         type: 'group',
         icon: 'heroicons_outline:home',
 
@@ -119,7 +119,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'sales',
         title: 'จัดการจอง',
-        subtitle: 'ขัอมูลเกี่ยวกับระบบ',
+        subtitle: 'ข้อมูลเกี่ยวกับระบบ',
         type: 'group',
         icon: 'heroicons_outline:home',
         children: [
@@ -183,24 +183,24 @@ export const compactNavigation: FuseNavigationItem[] = [
     },
     {
         id: 'pages',
-        title: 'Pages',
-        tooltip: 'Pages',
+        title: 'หน้า',
+        tooltip: 'หน้า',
         type: 'aside',
         icon: 'heroicons_outline:document-duplicate',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
     {
         id: 'user-interface',
-        title: 'UI',
-        tooltip: 'UI',
+        title: 'ส่วนติดต่อผู้ใช้',
+        tooltip: 'ส่วนติดต่อผู้ใช้',
         type: 'aside',
         icon: 'heroicons_outline:rectangle-stack',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
     {
         id: 'navigation-features',
-        title: 'Navigation',
-        tooltip: 'Navigation',
+        title: 'การนำทาง',
+        tooltip: 'การนำทาง',
         type: 'aside',
         icon: 'heroicons_outline:bars-3',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
@@ -209,38 +209,38 @@ export const compactNavigation: FuseNavigationItem[] = [
 export const futuristicNavigation: FuseNavigationItem[] = [
     {
         id: 'dashboards',
-        title: 'DASHBOARDS',
+        title: 'แดชบอร์ด',
         type: 'group',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
     {
         id: 'apps',
-        title: 'APPS',
+        title: 'แอป',
         type: 'group',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
     {
         id: 'others',
-        title: 'OTHERS',
+        title: 'อื่นๆ',
         type: 'group',
     },
     {
         id: 'pages',
-        title: 'Pages',
+        title: 'หน้า',
         type: 'aside',
         icon: 'heroicons_outline:document-duplicate',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
     {
         id: 'user-interface',
-        title: 'User Interface',
+        title: 'ส่วนติดต่อผู้ใช้',
         type: 'aside',
         icon: 'heroicons_outline:rectangle-stack',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
     {
         id: 'navigation-features',
-        title: 'Navigation Features',
+        title: 'คุณสมบัติการนำทาง',
         type: 'aside',
         icon: 'heroicons_outline:bars-3',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
