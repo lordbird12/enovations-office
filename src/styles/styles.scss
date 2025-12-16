@@ -13,7 +13,9 @@
     background-color: #000000 !important;
 }
 
-/* Prevent Angular Material select/autocomplete overlays from dimming the page */
-.cdk-overlay-backdrop.cdk-overlay-transparent-backdrop {
-    background: transparent !important;
+/* Prevent Angular CDK "transparent" backdrops (mat-select/menu) from dimming the page */
+.cdk-overlay-backdrop.cdk-overlay-transparent-backdrop,
+.cdk-overlay-backdrop.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
+    background-color: transparent !important;
+    opacity: 0 !important;
 }
