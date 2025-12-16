@@ -373,7 +373,7 @@
                             <div class="flex-auto ml-4 leading-none">
                                 <div class="text-sm font-medium text-secondary">Expenses</div>
                                 <div class="mt-2 font-medium text-2xl">{{data.budget.expenses | currency:'USD'}}</div>
-                                <mat-progress-bar class="mt-3 rounded-full" [color]="'warn'" [mode]="'determinate'" [value]="(data.budget.expenses  * 100) / data.budget.expensesLimit"></mat-progress-bar>
+                                <mat-spinner class="mt-3" [diameter]="24"></mat-spinner>
                             </div>
                             <div class="flex items-end justify-end min-w-18 mt-auto ml-6">
                                 <div class="text-lg leading-none">2.6%</div>
@@ -389,7 +389,7 @@
                             <div class="flex-auto ml-4 leading-none">
                                 <div class="text-sm font-medium text-secondary">Savings</div>
                                 <div class="mt-2 font-medium text-2xl">{{data.budget.savings | currency:'USD'}}</div>
-                                <mat-progress-bar class="mt-3 rounded-full" [mode]="'determinate'" [value]="(data.budget.savings  * 100) / data.budget.savingsGoal"></mat-progress-bar>
+                                <mat-spinner class="mt-3" [diameter]="24"></mat-spinner>
                             </div>
                             <div class="flex items-end justify-end min-w-18 mt-auto ml-6">
                                 <div class="text-lg leading-none">12.7%</div>
@@ -405,7 +405,7 @@
                             <div class="flex-auto ml-4 leading-none">
                                 <div class="text-sm font-medium text-secondary">Bills</div>
                                 <div class="mt-2 font-medium text-2xl">{{data.budget.bills | currency:'USD'}}</div>
-                                <mat-progress-bar class="mt-3 rounded-full" [mode]="'determinate'" [value]="(data.budget.bills  * 100) / data.budget.billsLimit"></mat-progress-bar>
+                                <mat-spinner class="mt-3" [diameter]="24"></mat-spinner>
                             </div>
                             <div class="flex items-end justify-end min-w-18 mt-auto ml-6">
                                 <div class="text-lg leading-none">105.7%</div>

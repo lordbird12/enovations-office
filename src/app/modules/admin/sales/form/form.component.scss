@@ -30,4 +30,32 @@
   .cursor-pointer {
     cursor: pointer;
   }
+
+  /* Fix for mat-select not returning to normal state after selection */
+  /* Force remove focus overlay when form field is not actually focused */
+  form-product-sales .mat-mdc-form-field:not(:focus-within) {
+    &.mat-focused {
+      // Remove focused styling when not actually focused
+      .mat-mdc-text-field-wrapper {
+        .mat-mdc-form-field-focus-overlay {
+          opacity: 0 !important;
+          display: none !important;
+        }
+        
+        // Reset border color
+        border-color: rgba(0, 0, 0, 0.38) !important;
+      }
+    }
+  }
+
+  /* Remove focus overlay immediately when not focused */
+  form-product-sales .mat-mdc-form-field:not(:focus-within) .mat-mdc-text-field-wrapper .mat-mdc-form-field-focus-overlay {
+    opacity: 0 !important;
+    display: none !important;
+  }
+
+  /* Ensure mat-select trigger doesn't stay focused */
+  form-product-sales .mat-mdc-select-trigger:not(:focus) {
+    outline: none !important;
+  }
   

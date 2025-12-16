@@ -1,5 +1,5 @@
 import { CommonModule, Location } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,10 @@ import { PageService } from '../page.service';
 import liff from '@line/liff';
 import { firstValueFrom, timeout } from 'rxjs';
 import { LineService } from '../../line.service';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarOptions } from '@fullcalendar/core';
+import { FullCalendarComponent } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid';
 
 interface TimelineEvent {
     id: number;
@@ -29,9 +33,10 @@ interface TimelineEvent {
         ReactiveFormsModule,
         MatIconModule,
         MatFormFieldModule,
+        FullCalendarModule,
     ]
 })
-export class CalendarTimelineComponent implements OnInit {
+export class CalendarTimelineComponent implements OnInit, AfterViewInit {
     timelineEvents: TimelineEvent[] = [];
     months: string[] = [];
     displayMonthCount = 6;
@@ -42,6 +47,29 @@ export class CalendarTimelineComponent implements OnInit {
     pictureUrl: string = '';
     selectedYear: number = new Date().getFullYear();
     allYears: number[] = []; // เช่น [2023, 2024, 2025]
+    
+    // View toggle
+    currentView: 'table' | 'calendar' = 'table';
+    
+    // Calendar properties
+    @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
+    calendarOptions: CalendarOptions = {
+        plugins: [dayGridPlugin],
+        initialView: 'dayGridMonth',
+        weekends: true,
+        events: [],
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,dayGridWeek'
+        },
+        eventClick: this.onCalendarEventClick.bind(this),
+        height: 'auto'
+    };
+    
+    // Store all events for both views
+    allEvents: any[] = [];
+    
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
@@ -120,22 +148,57 @@ export class CalendarTimelineComponent implements OnInit {
     }
 
     loadEvents(): void {
-        this.user = JSON.parse(localStorage.getItem('user'));
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+            console.error('User not found in localStorage');
+            return;
+        }
+        
+        try {
+            this.user = JSON.parse(userStr);
+        } catch (e) {
+            console.error('Error parsing user from localStorage:', e);
+            return;
+        }
+        
         const userId = this.user?.id;
-        console.log(userId);
+        console.log('Loading events for user ID:', userId);
+        
+        if (!userId) {
+            console.error('User ID not found in localStorage');
+            return;
+        }
         
         this._service.getCalendarUser(userId).subscribe((resp: any) => {
-             
             const newEvents = resp
                 .map((item: any) => {
                     let color = 'bg-gray-400';
+                    let calendarColor = '#9CA3AF'; // Default gray
                     switch (item.status) {
-                        case 'Ordered': color = 'bg-yellow-500'; break;
-                        case 'Reject': color = 'bg-red-500'; break;
-                        case 'Confirm': color = 'bg-green-500'; break;
-                        case 'Approve': color = 'bg-green-600'; break;
-                        case 'Finish': color = 'bg-blue-500'; break;
-                        case 'Returned': color = 'bg-purple-500'; break;
+                        case 'Ordered': 
+                            color = 'bg-yellow-500'; 
+                            calendarColor = '#EAB308'; 
+                            break;
+                        case 'Reject': 
+                            color = 'bg-red-500'; 
+                            calendarColor = '#EF4444'; 
+                            break;
+                        case 'Confirm': 
+                            color = 'bg-green-500'; 
+                            calendarColor = '#22C55E'; 
+                            break;
+                        case 'Approve': 
+                            color = 'bg-green-600'; 
+                            calendarColor = '#16A34A'; 
+                            break;
+                        case 'Finish': 
+                            color = 'bg-blue-500'; 
+                            calendarColor = '#3B82F6'; 
+                            break;
+                        case 'Returned': 
+                            color = 'bg-purple-500'; 
+                            calendarColor = '#A855F7'; 
+                            break;
                     }
 
                     return {
@@ -147,10 +210,18 @@ export class CalendarTimelineComponent implements OnInit {
                         reserve_ref_no: item.reserve_ref_no,
                         request_purpose: item.request_purpose,
                         color,
+                        calendarColor,
                         status: item.status || 'กำลังดำเนินการ',
+                        client_id: item.client_id,
+                        province: item.province,
+                        department: item.department,
+                        budget: item.budget,
                     };
                 })
                 .filter(event => DateTime.fromISO(event.start).year === +this.selectedYear);
+            
+            // Store all events
+            this.allEvents = newEvents;
             
             // 🟦 สร้าง 12 เดือนล่วงหน้า
             this.groupedTimelineEvents = {};
@@ -174,9 +245,73 @@ export class CalendarTimelineComponent implements OnInit {
                     DateTime.fromISO(a.start).toMillis() - DateTime.fromISO(b.start).toMillis()
                 );
             }
+            
+            // Update calendar events
+            this.updateCalendarEvents();
        
-            this._changeDetectorRef.detectChanges(); // แทน markForCheck ถ้าจำเป็น
+            this._changeDetectorRef.detectChanges();
+        }, (error) => {
+            console.error('Error loading events:', error);
         });
+    }
+    
+    updateCalendarEvents(): void {
+        const calendarEvents = this.allEvents.map(event => ({
+            id: event.id.toString(),
+            title: event.code || 'ไม่ระบุ',
+            start: event.start,
+            end: DateTime.fromISO(event.end).plus({ days: 1 }).toISODate(),
+            backgroundColor: event.calendarColor,
+            borderColor: event.calendarColor,
+            extendedProps: {
+                reserve_ref_no: event.reserve_ref_no,
+                request_purpose: event.request_purpose,
+                status: event.status,
+            }
+        }));
+        
+        this.calendarOptions = {
+            ...this.calendarOptions,
+            events: calendarEvents
+        };
+    }
+    
+    onCalendarEventClick(info: any): void {
+        const eventId = parseInt(info.event.id);
+        this.viewDetail(eventId);
+    }
+    
+    toggleView(view: 'table' | 'calendar'): void {
+        this.currentView = view;
+        if (view === 'calendar' && this.calendarComponent) {
+            setTimeout(() => {
+                this.calendarComponent.getApi().updateSize();
+            }, 100);
+        }
+    }
+    
+    ngAfterViewInit(): void {
+        if (this.currentView === 'calendar' && this.calendarComponent) {
+            setTimeout(() => {
+                this.calendarComponent.getApi().updateSize();
+            }, 100);
+        }
+    }
+    
+    getAllEventsForTable(): any[] {
+        return this.allEvents.sort((a, b) => 
+            DateTime.fromISO(a.start).toMillis() - DateTime.fromISO(b.start).toMillis()
+        );
+    }
+    
+    formatDate(date: string): string {
+        return DateTime.fromISO(date).setLocale('th').toFormat('dd MMM yyyy');
+    }
+    
+    formatDateRange(startDate: string, endDate: string): string {
+        const start = DateTime.fromISO(startDate).setLocale('th').toFormat('dd MMM yyyy');
+        const end = DateTime.fromISO(endDate).setLocale('th').toFormat('dd MMM yyyy');
+        return `${start} - ${end}`;
     }
 
 
@@ -357,10 +492,6 @@ export class CalendarTimelineComponent implements OnInit {
         return [];
     }
 
-    formatDateRange(startDate: string, endDate: string): string {
-        // Implement date formatting
-        return `${startDate} - ${endDate}`;
-    }
     onYearChange() {
         //  this.generateMonths();
         this.loadEvents(); // ดึงข้อมูลใหม่ตามปีที่เลือก

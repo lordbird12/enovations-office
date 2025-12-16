@@ -4,6 +4,7 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
+    OnDestroy,
     OnInit,
     ViewChild,
     ViewEncapsulation,
@@ -25,15 +26,17 @@ import { FormDialogComponent } from '../form-dialog/form-dialog.component';
 import { PageService } from '../page.service';
 import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PictureComponent } from '../../picture/picture.component';
 import { FormReportComponent } from '../../product/form-report/form-report.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { Subject } from 'rxjs';
+import { MatTabsModule } from '@angular/material/tabs';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
     selector: 'employee-list-sales',
     templateUrl: './list.component.html',
+    styleUrls: ['./list.component.scss'],
     encapsulation: ViewEncapsulation.None,
     standalone: true,
     imports: [
@@ -54,10 +57,11 @@ import { Subject } from 'rxjs';
         MatPaginatorModule,
         MatTableModule,
         DataTablesModule,
-        MatMenuModule
+        MatMenuModule,
+        MatTabsModule,
     ],
 })
-export class ListComponent implements OnInit, AfterViewInit {
+export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(DataTableDirective)
     dtElement!: DataTableDirective;
     dtTrigger: Subject<any> = new Subject();
@@ -68,19 +72,49 @@ export class ListComponent implements OnInit, AfterViewInit {
     dataRow: any[] = [];
     user: any
     selectedStatus: string = '';
+    viewMode: 'default' | 'marketing-pending' | 'marketing-all' | 'warehouse' = 'default';
+    marketingTabs = [
+        { status: '', label: 'ทั้งหมด' },
+        { status: 'Ordered', label: 'รออนุมัติ' },
+        { status: 'Confirm', label: 'อนุมัติ' },
+        { status: 'Reject', label: 'ไม่อนุมัติ' },
+        { status: 'Returned', label: 'เสร็จสิ้น' },
+        { status: 'Finish', label: 'รอคืน' },
+    ] as const;
+    marketingTabIndex = 0;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    private queryParamsSubscription?: Subscription;
     constructor(
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
-        private _router: Router
+        private _router: Router,
+        private _activatedRoute: ActivatedRoute
     ) {
         this.user = JSON.parse(localStorage.getItem('user'))
     }
 
     ngOnInit() {
+        this.applyViewModeFromQuery();
         this.loadTable();
-
+        
+        // Subscribe to query params changes to handle menu switching
+        this.queryParamsSubscription = this._activatedRoute.queryParams
+            .subscribe(params => {
+                const previousViewMode = this.viewMode;
+                const previousStatus = this.selectedStatus;
+                this.applyViewModeFromQuery();
+                
+                // If view mode or status changed, re-render the table
+                if (previousViewMode !== this.viewMode || previousStatus !== this.selectedStatus) {
+                    // Wait for view to update and ensure dtElement is ready before re-rendering
+                    setTimeout(() => {
+                        if (this.dtElement) {
+                            this.rerender();
+                        }
+                    }, 150);
+                }
+            });
     }
 
     ngAfterViewInit(): void {
@@ -88,6 +122,12 @@ export class ListComponent implements OnInit, AfterViewInit {
             this.dtTrigger.next(this.dtOptions);
         }, 200);
         this._changeDetectorRef.detectChanges();
+    }
+
+    ngOnDestroy(): void {
+        if (this.queryParamsSubscription) {
+            this.queryParamsSubscription.unsubscribe();
+        }
     }
 
     // เพิ่มเมธอด editElement(element) และ deleteElement(element)
@@ -121,6 +161,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             order: [[0, 'desc']],
             ajax: (dataTablesParameters: any, callback) => {
                 dataTablesParameters.status = this.selectedStatus || null;
+                dataTablesParameters.user_id = 2;
                 that._service.getPage(dataTablesParameters).subscribe((resp: any) => {
                     this.dataRow = resp.data;
                     console.log(this.dataRow)
@@ -154,7 +195,7 @@ export class ListComponent implements OnInit, AfterViewInit {
         };
     }
 
-    
+
 
 
     deleteElement() {
@@ -199,13 +240,35 @@ export class ListComponent implements OnInit, AfterViewInit {
     }
 
     set_status(status: string): void {
+        if (this.viewMode === 'marketing-pending') {
+            return;
+        }
         this.selectedStatus = status;
         this.rerender();
     }
 
+    onMarketingTabIndexChange(index: number): void {
+        const tab = this.marketingTabs[index];
+        if (!tab) {
+            return;
+        }
+        this.marketingTabIndex = index;
+        this.selectedStatus = tab.status;
+        this.rerender();
+    }
+
     rerender(): void {
+        if (!this.dtElement) {
+            return;
+        }
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-            dtInstance.ajax.reload();
+            dtInstance.ajax.reload(null, false); // false = don't reset paging
+        }).catch((error) => {
+            console.warn('Error reloading DataTable:', error);
+            // If table is not initialized yet, try to initialize it
+            if (this.dtTrigger) {
+                this.dtTrigger.next(this.dtOptions);
+            }
         });
     }
 
@@ -218,5 +281,43 @@ export class ListComponent implements OnInit, AfterViewInit {
                 console.log(err);
             }
         })
+    }
+
+    private applyViewModeFromQuery(): void {
+        const view = this._activatedRoute.snapshot.queryParamMap.get('view');
+        const status = this._activatedRoute.snapshot.queryParamMap.get('status');
+        
+        if (view === 'marketing-pending') {
+            this.viewMode = 'marketing-pending';
+            this.selectedStatus = 'Ordered';
+            this.marketingTabIndex = 0; // Reset tab index
+            this._changeDetectorRef.markForCheck();
+            return;
+        }
+        if (view === 'marketing-all') {
+            this.viewMode = 'marketing-all';
+            this.selectedStatus = ''; // Default to 'ทั้งหมด' tab
+            this.marketingTabIndex = this.marketingTabs.findIndex(
+                (t) => t.status === this.selectedStatus
+            );
+            if (this.marketingTabIndex < 0) {
+                this.marketingTabIndex = 0;
+            }
+            this._changeDetectorRef.markForCheck();
+            return;
+        }
+        // If status query param exists without view param, it's from warehouse
+        if (status && !view) {
+            this.viewMode = 'warehouse';
+            this.selectedStatus = status;
+            this.marketingTabIndex = 0; // Reset tab index
+            this._changeDetectorRef.markForCheck();
+            return;
+        }
+        this.viewMode = 'default';
+        // If status query param exists, use it; otherwise default to empty
+        this.selectedStatus = status || '';
+        this.marketingTabIndex = 0; // Reset tab index
+        this._changeDetectorRef.markForCheck();
     }
 }

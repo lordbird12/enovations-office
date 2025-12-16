@@ -1,8 +1,7 @@
-<!-- MOBILE BOOKING LIST WITH TABS -->
+<!-- MOBILE VIEW -->
 <div class="md:hidden w-full">
     <!-- Header with back button -->
-    <div
-        class="sticky top-0 z-10 bg-white px-4 py-3 border-b border-gray-200 shadow-sm flex justify-between items-center">
+    <div class="sticky top-0 z-10 bg-white px-4 py-3 border-b border-gray-200 shadow-sm flex justify-between items-center">
         <button (click)="goBack()" class="flex items-center text-gray-600 hover:text-gray-900">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd"
@@ -23,156 +22,116 @@
 
         <div class="w-5"></div>
     </div>
-    <!-- My Bookings Tab Content -->
-    <div *ngIf="activeTab === 'myBookings'" [attr.data-key]="selectedYear" class="px-4 py-2 space-y-4">
 
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-15">
-            <div class="bg-blue-50 px-0 py-3 border-b border-blue-100">
-                <div class="flex justify-between items-center">
-                    <select [(ngModel)]="selectedYear" (change)="onYearChange()"
-                        class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring focus:ring-blue-200">
-                        <option *ngFor="let year of allYears" [value]="year">{{ year }}</option>
-                    </select>
-                    <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-full">
-                        {{ getTotalEvents() }} รายการทั้งหมด
+    <!-- View Toggle Buttons -->
+    <div class="px-4 py-3 bg-white border-b border-gray-200 flex gap-2">
+        <button 
+            (click)="toggleView('table')"
+            [class.bg-blue-500]="currentView === 'table'"
+            [class.text-white]="currentView === 'table'"
+            [class.bg-gray-100]="currentView !== 'table'"
+            [class.text-gray-700]="currentView !== 'table'"
+            class="flex-1 px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            </svg>
+            ตาราง
+        </button>
+        <button 
+            (click)="toggleView('calendar')"
+            [class.bg-blue-500]="currentView === 'calendar'"
+            [class.text-white]="currentView === 'calendar'"
+            [class.bg-gray-100]="currentView !== 'calendar'"
+            [class.text-gray-700]="currentView !== 'calendar'"
+            class="flex-1 px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            ปฏิทิน
+        </button>
+    </div>
+
+    <!-- Year Selector -->
+    <div class="px-4 py-3 bg-blue-50 border-b border-blue-100 flex justify-between items-center">
+        <select [(ngModel)]="selectedYear" (change)="onYearChange()"
+            class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring focus:ring-blue-200 bg-white">
+            <option *ngFor="let year of allYears" [value]="year">{{ year }}</option>
+        </select>
+        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+            {{ getTotalEvents() }} รายการทั้งหมด
+        </span>
+    </div>
+
+    <!-- TABLE VIEW (Mobile - Cards) -->
+    <div *ngIf="currentView === 'table'" class="px-4 py-4 space-y-4 pb-20">
+        <div *ngFor="let event of getAllEventsForTable()" 
+            class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1" [ngClass]="event.color || 'bg-gray-400'"></div>
+            
+            <div class="p-4">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-900 text-lg mb-1">{{ event.code || 'ไม่ระบุ' }}</h3>
+                        <p class="text-sm text-gray-500 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {{ formatDateRange(event.start, event.end) }}
+                        </p>
+                    </div>
+                    <span [ngClass]="getStatusBadge(event.status).colorClass" 
+                        class="px-2 py-1 rounded-md text-xs font-semibold whitespace-nowrap ml-2">
+                        {{ getStatusBadge(event.status).label }}
                     </span>
                 </div>
-            </div>
 
-            <div class="px-4 py-2 border-b border-gray-100 flex justify-end">
-                <button (click)="toggleExpandAll()" class="text-sm flex items-center text-blue-600 hover:text-blue-800">
-                    {{ isAllExpanded ? 'ย่อทั้งหมด' : 'ขยายทั้งหมด' }}
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="divide-y divide-gray-100">
-                <div *ngFor="let month of getAllMonths()" class="hover:bg-gray-50 transition-colors">
-                    <button (click)="toggleMonth(month.key)" class="w-full flex justify-between items-center py-3 px-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                                <span class="text-md font-medium text-blue-800">
-                                    {{ formatMonthNumber(month.key) }}
-                                </span>
-                            </div>
-
-                            <div class="text-left">
-                                <h4 class="text-base font-medium text-gray-800">
-                                    {{ formatMonth(month.key) }}
-                                </h4>
-                                <p class="text-sm text-gray-500 mt-0.5">
-                                    {{ getEventCount(month.key) }} การจอง
-                                </p>
-                            </div>
-                        </div>
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4 text-gray-400 transform transition-transform duration-200"
-                            [class.rotate-180]="isMonthExpanded(month.key)" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd" />
+                <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mt-0.5 mr-2 text-gray-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
-                    </button>
-
-                    <div *ngIf="isMonthExpanded(month.key)" class="px-2 pb-3 space-y-3">
-                        <div *ngFor="let event of groupedTimelineEvents[month.key]"
-                            class="relative p-4 rounded-lg shadow-xs border border-gray-100 bg-white">
-
-                            <div class="absolute top-0 left-0 w-full h-1 rounded-t-lg"
-                                [ngClass]="event.color || 'bg-gray-400'">
-                            </div>
-
-                            <div class="flex justify-between items-start mb-3">
-                                <div>
-                                    <h3 class="font-semibold text-gray-900 text-base line-clamp-1">{{ event.title }}
-                                    </h3>
-                                    <p class="text-sm text-gray-500 mt-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 inline mr-1 -mt-0.5"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        {{ getEventDuration(event) }}
-                                    </p>
-                                </div>
-                                <!-- ✅ Status Badge -->
-                                <div>
-                                    <span *ngIf="event.status === 'Ordered'"
-                                        class="bg-yellow-200 px-2 py-1 rounded-md text-yellow-800 text-sm font-semibold">รออนุมัติ</span>
-                                    <span *ngIf="event.status === 'Reject'"
-                                        class="bg-red-200 px-2 py-1 rounded-md text-red-800 text-sm font-semibold">ไม่อนุมัติ</span>
-                                    <span *ngIf="event.status === 'Confirm'"
-                                        class="bg-green-200 px-2 py-1 rounded-md text-green-800 text-sm font-semibold">อนุมัติ</span>
-                                    <span *ngIf="event.status === 'Approve'"
-                                        class="bg-green-200 px-2 py-1 rounded-md text-green-800 text-sm font-semibold">รอรับของ</span>
-                                    <span *ngIf="event.status === 'Finish'"
-                                        class="bg-blue-200 px-2 py-1 rounded-md text-blue-800 text-sm font-semibold">รอคืน</span>
-                                    <span *ngIf="event.status === 'Returned'"
-                                        class="bg-purple-200 px-2 py-1 rounded-md text-purple-800 text-sm font-semibold">เสร็จสิ้น</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-3 space-y-2">
-                                <div class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-4 w-4 mt-0.5 mr-2 text-gray-500 flex-shrink-0" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                    </svg>
-                                    <div>
-                                        <p class="text-sm text-gray-500">เลขที่การจอง</p>
-                                        <p class="text-md font-medium text-gray-800">{{ event.reserve_ref_no || '-' }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="h-4 w-4 mt-0.5 mr-2 text-gray-500 flex-shrink-0" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                    <div>
-                                        <p class="text-sm text-gray-500">วัตถุประสงค์</p>
-                                        <p class="text-md text-gray-800 line-clamp-2">{{ event.request_purpose || '-' }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button
-                                class="w-full mt-3 px-4 py-2 bg-white border border-gray-200 rounded-lg text-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-                                (click)="viewDetail(event.id)">
-                                ดูรายละเอียด
-                            </button>
+                        <div class="flex-1">
+                            <p class="text-xs text-gray-500">เลขที่การจอง</p>
+                            <p class="text-sm font-medium text-gray-800">{{ event.reserve_ref_no || '-' }}</p>
                         </div>
+                    </div>
 
-                        <div *ngIf="getEventCount(month.key) === 0" class="text-center py-4 text-md text-gray-500">
-                            ไม่มีรายการจองในเดือนนี้
+                    <div class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mt-0.5 mr-2 text-gray-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <div class="flex-1">
+                            <p class="text-xs text-gray-500">วัตถุประสงค์</p>
+                            <p class="text-sm text-gray-800 line-clamp-2">{{ event.request_purpose || '-' }}</p>
                         </div>
                     </div>
                 </div>
+
+                <button
+                    class="w-full px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+                    (click)="viewDetail(event.id)">
+                    ดูรายละเอียด
+                </button>
             </div>
         </div>
 
-        <div *ngIf="getAllMonths().length === 0" class="px-4 py-10 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        <div *ngIf="getAllEventsForTable().length === 0" class="text-center py-10">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            <h3 class="mt-2 text-md font-medium text-gray-900">ไม่มีรายการจอง</h3>
-            <p class="mt-1 text-md text-gray-500">คุณยังไม่มีรายการจองในขณะนี้</p>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">ไม่มีรายการจอง</h3>
+            <p class="mt-1 text-sm text-gray-500">คุณยังไม่มีรายการจองในขณะนี้</p>
         </div>
     </div>
-    <!-- ✅ Footer -->
+
+    <!-- CALENDAR VIEW (Mobile) -->
+    <div *ngIf="currentView === 'calendar'" class="px-4 py-4 pb-20">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-2">
+            <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+        </div>
+    </div>
+
+    <!-- Footer -->
     <footer class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md z-50">
         <div class="flex justify-around items-center h-14">
             <button (click)="goHome()" class="flex flex-col items-center text-gray-600 hover:text-blue-600 text-xs">
@@ -193,5 +152,146 @@
             </button>
         </div>
     </footer>
-
 </div>
+
+<!-- DESKTOP VIEW -->
+<div class="hidden md:flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:p-6 sm:py-8 sm:px-10 border-b bg-card">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10">
+                รายการจองของฉัน
+            </h2>
+        </div>
+    </div>
+
+    <!-- View Toggle and Year Selector -->
+    <div class="p-4 sm:p-6 bg-white border-b border-gray-200">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <!-- View Toggle -->
+            <div class="flex gap-2">
+                <button 
+                    (click)="toggleView('table')"
+                    [class.bg-blue-500]="currentView === 'table'"
+                    [class.text-white]="currentView === 'table'"
+                    [class.bg-gray-100]="currentView !== 'table'"
+                    [class.text-gray-700]="currentView !== 'table'"
+                    class="px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                    </svg>
+                    ตาราง
+                </button>
+                <button 
+                    (click)="toggleView('calendar')"
+                    [class.bg-blue-500]="currentView === 'calendar'"
+                    [class.text-white]="currentView === 'calendar'"
+                    [class.bg-gray-100]="currentView !== 'calendar'"
+                    [class.text-gray-700]="currentView !== 'calendar'"
+                    class="px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    ปฏิทิน
+                </button>
+            </div>
+
+            <!-- Year Selector -->
+            <div class="flex items-center gap-4">
+                <select [(ngModel)]="selectedYear" (change)="onYearChange()"
+                    class="border border-gray-300 rounded-md px-4 py-2 text-sm focus:ring focus:ring-blue-200">
+                    <option *ngFor="let year of allYears" [value]="year">{{ year }}</option>
+                </select>
+                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-2 rounded-full">
+                    {{ getTotalEvents() }} รายการทั้งหมด
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLE VIEW (Desktop) -->
+    <div *ngIf="currentView === 'table'" class="flex-1 overflow-auto p-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">รหัส</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เลขที่การจอง</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">วันที่เริ่มต้น</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">วันที่สิ้นสุด</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">วัตถุประสงค์</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">สถานะ</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">การดำเนินการ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr *ngFor="let event of getAllEventsForTable()" class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 rounded-full mr-2" [ngClass]="event.color || 'bg-gray-400'"></div>
+                                    <span class="text-sm font-medium text-gray-900">{{ event.code || 'ไม่ระบุ' }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ event.reserve_ref_no || '-' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(event.start) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(event.end) }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ event.request_purpose || '-' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span [ngClass]="getStatusBadge(event.status).colorClass" 
+                                    class="px-2 py-1 rounded-md text-xs font-semibold">
+                                    {{ getStatusBadge(event.status).label }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <button 
+                                    (click)="viewDetail(event.id)"
+                                    class="text-blue-600 hover:text-blue-900 font-medium">
+                                    ดูรายละเอียด
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="getAllEventsForTable().length === 0" class="text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">ไม่มีรายการจอง</h3>
+                <p class="mt-1 text-sm text-gray-500">คุณยังไม่มีรายการจองในขณะนี้</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CALENDAR VIEW (Desktop) -->
+    <div *ngIf="currentView === 'calendar'" class="flex-1 overflow-auto p-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+        </div>
+    </div>
+</div>
+
+<!-- Calendar Styles -->
+<style>
+    .fc-event-title {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+    .fc-daygrid-event {
+        cursor: pointer;
+    }
+    @media (max-width: 768px) {
+        .fc-header-toolbar {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .fc-toolbar-chunk {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+    }
+</style>

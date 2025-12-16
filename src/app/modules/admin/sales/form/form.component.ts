@@ -2,7 +2,7 @@
 
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule, NgClass } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy, ViewEncapsulation, Renderer2, HostListener, ElementRef } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -60,7 +60,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
     ],
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, OnDestroy {
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     fixedSubscriptInput: FormControl = new FormControl('', [Validators.required]);
     dynamicSubscriptInput: FormControl = new FormControl('', [Validators.required]);
@@ -74,6 +74,13 @@ export class FormComponent implements OnInit {
 
     customerType: string[] = [
         'Government', 'Private', 'Clinic', 'Vet'
+    ];
+
+    bookingTypes: string[] = [
+        'Echocardiogram',
+        'ec',
+        'Ultrasound Imaging',
+        'rc'
     ];
     departments: string[] = [
         'Cardiology',
@@ -342,6 +349,7 @@ export class FormComponent implements OnInit {
 
     user: any
     pageType: any
+    private focusObserver?: MutationObserver;
     /**
      * Constructor
      */
@@ -353,6 +361,8 @@ export class FormComponent implements OnInit {
         public activatedRoute: ActivatedRoute,
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _renderer: Renderer2,
+        private _elementRef: ElementRef,
 
     ) {
 
@@ -416,7 +426,8 @@ export class FormComponent implements OnInit {
             memberIds: [],
             tds: [],
             client_name: null,
-            application_special_list: 'Yes'
+            application_special_list: 'Yes',
+            type: this.type || null
         });
     }
 
@@ -439,6 +450,9 @@ export class FormComponent implements OnInit {
                         ...this.itemData,
 
                     });
+                    if (this.itemData.type) {
+                        this.type = this.itemData.type;
+                    }
                     const hasWorkStation = !!this.itemData?.work_station_id;
                     const workstationName = hasWorkStation
                         ? this.workstationData.find(item => item.id === this.itemData.work_station_id)?.name ?? ''
@@ -477,7 +491,7 @@ export class FormComponent implements OnInit {
             const currentDateTime = DateTime.now();
             this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy');
             this.formData.patchValue({
-
+                type: this.type || null
             })
 
             // Mock Data (สามารถเปลี่ยนเป็น API Response ได้)
@@ -538,6 +552,51 @@ export class FormComponent implements OnInit {
                     this.formData.get('work_station_id')?.setValue(null, { emitEvent: false });
                 }
             });
+        
+        this.formData.get('type')?.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe((value) => {
+                this.type = value;
+            });
+
+        // Setup MutationObserver to watch for focused state changes
+        this.setupFocusObserver();
+    }
+
+    private setupFocusObserver(): void {
+        // Observe changes to mat-form-field elements
+        const componentElement = this._elementRef.nativeElement;
+        
+        this.focusObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target as Element;
+                    if (target.classList.contains('mat-mdc-form-field') && 
+                        target.classList.contains('mat-focused')) {
+                        // Check if field is actually focused
+                        const isActuallyFocused = target.querySelector(':focus') !== null || 
+                                                 target.matches(':focus-within');
+                        if (!isActuallyFocused) {
+                            // Remove focused class if not actually focused
+                            setTimeout(() => {
+                                if (!target.matches(':focus-within') && 
+                                    target.querySelector(':focus') === null) {
+                                    this._renderer.removeClass(target, 'mat-focused');
+                                }
+                            }, 100);
+                        }
+                    }
+                }
+            });
+        });
+
+        // Start observing
+        this.focusObserver.observe(componentElement, {
+            attributes: true,
+            attributeFilter: ['class'],
+            subtree: true,
+            childList: false
+        });
     }
 
     // Getter for FormArray
@@ -601,6 +660,31 @@ export class FormComponent implements OnInit {
         /**
      * On destroy
      */  protected _onDestroy = new Subject<void>();
+
+    ngOnDestroy(): void {
+        // Disconnect observer
+        if (this.focusObserver) {
+            this.focusObserver.disconnect();
+        }
+        this._onDestroy.next();
+        this._onDestroy.complete();
+    }
+
+    @HostListener('document:click', ['$event'])
+    handleDocumentClick(event: MouseEvent): void {
+        // Check if click is outside mat-select panel
+        const target = event.target as HTMLElement;
+        const isSelectPanel = target.closest('.cdk-overlay-pane') || 
+                             target.closest('.mat-mdc-select-panel');
+        const isFormField = target.closest('.mat-mdc-form-field');
+        
+        if (!isSelectPanel && !isFormField) {
+            // Click is outside select panel and form field, remove focus state
+            setTimeout(() => {
+                this.removeFocusState();
+            }, 100);
+        }
+    }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
@@ -1345,5 +1429,78 @@ export class FormComponent implements OnInit {
                 // Go up twice because card routes are setup like this; "card/CARD_ID"
                 // this._router.navigate(['./../..'], {relativeTo: this._activatedRoute});
             });
+    }
+
+    onSelectOpenedChange(isOpen: boolean): void {
+        if (!isOpen) {
+            // When dropdown closes, remove focus state
+            this.removeFocusState();
+        }
+    }
+
+    onSelectClosed(event?: any): void {
+        // Remove focus state when selection changes or dropdown closes
+        this.removeFocusState();
+    }
+
+    private removeFocusState(): void {
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                // Blur any active element first
+                const activeElement = document.activeElement;
+                if (activeElement && activeElement instanceof HTMLElement) {
+                    // Don't blur if it's the select panel
+                    const isSelectPanel = activeElement.closest('.cdk-overlay-pane') || 
+                                         activeElement.closest('.mat-mdc-select-panel');
+                    if (!isSelectPanel) {
+                        activeElement.blur();
+                    }
+                }
+                
+                // Find all mat-form-fields within this component
+                const componentElement = this._elementRef.nativeElement;
+                
+                // Remove focused class from mat-form-fields that are not actually focused
+                const formFields = componentElement.querySelectorAll('.mat-mdc-form-field.mat-focused');
+                formFields.forEach((field: Element) => {
+                    // Check if field is actually focused
+                    const isActuallyFocused = field.querySelector(':focus') !== null;
+                    if (!isActuallyFocused) {
+                        this._renderer.removeClass(field, 'mat-focused');
+                    }
+                });
+                
+                // Remove focus from mat-select elements that are not actually focused
+                const selectElements = componentElement.querySelectorAll('.mat-mdc-select.mat-focused');
+                selectElements.forEach((select: Element) => {
+                    const isActuallyFocused = select.querySelector(':focus') !== null;
+                    if (!isActuallyFocused) {
+                        this._renderer.removeClass(select, 'mat-focused');
+                    }
+                });
+                
+                // Force blur on select trigger elements
+                const selectTriggers = componentElement.querySelectorAll('.mat-mdc-select-trigger');
+                selectTriggers.forEach((trigger: Element) => {
+                    if (trigger instanceof HTMLElement && document.activeElement !== trigger) {
+                        trigger.blur();
+                    }
+                });
+            }, 50);
+        });
+        
+        // Additional cleanup after a longer delay
+        setTimeout(() => {
+            const componentElement = this._elementRef.nativeElement;
+            const formFields = componentElement.querySelectorAll('.mat-mdc-form-field.mat-focused');
+            formFields.forEach((field: Element) => {
+                const isActuallyFocused = field.querySelector(':focus') !== null || 
+                                         field.matches(':focus-within');
+                if (!isActuallyFocused) {
+                    this._renderer.removeClass(field, 'mat-focused');
+                }
+            });
+        }, 200);
     }
 }

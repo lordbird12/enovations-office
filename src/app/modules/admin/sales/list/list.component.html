@@ -1,20 +1,22 @@
 <div class="flex flex-col flex-auto min-w-0">
     <!-- Header -->
     <!-- Loader -->
-    <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
-        <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+    <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-10 pointer-events-none" *ngIf="isLoading">
+        <mat-spinner class="pointer-events-auto"></mat-spinner>
     </div>
     <div
-        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
-        <div class="flex-1 flemin-w-0">
-            <!-- Title -->
-            <div class="flex flex-row mt-2 justify-between">
+        class="flex flex-col flex-0 border-b bg-card dark:bg-transparent">
+        <!-- Title and Action Buttons -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10">
+            <div class="flex-1 min-w-0">
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
                     รายการจองเครื่อง
                 </h2>
+            </div>
 
-                <div class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    <button mat-button [matMenuTriggerFor]="menu_status" mat-flat-button [color]="'primary'" class="mr-4">
+            <div class="flex items-center gap-4 mt-4 sm:mt-0">
+                <ng-container *ngIf="viewMode === 'default'">
+                    <button mat-button [matMenuTriggerFor]="menu_status" mat-flat-button [color]="'primary'">
                         สถานะ <mat-icon svgIcon="heroicons_outline:chevron-down" [color]="'primary'"></mat-icon>
                     </button>
 
@@ -26,19 +28,40 @@
                         <button mat-menu-item (click)="set_status('Finish')">รอคืน</button>
                         <button mat-menu-item (click)="set_status('Returned')">เสร็จสิ้น</button>
                     </mat-menu>
+                </ng-container>
 
+                <ng-container *ngIf="viewMode === 'marketing-pending'">
+                    <div class="inline-flex items-center px-3 py-1 rounded-md bg-yellow-200 text-yellow-800 text-base font-bold">
+                        รออนุมัติ
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="viewMode !== 'warehouse'">
                     <button mat-button [matMenuTriggerFor]="menu" mat-flat-button [color]="'primary'">
                         <mat-icon svgIcon="heroicons_outline:plus-small" [color]="'primary'"></mat-icon>
-                        เพิ่มการจอง</button>
+                        เพิ่มการจอง
+                    </button>
                     <mat-menu #menu="matMenu">
                         <button mat-menu-item (click)="addElement('Echocardiogram')">Echocardiogram</button>
                         <button mat-menu-item (click)="addElement('Ultrasound Imaging')">Ultrasound Imaging</button>
                         <button mat-menu-item (click)="addElement('ec')">EC</button>
                         <button mat-menu-item (click)="addElement('rc')">RC</button>
                     </mat-menu>
-                </div>
+                </ng-container>
             </div>
         </div>
+
+        <!-- Marketing Tabs Section -->
+        <ng-container *ngIf="viewMode === 'marketing-all'">
+            <div class="px-6 sm:px-10 pb-4">
+                <mat-tab-group
+                    class="marketing-tabs"
+                    [selectedIndex]="marketingTabIndex"
+                    (selectedIndexChange)="onMarketingTabIndexChange($event)">
+                    <mat-tab *ngFor="let tab of marketingTabs" [label]="tab.label"></mat-tab>
+                </mat-tab-group>
+            </div>
+        </ng-container>
     </div>
 
     <!-- Main -->

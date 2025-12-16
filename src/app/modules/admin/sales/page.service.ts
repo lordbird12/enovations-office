@@ -147,6 +147,26 @@ export class PageService {
                 })
             );
     }
+
+    getCalendarUser(id: any): Observable<any> {
+        // ดึง token จาก localStorage
+        const token = localStorage.getItem('accessToken') || localStorage.getItem('token');
+        // สร้าง header ใหม่พร้อม token
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
+
+        return this._httpClient
+            .get(
+                `${environment.baseURL}/api/get_order_by_sale_calendar/${id}`,
+                { headers } // ใช้ headers แบบ custom
+            )
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
     getPermission(): Observable<any> {
         return this._httpClient
             .get<any>(environment.baseURL + '/api/get_permission')

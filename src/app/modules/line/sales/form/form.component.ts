@@ -75,6 +75,13 @@ export class FormComponent implements OnInit {
     customerType: string[] = [
         'Government', 'Private', 'Clinic', 'Vet'
     ];
+
+    bookingTypes: string[] = [
+        'Echocardiogram',
+        'ec',
+        'Ultrasound Imaging',
+        'rc'
+    ];
     departments: string[] = [
         'Cardiology',
         'X-RAY',
@@ -287,7 +294,7 @@ export class FormComponent implements OnInit {
         this.user = JSON.parse(localStorage.getItem('user'))
 
         // this.type = this.activatedRoute.snapshot.data.type
-        this.type = this.activatedRoute.snapshot.queryParams['type']
+        this.type = this.activatedRoute.snapshot.queryParams['type'] || this.activatedRoute.snapshot.data.type
 
         this.pageType = this.activatedRoute.snapshot.data.page_type
 
@@ -354,7 +361,8 @@ export class FormComponent implements OnInit {
             machine_models: this._fb.array([]),
             transducers: this._fb.array([]),
             memberIds: [],
-            tds: []
+            tds: [],
+            type: this.type || null
 
         });
     }
@@ -378,6 +386,9 @@ export class FormComponent implements OnInit {
                         ...this.itemData,
 
                     });
+                    if (this.itemData.type) {
+                        this.type = this.itemData.type;
+                    }
                     const hasWorkStation = !!this.itemData?.work_station_id;
                     const workstationName = hasWorkStation
                         ? this.workstationData.find(item => item.id === this.itemData.work_station_id)?.name ?? ''
@@ -416,7 +427,7 @@ export class FormComponent implements OnInit {
             const currentDateTime = DateTime.now();
             this.formattedDateTime = currentDateTime.toFormat('dd/MM/yyyy');
             this.formData.patchValue({
-
+                type: this.type || null
             })
 
             // Mock Data (สามารถเปลี่ยนเป็น API Response ได้)
@@ -475,6 +486,12 @@ export class FormComponent implements OnInit {
                     this.formData.get('work_station_detail')?.setValue('', { emitEvent: false });
                     this.formData.get('work_station_id')?.setValue(null, { emitEvent: false });
                 }
+            });
+        
+        this.formData.get('type')?.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe((value) => {
+                this.type = value;
             });
     }
 

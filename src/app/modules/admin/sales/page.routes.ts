@@ -5,6 +5,7 @@ import { FormComponent } from './form/form.component';
 import { PageService } from './page.service';
 import { inject } from '@angular/core';
 import { ViewOrderComponent } from './view/view.component';
+import { MyBookingsComponent } from './my-bookings/my-bookings.component';
 
 export default [
     // {
@@ -154,6 +155,10 @@ export default [
                 data : {
                     page_type: 'EDIT'
                 }
+            },
+            {
+                path     : 'my-bookings',
+                component: MyBookingsComponent,
             },
         ],
     },

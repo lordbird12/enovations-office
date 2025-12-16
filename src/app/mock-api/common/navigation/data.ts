@@ -4,10 +4,10 @@ const storedPermission = JSON.parse(localStorage.getItem('permission'));
 export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'admin',
-        title: 'จัดการระบบ',
+        title: 'ตั้งค่าระบบ',
         subtitle: 'ข้อมูลเกี่ยวกับระบบ',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'heroicons_outline:cog-6-tooth',
         hidden: () => {
             // const storedPermission = JSON.parse(localStorage.getItem('permission'));
             var user = JSON.parse(localStorage.getItem('user'))
@@ -19,6 +19,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
         },
         children: [
             {
+                id: 'admin.employee',
+                title: 'ผู้ใช้งาน',
+                type: 'basic',
+                icon: 'heroicons_outline:users',
+                link: '/admin/employee/list',
+            },
+            {
                 id: 'admin.comp',
                 title: 'ข้อมูลบริษัท',
                 type: 'basic',
@@ -27,24 +34,17 @@ export const defaultNavigation: FuseNavigationItem[] = [
             },
             {
                 id: 'admin.department',
-                title: 'แผนกงาน',
+                title: 'แผนก',
                 type: 'basic',
                 icon: 'heroicons_outline:list-bullet',
                 link: '/admin/department/list',
             },
             {
                 id: 'admin.position',
-                title: 'ตำแหน่งงาน',
+                title: 'ตำแหน่ง',
                 type: 'basic',
                 icon: 'heroicons_outline:list-bullet',
                 link: '/admin/position/list',
-            },
-            {
-                id: 'admin.employee',
-                title: 'ข้อมูลพนักงาน',
-                type: 'basic',
-                icon: 'heroicons_outline:users',
-                link: '/admin/employee/list',
             },
             {
                 id: 'admin.team',
@@ -53,20 +53,130 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon: 'heroicons_outline:user-group',
                 link: '/admin/team/list',
             },
-
+            {
+                id: 'admin.category-product',
+                title: 'ประเภทสินค้า',
+                type: 'basic',
+                icon: 'heroicons_outline:cube',
+                link: '/admin/category-product/list',
+            },
+            {
+                id: 'admin.brand',
+                title: 'ยี่ห้อสินค้า',
+                type: 'basic',
+                icon: 'heroicons_outline:building-office-2',
+                link: '/admin/brand/list',
+            },
+            {
+                id: 'admin.product',
+                title: 'สินค้า',
+                type: 'basic',
+                icon: 'heroicons_outline:cube',
+                link: '/admin/product/list',
+            },
+            {
+                id: 'client.list',
+                title: 'ลูกค้าโรงพยาบาล',
+                type: 'basic',
+                icon: 'heroicons_mini:user-group',
+                link: '/admin/customers/list',
+            },
         ],
     },
-
     {
-        id: 'products',
-        title: 'จัดการคลังและสินค้า',
+        id: 'sales',
+        title: 'Sale',
         subtitle: 'ข้อมูลเกี่ยวกับระบบ',
         type: 'group',
-        icon: 'heroicons_outline:home',
-
+        icon: 'heroicons_outline:shopping-cart',
         children: [
             {
-                id: 'products.category-product',
+                id: 'sales.dashboard',
+                title: 'Dashboard',
+                type: 'basic',
+                icon: 'heroicons_outline:chart-bar',
+                link: '/dashboards/project',
+            },
+            {
+                id: 'sales.create',
+                title: 'สร้างการจอง',
+                type: 'basic',
+                icon: 'heroicons_outline:plus-circle',
+                link: '/admin/sales/form/echocardiogram',
+            },
+            {
+                id: 'sales.my-bookings',
+                title: 'รายการจองของฉัน',
+                type: 'basic',
+                icon: 'heroicons_outline:clipboard-document-list',
+                link: '/admin/sales/my-bookings',
+            },
+        ],
+    },
+    {
+        id: 'marketing',
+        title: 'Marketing',
+        subtitle: 'ข้อมูลเกี่ยวกับระบบ',
+        type: 'group',
+        icon: 'heroicons_outline:megaphone',
+        children: [
+            {
+                id: 'marketing.dashboard',
+                title: 'Dashboard',
+                type: 'basic',
+                icon: 'heroicons_outline:chart-bar',
+                link: '/dashboards/project',
+            },
+            {
+                id: 'marketing.pending-approval',
+                title: 'รายการจองรออนุมัติ',
+                type: 'basic',
+                icon: 'heroicons_outline:clock',
+                link: '/admin/sales/list',
+                queryParams: { view: 'marketing-pending' },
+            },
+            {
+                id: 'marketing.all-bookings',
+                title: 'รายการจองทั้งหมด',
+                type: 'basic',
+                icon: 'heroicons_outline:clipboard-document-list',
+                link: '/admin/sales/list',
+                queryParams: { view: 'marketing-all' },
+            },
+        ],
+    },
+    {
+        id: 'warehouse',
+        title: 'Warehouse',
+        subtitle: 'ข้อมูลเกี่ยวกับระบบ',
+        type: 'group',
+        icon: 'heroicons_outline:archive-box',
+        children: [
+            {
+                id: 'warehouse.dashboard',
+                title: 'Dashboard',
+                type: 'basic',
+                icon: 'heroicons_outline:chart-bar',
+                link: '/dashboards/project',
+            },
+            {
+                id: 'warehouse.pending-arrange',
+                title: 'รอจัดสินค้า',
+                type: 'basic',
+                icon: 'heroicons_outline:arrow-path',
+                link: '/admin/sales/list',
+                queryParams: { status: 'Confirm' },
+            },
+            {
+                id: 'warehouse.pending-receive',
+                title: 'รอรับสินค้า',
+                type: 'basic',
+                icon: 'heroicons_outline:inbox-arrow-down',
+                link: '/admin/sales/list',
+                queryParams: { status: 'Finish' },
+            },
+            {
+                id: 'warehouse.category-product',
                 title: 'ประเภทสินค้า',
                 type: 'basic',
                 icon: 'heroicons_outline:cube',
@@ -82,23 +192,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 },
             },
             {
-                id: 'products.brand',
-                title: 'ยี่ห้อ',
-                type: 'basic',
-                icon: 'heroicons_outline:building-office-2',
-                link: '/admin/brand/list',
-                hidden: () => {
-                    // const storedPermission = JSON.parse(localStorage.getItem('permission'));
-                    var user = JSON.parse(localStorage.getItem('user'))
-                    if (user.permission_id == '1' || user.permission_id == '3') {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                },
-            },
-            {
-                id: 'products.product',
+                id: 'warehouse.product',
                 title: 'สินค้า',
                 type: 'basic',
                 icon: 'heroicons_outline:cube',
@@ -112,37 +206,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                         return true;
                     }
                 },
-            },
-
-        ],
-    },
-    {
-        id: 'sales',
-        title: 'จัดการจอง',
-        subtitle: 'ข้อมูลเกี่ยวกับระบบ',
-        type: 'group',
-        icon: 'heroicons_outline:home',
-        children: [
-            {
-                id: 'sales.list',
-                title: 'จองเครื่อง',
-                type: 'basic',
-                icon: 'checklist',
-                link: '/admin/sales/list',
-            },
-            {
-                id: 'calendar.list',
-                title: 'ปฏิทิน',
-                type: 'basic',
-                icon: 'heroicons_outline:calendar-days',
-                link: '/admin/calendar-order/list',
-            },
-            {
-                id: 'client.list',
-                title: 'ลูกค้าโรงพยาบาล',
-                type: 'basic',
-                icon: 'heroicons_mini:user-group',
-                link: '/admin/customers/list',
             },
         ],
     },

@@ -1,0 +1,94 @@
+// Marketing Tabs Styling
+.marketing-tabs {
+    ::ng-deep {
+        .mat-mdc-tab-header {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+            margin-bottom: 0;
+        }
+
+        .mat-mdc-tab-labels {
+            gap: 8px;
+        }
+
+        .mat-mdc-tab {
+            min-width: 120px;
+            padding: 0 16px;
+            height: 48px;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+
+            &:hover {
+                opacity: 1;
+            }
+
+            .mdc-tab__text-label {
+                font-size: 14px;
+                font-weight: 500;
+                color: rgba(0, 0, 0, 0.87);
+                transition: color 0.3s ease;
+            }
+
+            &.mdc-tab--active {
+                opacity: 1;
+
+                .mdc-tab__text-label {
+                    font-weight: 600;
+                    color: var(--mdc-theme-primary, #1976d2);
+                }
+            }
+        }
+
+        .mat-mdc-tab-body-wrapper {
+            display: none; // Hide tab content since we're using tabs as filters
+        }
+
+        .mdc-tab-indicator__content--underline {
+            border-color: var(--mdc-theme-primary, #1976d2);
+            border-width: 3px;
+        }
+
+        // Responsive adjustments
+        @media (max-width: 768px) {
+            .mat-mdc-tab {
+                min-width: 80px;
+                padding: 0 12px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .mat-mdc-tab-labels {
+                gap: 4px;
+            }
+
+            .mat-mdc-tab {
+                min-width: 70px;
+                padding: 0 8px;
+                font-size: 11px;
+            }
+        }
+    }
+}
+
+// Dark mode support
+.dark {
+    .marketing-tabs {
+        ::ng-deep {
+            .mat-mdc-tab-header {
+                border-bottom-color: rgba(255, 255, 255, 0.12);
+            }
+
+            .mat-mdc-tab {
+                .mdc-tab__text-label {
+                    color: rgba(255, 255, 255, 0.87);
+                }
+
+                &.mdc-tab--active {
+                    .mdc-tab__text-label {
+                        color: var(--mdc-theme-primary, #90caf9);
+                    }
+                }
+            }
+        }
+    }
+}

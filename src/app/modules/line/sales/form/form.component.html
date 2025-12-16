@@ -2,7 +2,7 @@
     <!-- Header -->
     <div class="flex flex-col items-center p-4 border-b bg-card dark:bg-transparent">
         <h2 class="text-xl font-bold text-center">
-            {{ isForm ? 'สร้างใบจอง ' + (type ?? '') : 'แก้ไขการจอง' }}
+            {{ isForm ? 'สร้างใบจอง ' + (formData.get('type')?.value || type || '') : 'แก้ไขการจอง' }}
         </h2>
     </div>
 
@@ -14,6 +14,15 @@
                 <h3 class="text-lg font-bold text-gray-500 px-2 mb-2">
                     ข้อมูลลูกค้า
                 </h3>
+
+                <mat-form-field class="w-full p-2" *ngIf="isForm">
+                    <mat-label>ประเภทการจอง</mat-label>
+                    <mat-select [formControlName]="'type'" placeholder="เลือกประเภทการจอง">
+                        <mat-option *ngFor="let item of bookingTypes" [value]="item">
+                            {{item}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
                 <mat-form-field class="w-full p-2">
                     <mat-label>ชื่อโรงพยาบาล</mat-label>

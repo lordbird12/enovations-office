@@ -80,11 +80,12 @@ export class FormComponent implements OnInit {
     Id: any;
     itemData: any;
     url_image: string;
-    teamPositions = [
-        { value: 'Boss', label: 'หัวหน้าทีม' },
-        { value: 'User', label: 'เซล' },
-        { value: 'Approve', label: 'ผู้มีสิทธิอนุมัติ' }
-      ];
+    teamPositions =
+        [
+            { value: 'Boss', label: 'หัวหน้าทีม' },
+            { value: 'User', label: 'ผู้ใช้งาน' },
+            { value: 'Approver', label: 'ผู้มีสิทธิอนุมัติ' }
+        ]
     constructor(
         private formBuilder: FormBuilder,
         private _service: PageService,
@@ -108,7 +109,7 @@ export class FormComponent implements OnInit {
             user_no: [],
             team_id: [],
             team_role: [],
-            id:null
+            id: null
         });
 
         this.addForm2 = this.formBuilder.group({
@@ -137,28 +138,28 @@ export class FormComponent implements OnInit {
                 teams: this._service.getTeam(),
             })
         )
-            this.permissions = response.permissions.data;
-            this.departments = response.departments.data;
-            this.positions = response.positions.data;
-            this.teams = response.teams.data;
-        if(this.Id) {
+        this.permissions = response.permissions.data;
+        this.departments = response.departments.data;
+        this.positions = response.positions.data;
+        this.teams = response.teams.data;
+        if (this.Id) {
 
-            this._service.getById(this.Id).subscribe((resp: any)=>{
+            this._service.getById(this.Id).subscribe((resp: any) => {
                 this.itemData = resp.data;
                 console.log(this.itemData);
-                
+
                 this.addForm.patchValue({
                     ...this.itemData,
                     permission_id: this.itemData.permission_id,
                     department_id: +this.itemData.department_id,
                     position_id: +this.itemData.position_id,
                     image: ''
-   
+
                 })
                 this.url_image = this.itemData.image
             })
         }
-  
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -191,7 +192,7 @@ export class FormComponent implements OnInit {
     onSaveClick(): void {
 
         console.log(this.addForm.value, 'addForm');
-        
+
         this.flashMessage = null;
         // this.addForm.patchValue({
         //     user_no: this.addForm2.value.user_no,
@@ -227,12 +228,12 @@ export class FormComponent implements OnInit {
         // Subscribe to the confirmation dialog closed action
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
-                if(this.Id) {
-                    let formvalue = this.addForm.value 
-                    if(formvalue.team_id === null) {
+                if (this.Id) {
+                    let formvalue = this.addForm.value
+                    if (formvalue.team_id === null) {
                         formvalue.team_id = ''
                     }
-                    if(formvalue.team_role === null) {
+                    if (formvalue.team_role === null) {
                         formvalue.team_role = ''
                     }
                     delete formvalue.password
@@ -245,9 +246,9 @@ export class FormComponent implements OnInit {
                     this._service.update(formData).subscribe({
                         next: (resp: any) => {
                             this.showFlashMessage('success');
-    
+
                             this._router.navigate(['admin/employee/list'])
-    
+
                         },
                         error: (err: any) => {
                             this.addForm.enable();
@@ -284,9 +285,9 @@ export class FormComponent implements OnInit {
                     this._service.create(formData).subscribe({
                         next: (resp: any) => {
                             this.showFlashMessage('success');
-    
+
                             this._router.navigate(['admin/employee/list'])
-    
+
                         },
                         error: (err: any) => {
                             this.addForm.enable();
@@ -314,7 +315,7 @@ export class FormComponent implements OnInit {
                         },
                     });
                 }
-              
+
             }
         });
         // แสดง Snackbar ข้อความ "complete"
@@ -337,7 +338,7 @@ export class FormComponent implements OnInit {
             // Mark for check
             this._changeDetectorRef.markForCheck();
         }, 150);
-        
+
         this.url_image = null
     }
 
@@ -349,7 +350,7 @@ export class FormComponent implements OnInit {
         }
     }
 
-     pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
+    pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
     loadTable(): void {
         const that = this;
         this.dtOptions = {
@@ -366,8 +367,8 @@ export class FormComponent implements OnInit {
                     .getPageIncomePaid(dataTablesParameters)
                     .subscribe((resp: any) => {
                         this.dataRow = resp.data;
-                        console.log(this.dataRow,'dataRow');
-                        
+                        console.log(this.dataRow, 'dataRow');
+
                         this.pages.current_page = resp.current_page;
                         this.pages.last_page = resp.last_page;
                         this.pages.per_page = resp.per_page;

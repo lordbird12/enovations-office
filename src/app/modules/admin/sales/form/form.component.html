@@ -3,7 +3,7 @@
     <div class="flex flex-col sm:flex-row items-center justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent"
         *ngIf="isForm">
         <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-            {{ isForm ? 'สร้างใบจอง ' + (type ?? '-') : 'แก้ไขการจอง' }}
+            {{ isForm ? 'สร้างใบจอง ' + (formData.get('type')?.value || type || '-') : 'แก้ไขการจอง' }}
         </h2>
         <button *ngIf="!isForm" class="px-6 ml-3" mat-flat-button color="warn" (click)="onBack()">ย้อนกลับ</button>
     </div>
@@ -19,6 +19,16 @@
                                 ข้อมูลลูกค้า
                             </p>
                         </span>
+                        <div class="w-full px-3 mb-6 md:mb-0" *ngIf="isForm">
+                            <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                                <mat-label>ประเภทการจอง</mat-label>
+                                <mat-select [formControlName]="'type'" placeholder="เลือกประเภทการจอง" (selectionChange)="onSelectClosed()" (closed)="onSelectClosed()" (openedChange)="onSelectOpenedChange($event)">
+                                    <mat-option *ngFor="let item of bookingTypes" [value]="item">
+                                        {{item}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <div class="flex items-center justify-between mb-1">
                                 <label class="text-sm font-md">ชื่อโรงพยาบาล</label>
@@ -52,7 +62,7 @@
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>ประเภทโรงพยาบาล</mat-label>
-                                <mat-select [formControlName]="'customer_type'" placeholder="">
+                                <mat-select [formControlName]="'customer_type'" placeholder="" (selectionChange)="onSelectClosed()" (closed)="onSelectClosed()" (openedChange)="onSelectOpenedChange($event)">
                                     <mat-option *ngFor="let item of customerType" [value]="item">
                                         {{item}}
                                     </mat-option>
@@ -64,7 +74,7 @@
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>จังหวัด</mat-label>
-                                <mat-select [formControlName]="'province'" placeholder="">
+                                <mat-select [formControlName]="'province'" placeholder="" (selectionChange)="onSelectClosed()" (closed)="onSelectClosed()" (openedChange)="onSelectOpenedChange($event)">
                                     <mat-option *ngFor="let item of provinces" [value]="item">
                                         {{item}}
                                     </mat-option>
@@ -74,7 +84,7 @@
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>แผนก</mat-label>
-                                <mat-select [formControlName]="'department'" placeholder="">
+                                <mat-select [formControlName]="'department'" placeholder="" (selectionChange)="onSelectClosed()" (closed)="onSelectClosed()" (openedChange)="onSelectOpenedChange($event)">
                                     <mat-option *ngFor="let item of departments" [value]="item">
                                         {{item}}
                                     </mat-option>
@@ -113,7 +123,7 @@
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>วัตถุประสงค์การขอ</mat-label>
-                                <mat-select [formControlName]="'request_purpose'" placeholder="ระบุวัตถุประสงค์">
+                                <mat-select [formControlName]="'request_purpose'" placeholder="ระบุวัตถุประสงค์" (selectionChange)="onSelectClosed()" (closed)="onSelectClosed()" (openedChange)="onSelectOpenedChange($event)">
                                     <mat-option *ngFor="let item of purpose" [value]="item">
                                         {{item}}
                                     </mat-option>
