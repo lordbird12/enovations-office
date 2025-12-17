@@ -8,7 +8,7 @@ fuse-loading-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: transparent;
     pointer-events: none;
 
     mat-spinner {

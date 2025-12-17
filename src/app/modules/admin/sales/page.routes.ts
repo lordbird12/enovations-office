@@ -6,6 +6,7 @@ import { PageService } from './page.service';
 import { inject } from '@angular/core';
 import { ViewOrderComponent } from './view/view.component';
 import { MyBookingsComponent } from './my-bookings/my-bookings.component';
+import { ProductListComponent } from './product-list/product-list.component';
 
 export default [
     // {
@@ -159,6 +160,10 @@ export default [
             {
                 path     : 'my-bookings',
                 component: MyBookingsComponent,
+            },
+            {
+                path     : 'product-list',
+                component: ProductListComponent,
             },
         ],
     },

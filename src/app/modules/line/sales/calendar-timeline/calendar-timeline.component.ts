@@ -169,8 +169,18 @@ export class CalendarTimelineComponent implements OnInit, AfterViewInit {
             return;
         }
         
-        this._service.getCalendarUser(userId).subscribe((resp: any) => {
-            const newEvents = resp
+        // Use the new API endpoint that accepts user_id parameter
+        this._service.getOrdersByUserId(userId).subscribe((orders: any) => {
+            if (!orders || !Array.isArray(orders)) {
+                console.warn('No orders data received or invalid format');
+                this.allEvents = [];
+                this.groupedTimelineEvents = {};
+                this.updateCalendarEvents();
+                this._changeDetectorRef.detectChanges();
+                return;
+            }
+
+            const newEvents = orders
                 .map((item: any) => {
                     let color = 'bg-gray-400';
                     let calendarColor = '#9CA3AF'; // Default gray
@@ -218,7 +228,18 @@ export class CalendarTimelineComponent implements OnInit, AfterViewInit {
                         budget: item.budget,
                     };
                 })
-                .filter(event => DateTime.fromISO(event.start).year === +this.selectedYear);
+                .filter(event => {
+                    // Filter by selected year if start_date exists
+                    if (event.start) {
+                        try {
+                            return DateTime.fromISO(event.start).year === +this.selectedYear;
+                        } catch (e) {
+                            console.warn('Invalid date format:', event.start);
+                            return false;
+                        }
+                    }
+                    return false;
+                });
             
             // Store all events
             this.allEvents = newEvents;
@@ -233,9 +254,13 @@ export class CalendarTimelineComponent implements OnInit, AfterViewInit {
 
             // 🟩 ใส่ข้อมูล event ลงในเดือนที่ตรงกัน
             for (const event of newEvents) {
-                const monthKey = DateTime.fromISO(event.start).toFormat('yyyy-MM');
-                if (this.groupedTimelineEvents[monthKey]) {
-                    this.groupedTimelineEvents[monthKey].push(event);
+                try {
+                    const monthKey = DateTime.fromISO(event.start).toFormat('yyyy-MM');
+                    if (this.groupedTimelineEvents[monthKey]) {
+                        this.groupedTimelineEvents[monthKey].push(event);
+                    }
+                } catch (e) {
+                    console.warn('Error processing event date:', event.start, e);
                 }
             }
 
@@ -252,6 +277,10 @@ export class CalendarTimelineComponent implements OnInit, AfterViewInit {
             this._changeDetectorRef.detectChanges();
         }, (error) => {
             console.error('Error loading events:', error);
+            this.allEvents = [];
+            this.groupedTimelineEvents = {};
+            this.updateCalendarEvents();
+            this._changeDetectorRef.detectChanges();
         });
     }
     

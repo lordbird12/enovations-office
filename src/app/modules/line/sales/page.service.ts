@@ -5,6 +5,7 @@ import {
     HttpEvent,
     HttpHeaders,
     HttpInterceptor,
+    HttpParams,
 } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -206,6 +207,28 @@ export class PageService {
             .pipe(
                 tap((result) => {
                     this._data.next(result);
+                })
+            );
+    }
+
+    getOrdersByUserId(userId: number): Observable<any> {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+        });
+        let params = new HttpParams();
+        if (userId) {
+            params = params.set('user_id', userId.toString());
+        }
+        return this._httpClient
+            .get<any>(environment.baseURL + '/api/get_orders', { headers, params })
+            .pipe(
+                switchMap((response: any) => {
+                    // Return the data array from the response
+                    if (response && response.data) {
+                        return of(response.data);
+                    }
+                    return of([]);
                 })
             );
     }

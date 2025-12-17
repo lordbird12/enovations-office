@@ -52,7 +52,7 @@ export class LineRegisterComponent implements OnInit {
     }
 
     if (this.userIdFromLine) {
-      console.log('LINE User ID:', this.userIdFromLine);
+    //   console.log('LINE User ID:', this.userIdFromLine);
     } else {
       alert('ไม่สามารถดึง user_id จาก LINE ได้');
     }

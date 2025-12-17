@@ -9,3 +9,16 @@
     display: none;
 }
 
+/* Fix for overlay shadow bug - ensure overlays start hidden and are properly cleaned up */
+.fuse-drawer-overlay,
+.fuse-vertical-navigation-overlay,
+.fuse-vertical-navigation-aside-overlay {
+    /* Ensure overlays start with opacity 0 (animations will handle showing them) */
+    opacity: 0;
+}
+
+/* Fix for loading bar background causing gray overlay */
+fuse-loading-bar {
+    background-color: transparent !important;
+}
+

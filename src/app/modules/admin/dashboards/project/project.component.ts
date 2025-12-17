@@ -114,17 +114,25 @@ export class ProjectComponent implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         this.generateCalendar()
-        this._projectService.getOrderStatus().subscribe((resp: any) => {
+        
+        // ดึง user_id จาก localStorage เพื่อกรองข้อมูลเฉพาะของตนเอง
+        const userId = this.user?.id;
+        
+        this._projectService.getOrderStatus(userId).subscribe((resp: any) => {
             this.bookingData = resp.data; // จากที่คุณส่งมา: res.data คือ array
             this.summary = this.countStatus(this.bookingData);
-
-
+            
+            // อัปเดต bookings array จากข้อมูลการจองที่ได้
+            this.updateBookingsFromData();
+            this.generateCalendar(); // สร้างปฏิทินใหม่พร้อมข้อมูลการจอง
+            this._changeDetectorRef.markForCheck();
         })
 
-        this._projectService.getProductCategory().subscribe((resp: any) => {
+        this._projectService.getProductCategory(userId).subscribe((resp: any) => {
             this.departments = resp.data;
             this.productCounts = this.countProductsByType(this.departments);
             console.log(this.productCounts, 'productCounts');
+            this._changeDetectorRef.markForCheck();
         })
         // เช็คว่าถ้ากดปิดไปแล้ววันนี้จะไม่แสดงอีก
         if (!this._projectService.hasClosedToday()) {
@@ -175,6 +183,36 @@ export class ProjectComponent implements OnInit, OnDestroy {
         }
 
         this.calendarDays = days;
+    }
+
+    updateBookingsFromData(): void {
+        // รีเซ็ต bookings array
+        this.bookings = [];
+        
+        // ดึงวันที่ที่มีการจองจาก bookingData
+        if (this.bookingData && Array.isArray(this.bookingData)) {
+            this.bookingData.forEach((booking: any) => {
+                // ตรวจสอบว่ามี date_start หรือ date_end หรือไม่
+                if (booking.date_start) {
+                    const date = DateTime.fromISO(booking.date_start);
+                    if (date.isValid) {
+                        const dateStr = date.toISODate();
+                        if (dateStr && !this.bookings.includes(dateStr)) {
+                            this.bookings.push(dateStr);
+                        }
+                    }
+                }
+                if (booking.date_end) {
+                    const date = DateTime.fromISO(booking.date_end);
+                    if (date.isValid) {
+                        const dateStr = date.toISODate();
+                        if (dateStr && !this.bookings.includes(dateStr)) {
+                            this.bookings.push(dateStr);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     goToPreviousMonth(): void {

@@ -1,5 +1,33 @@
 /* eslint-disable */
 import { FuseNavigationItem } from '@fuse/components/navigation';
+
+function _getUserFromLocalStorage(): any | null {
+    try {
+        const raw = localStorage.getItem('user');
+        return raw ? JSON.parse(raw) : null;
+    } catch {
+        return null;
+    }
+}
+
+function _allowOnlyDepartment(departmentId: number): boolean {
+    const user = _getUserFromLocalStorage();
+    const permissionId = Number(user?.permission_id);
+    const userDepartmentId = Number(user?.department_id);
+
+    // Keep all menus for super admin
+    if (permissionId === 1) {
+        return true;
+    }
+
+    // If department is not available (e.g. before login), don't hide anything
+    if (!Number.isFinite(userDepartmentId)) {
+        return true;
+    }
+
+    return userDepartmentId === departmentId;
+}
+
 const storedPermission = JSON.parse(localStorage.getItem('permission'));
 export const defaultNavigation: FuseNavigationItem[] = [
     {
@@ -89,6 +117,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         subtitle: 'ข้อมูลเกี่ยวกับระบบ',
         type: 'group',
         icon: 'heroicons_outline:shopping-cart',
+        hidden: () => !_allowOnlyDepartment(36),
         children: [
             {
                 id: 'sales.dashboard',
@@ -111,6 +140,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon: 'heroicons_outline:clipboard-document-list',
                 link: '/admin/sales/my-bookings',
             },
+            {
+                id: 'sales.product-list',
+                title: 'รายการสินค้า',
+                type: 'basic',
+                icon: 'heroicons_outline:cube',
+                link: '/admin/sales/product-list',
+            },
         ],
     },
     {
@@ -119,6 +155,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         subtitle: 'ข้อมูลเกี่ยวกับระบบ',
         type: 'group',
         icon: 'heroicons_outline:megaphone',
+        hidden: () => !_allowOnlyDepartment(35),
         children: [
             {
                 id: 'marketing.dashboard',
@@ -143,6 +180,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 link: '/admin/sales/list',
                 queryParams: { view: 'marketing-all' },
             },
+            {
+                id: 'marketing.product-list',
+                title: 'รายการสินค้า',
+                type: 'basic',
+                icon: 'heroicons_outline:cube',
+                link: '/admin/sales/product-list',
+            },
         ],
     },
     {
@@ -151,6 +195,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         subtitle: 'ข้อมูลเกี่ยวกับระบบ',
         type: 'group',
         icon: 'heroicons_outline:archive-box',
+        hidden: () => !_allowOnlyDepartment(34),
         children: [
             {
                 id: 'warehouse.dashboard',

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment.development';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
@@ -61,14 +61,24 @@ export class ProjectService {
         );
     }
 
-     getOrderStatus(): Observable<any> {
+     getOrderStatus(userId?: number): Observable<any> {
+        let params = new HttpParams();
+        if (userId) {
+            params = params.set('user_id', userId.toString());
+        }
         return this._httpClient.get(
             environment.baseURL + '/api/get_orders',
+            { params }
         );
     }
-     getProductCategory(): Observable<any> {
+     getProductCategory(userId?: number): Observable<any> {
+        let params = new HttpParams();
+        if (userId) {
+            params = params.set('user_id', userId.toString());
+        }
         return this._httpClient.get(
             environment.baseURL + '/api/get_product_all',
+            { params }
         );
     }
     

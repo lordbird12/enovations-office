@@ -97,14 +97,14 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit() {
         this.applyViewModeFromQuery();
         this.loadTable();
-        
+
         // Subscribe to query params changes to handle menu switching
         this.queryParamsSubscription = this._activatedRoute.queryParams
             .subscribe(params => {
                 const previousViewMode = this.viewMode;
                 const previousStatus = this.selectedStatus;
                 this.applyViewModeFromQuery();
-                
+
                 // If view mode or status changed, re-render the table
                 if (previousViewMode !== this.viewMode || previousStatus !== this.selectedStatus) {
                     // Wait for view to update and ensure dtElement is ready before re-rendering
@@ -161,7 +161,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
             order: [[0, 'desc']],
             ajax: (dataTablesParameters: any, callback) => {
                 dataTablesParameters.status = this.selectedStatus || null;
-                dataTablesParameters.user_id = 2;
+                // dataTablesParameters.user_id = 2;
                 that._service.getPage(dataTablesParameters).subscribe((resp: any) => {
                     this.dataRow = resp.data;
                     console.log(this.dataRow)
@@ -286,7 +286,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     private applyViewModeFromQuery(): void {
         const view = this._activatedRoute.snapshot.queryParamMap.get('view');
         const status = this._activatedRoute.snapshot.queryParamMap.get('status');
-        
+
         if (view === 'marketing-pending') {
             this.viewMode = 'marketing-pending';
             this.selectedStatus = 'Ordered';
