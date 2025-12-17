@@ -59,7 +59,7 @@ export class ClaimDialogComponent implements OnInit {
         },
         {
             name : 'อนุมัติ',
-            value : 'Approve'
+            value : 'Confirm'
         },
         {
             name : 'ไม่อนุมัติ',

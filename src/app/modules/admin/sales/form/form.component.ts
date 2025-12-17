@@ -1021,6 +1021,7 @@ export class FormComponent implements OnInit, OnDestroy {
         if (selectedData) {
             this.formData.patchValue({
                 client_id: selectedData.id,
+                client_name: selectedData.name,
             });
             let data = selectedData.name
             this.clientFilter.setValue(data)
