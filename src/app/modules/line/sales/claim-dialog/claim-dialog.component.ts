@@ -59,7 +59,7 @@ export class ClaimDialogComponent implements OnInit {
         },
         {
             name : 'อนุมัติ',
-            value : 'Approve'
+            value : 'Confirm'
         },
         {
             name : 'ไม่อนุมัติ',
@@ -67,7 +67,7 @@ export class ClaimDialogComponent implements OnInit {
         },
         {
             name : 'รอรับสินค้า',
-            value : 'Confirm'
+            value : 'Approve'
         },
         {
             name : 'รอคืนสินค้า',
@@ -85,7 +85,7 @@ export class ClaimDialogComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
         private _router: Router
-    ) { 
+    ) {
         this.user = JSON.parse(localStorage.getItem('user'))
 
     }

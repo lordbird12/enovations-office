@@ -4,13 +4,13 @@
     <div formArrayName="products">
       <div *ngFor="let product of products.controls; let i = index" class="border p-4 rounded-lg shadow-sm w-full mb-4">
         <div [formGroupName]="i">
-          <h3 class="mb-3">Product name: {{product.get('name').value}}</h3>
-          
+          <h3 class="mb-3">ชื่อสินค้า: {{product.get('name').value}}</h3>
+
           <div class="mb-4">
             <label class="block mb-2">สถานะ</label>
             <mat-radio-group formControlName="status" class="flex gap-4">
-              <mat-radio-button value="approved">Approved</mat-radio-button>
-              <mat-radio-button value="rejected">Rejected</mat-radio-button>
+              <mat-radio-button value="approved">อนุมัติ</mat-radio-button>
+              <mat-radio-button value="rejected">ไม่อนุมัติ</mat-radio-button>
             </mat-radio-group>
           </div>
 
