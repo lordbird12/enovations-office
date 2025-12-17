@@ -106,6 +106,7 @@
                         <th class="w-[20px]">Status</th>
                         <th class="w-[100px]">Category</th>
                         <th class="w-[100px]">Brand</th>
+                        <th class="w-[100px]">Machine Model</th>
                         <th class="w-[100px]">Code</th>
                         <th class="w-[100px]">Name</th>
                         <th class="w-[200px]">Serial No.</th>
@@ -135,6 +136,7 @@
                         </td>
                         <td>{{ item.category ? item.category?.name : "-" }}</td>
                         <td>{{ item.brand ? item.brand?.name : "-" }}</td>
+                        <td>{{ item.machine_model ? item.machine_model?.name : "-" }}</td>
                         <td>{{ item.code ? item.code : "-" }}</td>
                         <td>{{ item.name ? item.name: "-"}}</td>
                         <td>{{ item.detail ? item.serial_no : "-" }}</td>

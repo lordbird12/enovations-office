@@ -500,39 +500,20 @@ export class DialogAddProductComponent implements OnInit {
 
         if (selected) {
             if (type === 'machine_models') {
-                const existingItem = this.machineModelsArray.controls.find(
-                    (control) =>
-                        control.get('machine_model_id')?.value === selected.id
-                );
-                if (existingItem) {
-                    alert('เลือกเครื่องซ้ำ');
-                    this.productFilter.setValue(null); // ล้างค่าในช่อง input
-                } else {
-                    let item = this.fb.group({
-                        machine_model_id: selected.id,
-                        machine_model_name: selected.name,
-                        qty: 1,
-                    });
-                    this.machineModelsArray.push(item);
-                    this.productFilter.setValue(null); // ล้างค่าในช่อง input
-                }
+                let item = this.fb.group({
+                    machine_model_id: selected.id,
+                    machine_model_name: selected.name,
+                    qty: 1,
+                });
+                this.machineModelsArray.push(item);
             } else {
-                const existingItem = this.transducersArray.controls.find(
-                    (control) =>
-                        control.get('transducers')?.value === selected.id
-                );
-                if (existingItem) {
-                    alert('เลือกเครื่องซ้ำ');
-                    this.productFilter.setValue(null); // ล้างค่าในช่อง input
-                } else {
-                    let item = this.fb.group({
-                        product_id: selected.id,
-                        qty: 1,
-                    });
-                    this.transducersArray.push(item);
-                    this.productFilter.setValue(null); // ล้างค่าในช่อง input
-                }
+                let item = this.fb.group({
+                    product_id: selected.id,
+                    qty: 1,
+                });
+                this.transducersArray.push(item);
             }
+            this.productFilter.setValue(null); // ล้างค่าในช่อง input
         }
     }
     /** เพิ่ม/ลบ Transducers */

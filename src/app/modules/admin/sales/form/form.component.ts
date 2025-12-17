@@ -1042,34 +1042,23 @@ export class FormComponent implements OnInit, OnDestroy {
         const selected = this.mcData.find(item => item.name === selectedName);
 
         if (selected) {
-            const existingItem = this.machine_models.controls.find(
-                (control) => control.get('machine_model_id')?.value === selected.id
-            );
-            if (existingItem) {
-                alert('เลือกเครื่องซ้ำ')
-                this.machineModelFilter.setValue(null); // ล้างค่าในช่อง input
+            if (type === 'machine_models') {
+
+                let item = this._fb.group({
+                    machine_model_id: selected.id,
+                    machine_model_name: selected.name,
+                    qty: 1,
+                });
+                this.machine_models.push(item)
             } else {
-                if (type === 'machine_models') {
-
-                    let item = this._fb.group({
-                        machine_model_id: selected.id,
-                        machine_model_name: selected.name,
-                        qty: 1,
-                    });
-                    this.machine_models.push(item)
-                    this.machineModelFilter.setValue(null); // ล้างค่าในช่อง input
-                } else {
-                    let item = this._fb.group({
-                        machine_model_id: selected.id,
-                        machine_model_name: selected.name,
-                        qty: 1,
-                    });
-                    this.transducers.push(item)
-                    this.machineModelFilter.setValue(null); // ล้างค่าในช่อง input
-                }
+                let item = this._fb.group({
+                    machine_model_id: selected.id,
+                    machine_model_name: selected.name,
+                    qty: 1,
+                });
+                this.transducers.push(item)
             }
-
-
+            this.machineModelFilter.setValue(null); // ล้างค่าในช่อง input
         }
     }
 
