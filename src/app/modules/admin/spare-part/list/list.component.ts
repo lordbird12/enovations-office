@@ -4,11 +4,12 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
+    OnDestroy,
     OnInit,
     ViewChild,
     ViewEncapsulation,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
@@ -30,6 +31,9 @@ import { PictureComponent } from '../../picture/picture.component';
 import { FormReportComponent } from '../form-report/form-report.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { Subject, takeUntil } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
     selector: 'employee-list-spare-part',
@@ -54,10 +58,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatPaginatorModule,
         MatTableModule,
         DataTablesModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        NgxMatSelectSearchModule,
     ],
 })
-export class ListComponent implements OnInit, AfterViewInit {
+export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(DataTableDirective)
     dtElement!: DataTableDirective;
     isLoading: boolean = false;
@@ -72,6 +77,22 @@ export class ListComponent implements OnInit, AfterViewInit {
     flashMessage: 'success' | 'error' | null = null;
     dataRow: any[] = [];
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+    // Filter controls for search
+    categoryFilterCtrl: FormControl = new FormControl();
+    supplierFilterCtrl: FormControl = new FormControl();
+    brandFilterCtrl: FormControl = new FormControl();
+
+    // Filtered data
+    filteredCategories: any[] = [];
+    filteredSuppliers: any[] = [];
+    filteredBrands: any[] = [];
+
+    private categoryFilterSetup = false;
+    private supplierFilterSetup = false;
+    private brandFilterSetup = false;
+
+    private _onDestroy = new Subject<void>();
     constructor(
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
@@ -95,20 +116,75 @@ export class ListComponent implements OnInit, AfterViewInit {
     getSuppliers(): void {
         this._service.getSuppliers().subscribe((resp) => {
             this.itemSupplier = resp.data;
+            this.filteredSuppliers = resp.data?.slice?.() ?? [];
+            this.setupSupplierFilter();
         });
     }
 
     getCategories(): void {
         this._service.getCategories().subscribe((resp) => {
             this.item1Data = resp.data;
+            this.filteredCategories = resp.data?.slice?.() ?? [];
+            this.setupCategoryFilter();
         });
     }
 
     getBrand(): void {
         this._service.getBrand().subscribe((resp) => {
             this.itemBrand = resp.data;
+            this.filteredBrands = resp.data?.slice?.() ?? [];
+            this.setupBrandFilter();
         });
 
+    }
+
+    setupCategoryFilter(): void {
+        if (this.categoryFilterSetup) return;
+        this.categoryFilterSetup = true;
+        this.categoryFilterCtrl.valueChanges
+            .pipe(
+                startWith(''),
+                map((value) => this._filter(this.item1Data || [], value, 'name')),
+                takeUntil(this._onDestroy)
+            )
+            .subscribe((filtered) => {
+                this.filteredCategories = filtered;
+            });
+    }
+
+    setupSupplierFilter(): void {
+        if (this.supplierFilterSetup) return;
+        this.supplierFilterSetup = true;
+        this.supplierFilterCtrl.valueChanges
+            .pipe(
+                startWith(''),
+                map((value) => this._filter(this.itemSupplier || [], value, 'name')),
+                takeUntil(this._onDestroy)
+            )
+            .subscribe((filtered) => {
+                this.filteredSuppliers = filtered;
+            });
+    }
+
+    setupBrandFilter(): void {
+        if (this.brandFilterSetup) return;
+        this.brandFilterSetup = true;
+        this.brandFilterCtrl.valueChanges
+            .pipe(
+                startWith(''),
+                map((value) => this._filter(this.itemBrand || [], value, 'name')),
+                takeUntil(this._onDestroy)
+            )
+            .subscribe((filtered) => {
+                this.filteredBrands = filtered;
+            });
+    }
+
+    private _filter(data: any[], value: string, property: string): any[] {
+        const filterValue = value?.toLowerCase?.() || '';
+        return (data || []).filter((item) =>
+            item?.[property]?.toLowerCase?.().includes(filterValue)
+        );
     }
 
     getCompanie(): void {
@@ -135,8 +211,16 @@ export class ListComponent implements OnInit, AfterViewInit {
         this._changeDetectorRef.detectChanges();
     }
 
+    ngOnDestroy(): void {
+        this._onDestroy.next();
+        this._onDestroy.complete();
+    }
+
     ClearForm() {
         this.form.reset()
+        this.categoryFilterCtrl.setValue('');
+        this.supplierFilterCtrl.setValue('');
+        this.brandFilterCtrl.setValue('');
     }
 
     search() {

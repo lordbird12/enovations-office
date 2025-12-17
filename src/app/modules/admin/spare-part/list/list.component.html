@@ -51,10 +51,17 @@
                     <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                         <mat-label>หมวดสินค้า</mat-label>
                         <mat-select [formControlName]="'category_product_id'">
+                            <mat-option>
+                                <ngx-mat-select-search
+                                    [formControl]="categoryFilterCtrl"
+                                    placeholderLabel="ค้นหา Category..."
+                                    noEntriesFoundLabel="ไม่พบข้อมูล">
+                                </ngx-mat-select-search>
+                            </mat-option>
                             <mat-option [value]="''">
                                 <span>เลือกหมวดสินค้า</span>
                             </mat-option>
-                            <mat-option *ngFor="let item of item1Data" [value]="item.id">
+                            <mat-option *ngFor="let item of filteredCategories" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
                         </mat-select>
@@ -64,10 +71,17 @@
                     <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                         <mat-label>ซัพพลายเอ่อ</mat-label>
                         <mat-select [formControlName]="'supplier_id'">
+                            <mat-option>
+                                <ngx-mat-select-search
+                                    [formControl]="supplierFilterCtrl"
+                                    placeholderLabel="ค้นหา Supplier..."
+                                    noEntriesFoundLabel="ไม่พบข้อมูล">
+                                </ngx-mat-select-search>
+                            </mat-option>
                             <mat-option [value]="''">
                                 <span>เลือกซัพพลายเอ่อ</span>
                             </mat-option>
-                            <mat-option *ngFor="let item of itemSupplier" [value]="item.id">
+                            <mat-option *ngFor="let item of filteredSuppliers" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
                         </mat-select>
@@ -77,10 +91,17 @@
                     <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                         <mat-label>ยี่ห้อ</mat-label>
                         <mat-select [formControlName]="'brand_id'">
+                            <mat-option>
+                                <ngx-mat-select-search
+                                    [formControl]="brandFilterCtrl"
+                                    placeholderLabel="ค้นหา Brand..."
+                                    noEntriesFoundLabel="ไม่พบข้อมูล">
+                                </ngx-mat-select-search>
+                            </mat-option>
                             <mat-option [value]="''">
                                 <span>เลือกยี่ห้อ</span>
                             </mat-option>
-                            <mat-option *ngFor="let item of itemBrand" [value]="item.id">
+                            <mat-option *ngFor="let item of filteredBrands" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
                         </mat-select>
