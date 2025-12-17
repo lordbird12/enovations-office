@@ -202,7 +202,7 @@
                         <mat-radio-button value="Y">ต้องการ</mat-radio-button>
                         <mat-radio-button value="N">ไม่ต้องการ</mat-radio-button>
                     </mat-radio-group>
-                    <div class="mt-3" *ngIf="formData.get('work_station_required')?.value === 'need'">
+                    <div class="mt-3" *ngIf="formData.get('work_station_required')?.value === 'Y'">
                         <mat-form-field class="w-full">
                             <mat-label>ระบุรุ่นเครื่องที่ต้องการ</mat-label>
                             <input matInput placeholder="กรอกรายละเอียดรุ่นเครื่อง" formControlName="work_station_detail">
