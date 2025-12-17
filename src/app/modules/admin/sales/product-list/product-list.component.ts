@@ -7,8 +7,9 @@ import {
     OnInit,
     ViewChild,
     ViewEncapsulation,
+    OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatChipsModule } from '@angular/material/chips';
@@ -22,6 +23,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { Service } from 'app/modules/admin/product/page.service';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { Subject, takeUntil } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
     selector: 'sales-product-list',
@@ -46,9 +50,10 @@ import { DataTableDirective, DataTablesModule } from 'angular-datatables';
         MatPaginatorModule,
         MatTableModule,
         DataTablesModule,
+        NgxMatSelectSearchModule,
     ],
 })
-export class ProductListComponent implements OnInit, AfterViewInit {
+export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(DataTableDirective)
     dtElement!: DataTableDirective;
     isLoading: boolean = false;
@@ -62,6 +67,23 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     dataRow: any[] = [];
     user: any;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+    // Filter controls for search
+    categoryFilterCtrl: FormControl = new FormControl();
+    brandFilterCtrl: FormControl = new FormControl();
+    machineModelFilterCtrl: FormControl = new FormControl();
+
+    // Filtered data
+    filteredCategories: any[] = [];
+    filteredBrands: any[] = [];
+    filteredMachineModels: any[] = [];
+
+    // Flags to track if filters are already set up
+    private categoryFilterSetup = false;
+    private brandFilterSetup = false;
+    private machineModelFilterSetup = false;
+
+    private _onDestroy = new Subject<void>();
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
@@ -84,19 +106,82 @@ export class ProductListComponent implements OnInit, AfterViewInit {
     getCategories(): void {
         this._service.getCategories().subscribe((resp) => {
             this.item1Data = resp.data;
+            this.filteredCategories = resp.data.slice();
+            this.setupCategoryFilter();
         });
     }
 
     getBrand(): void {
         this._service.getBrand().subscribe((resp) => {
             this.itemBrand = resp.data;
+            this.filteredBrands = resp.data.slice();
+            this.setupBrandFilter();
         });
     }
 
     getMachineModel(): void {
         this._service.getMachineModel().subscribe((resp) => {
             this.itemMC = resp.data;
+            this.filteredMachineModels = resp.data.slice();
+            this.setupMachineModelFilter();
         });
+    }
+
+    setupCategoryFilter(): void {
+        if (this.categoryFilterSetup) return;
+        this.categoryFilterSetup = true;
+        this.categoryFilterCtrl.valueChanges
+            .pipe(
+                startWith(''),
+                map(value => {
+                    const data = this.item1Data || [];
+                    return this._filter(data, value, 'name');
+                }),
+                takeUntil(this._onDestroy)
+            )
+            .subscribe(filtered => {
+                this.filteredCategories = filtered;
+            });
+    }
+
+    setupBrandFilter(): void {
+        if (this.brandFilterSetup) return;
+        this.brandFilterSetup = true;
+        this.brandFilterCtrl.valueChanges
+            .pipe(
+                startWith(''),
+                map(value => {
+                    const data = this.itemBrand || [];
+                    return this._filter(data, value, 'name');
+                }),
+                takeUntil(this._onDestroy)
+            )
+            .subscribe(filtered => {
+                this.filteredBrands = filtered;
+            });
+    }
+
+    setupMachineModelFilter(): void {
+        if (this.machineModelFilterSetup) return;
+        this.machineModelFilterSetup = true;
+        this.machineModelFilterCtrl.valueChanges
+            .pipe(
+                startWith(''),
+                map(value => {
+                    const data = this.itemMC || [];
+                    return this._filter(data, value, 'name');
+                }),
+                takeUntil(this._onDestroy)
+            )
+            .subscribe(filtered => {
+                this.filteredMachineModels = filtered;
+            });
+    }
+
+    private _filter(data: any[], value: string, property: string): any[] {
+        if (!data) return [];
+        const filterValue = value?.toLowerCase() || '';
+        return data.filter(item => item[property]?.toLowerCase().includes(filterValue));
     }
 
     getCompanie(): void {
@@ -143,6 +228,14 @@ export class ProductListComponent implements OnInit, AfterViewInit {
             companie_id: '',
             area_id: '',
         });
+        this.categoryFilterCtrl.setValue('');
+        this.brandFilterCtrl.setValue('');
+        this.machineModelFilterCtrl.setValue('');
+    }
+
+    ngOnDestroy(): void {
+        this._onDestroy.next();
+        this._onDestroy.complete();
     }
 
     rerender(): void {

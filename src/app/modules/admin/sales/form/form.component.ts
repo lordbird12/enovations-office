@@ -349,6 +349,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
     user: any
     pageType: any
+    source: string = 'sale'; // Default to 'sale' if not specified
     private focusObserver?: MutationObserver;
     /**
      * Constructor
@@ -399,7 +400,7 @@ export class FormComponent implements OnInit, OnDestroy {
             user_id: null,
             function_qualifications: null,
             work_station_id: null,
-            work_station_required: 'no_need',
+            work_station_required: 'Y',
             work_station_detail: '',
             additional_equipment: null,
             meeting_details: null,
@@ -432,6 +433,9 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        // Get source from query params, default to 'sale' if not specified
+        this.source = this.activatedRoute.snapshot.queryParams['source'] || 'sale';
+
         if (this.pageType === 'EDIT') {
             this.activatedRoute.params.subscribe(params => {
                 this.isForm = false;
@@ -458,7 +462,7 @@ export class FormComponent implements OnInit, OnDestroy {
                         ? this.workstationData.find(item => item.id === this.itemData.work_station_id)?.name ?? ''
                         : this.itemData?.work_station_detail ?? '';
                     this.formData.patchValue({
-                        work_station_required: hasWorkStation ? 'need' : 'no_need',
+                        work_station_required: hasWorkStation ? 'Y' : 'N',
                         work_station_detail: workstationName || '',
                     });
                     for (let index = 0; index < this.itemData.machine_models.length; index++) {
@@ -552,7 +556,7 @@ export class FormComponent implements OnInit, OnDestroy {
                     this.formData.get('work_station_id')?.setValue(null, { emitEvent: false });
                 }
             });
-        
+
         this.formData.get('type')?.valueChanges
             .pipe(takeUntil(this._onDestroy))
             .subscribe((value) => {
@@ -566,20 +570,20 @@ export class FormComponent implements OnInit, OnDestroy {
     private setupFocusObserver(): void {
         // Observe changes to mat-form-field elements
         const componentElement = this._elementRef.nativeElement;
-        
+
         this.focusObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
                     const target = mutation.target as Element;
-                    if (target.classList.contains('mat-mdc-form-field') && 
+                    if (target.classList.contains('mat-mdc-form-field') &&
                         target.classList.contains('mat-focused')) {
                         // Check if field is actually focused
-                        const isActuallyFocused = target.querySelector(':focus') !== null || 
+                        const isActuallyFocused = target.querySelector(':focus') !== null ||
                                                  target.matches(':focus-within');
                         if (!isActuallyFocused) {
                             // Remove focused class if not actually focused
                             setTimeout(() => {
-                                if (!target.matches(':focus-within') && 
+                                if (!target.matches(':focus-within') &&
                                     target.querySelector(':focus') === null) {
                                     this._renderer.removeClass(target, 'mat-focused');
                                 }
@@ -674,10 +678,10 @@ export class FormComponent implements OnInit, OnDestroy {
     handleDocumentClick(event: MouseEvent): void {
         // Check if click is outside mat-select panel
         const target = event.target as HTMLElement;
-        const isSelectPanel = target.closest('.cdk-overlay-pane') || 
+        const isSelectPanel = target.closest('.cdk-overlay-pane') ||
                              target.closest('.mat-mdc-select-panel');
         const isFormField = target.closest('.mat-mdc-form-field');
-        
+
         if (!isSelectPanel && !isFormField) {
             // Click is outside select panel and form field, remove focus state
             setTimeout(() => {
@@ -1076,6 +1080,33 @@ export class FormComponent implements OnInit, OnDestroy {
         this._router.navigate(['admin/sales/list'])
     }
 
+    private _extractOrderIdFromResponse(resp: any): string | number | null {
+        return (
+            resp?.data?.id ??
+            resp?.data?.order?.id ??
+            resp?.data?.data?.id ??
+            resp?.id ??
+            null
+        )
+    }
+
+    private _navigateAfterSave(orderId: string | number | null): void {
+        // Marketing flow should land on the detail page of the saved record
+        if (this.source === 'marketing') {
+            if (orderId !== null && orderId !== undefined && orderId !== '') {
+                this._router.navigate(['admin/sales/view/' + orderId])
+                return
+            }
+
+            // Fallback if API response doesn't contain an id
+            this._router.navigate(['admin/sales/list'], { queryParams: { view: 'marketing-all' } })
+            return
+        }
+
+        // Default to sale menu - navigate to my-bookings
+        this._router.navigate(['admin/sales/my-bookings'])
+    }
+
     onSubmit(): void {
 
         if (this.isForm === true) {
@@ -1111,13 +1142,14 @@ export class FormComponent implements OnInit, OnDestroy {
                     formValue.start_date = DateTime.fromISO(this.formData.value.start_date).toFormat('yyyy-MM-dd')
                     formValue.end_date = DateTime.fromISO(this.formData.value.end_date).toFormat('yyyy-MM-dd')
 
-                    this._service.create(formValue).subscribe({
-                        next: (resp: any) => {
-                            this._router.navigate(['admin/sales/list'])
-                        },
-                        error: (err: any) => {
-                            this._fuseConfirmationService.open({
-                                "title": "กรุณาระบุข้อมูล",
+                     this._service.create(formValue).subscribe({
+                         next: (resp: any) => {
+                             const createdId = this._extractOrderIdFromResponse(resp)
+                             this._navigateAfterSave(createdId)
+                         },
+                         error: (err: any) => {
+                             this._fuseConfirmationService.open({
+                                 "title": "กรุณาระบุข้อมูล",
                                 "message": err.error.message,
                                 "icon": {
                                     "show": true,
@@ -1171,13 +1203,14 @@ export class FormComponent implements OnInit, OnDestroy {
                     let formValue = this.formData.value;
                     formValue.start_date = DateTime.fromISO(this.formData.value.start_date).toFormat('yyyy-MM-dd')
                     formValue.end_date = DateTime.fromISO(this.formData.value.end_date).toFormat('yyyy-MM-dd')
-                    this._service.update(formValue, this.Id).subscribe({
-                        next: (resp: any) => {
-                            this._router.navigate(['admin/sales/list'])
-                        },
-                        error: (err: any) => {
-                            this._fuseConfirmationService.open({
-                                "title": "กรุณาระบุข้อมูล",
+                     this._service.update(formValue, this.Id).subscribe({
+                         next: (resp: any) => {
+                             const updatedId = this._extractOrderIdFromResponse(resp) ?? this.Id
+                             this._navigateAfterSave(updatedId)
+                         },
+                         error: (err: any) => {
+                             this._fuseConfirmationService.open({
+                                 "title": "กรุณาระบุข้อมูล",
                                 "message": err.error.message,
                                 "icon": {
                                     "show": true,
@@ -1451,16 +1484,16 @@ export class FormComponent implements OnInit, OnDestroy {
                 const activeElement = document.activeElement;
                 if (activeElement && activeElement instanceof HTMLElement) {
                     // Don't blur if it's the select panel
-                    const isSelectPanel = activeElement.closest('.cdk-overlay-pane') || 
+                    const isSelectPanel = activeElement.closest('.cdk-overlay-pane') ||
                                          activeElement.closest('.mat-mdc-select-panel');
                     if (!isSelectPanel) {
                         activeElement.blur();
                     }
                 }
-                
+
                 // Find all mat-form-fields within this component
                 const componentElement = this._elementRef.nativeElement;
-                
+
                 // Remove focused class from mat-form-fields that are not actually focused
                 const formFields = componentElement.querySelectorAll('.mat-mdc-form-field.mat-focused');
                 formFields.forEach((field: Element) => {
@@ -1470,7 +1503,7 @@ export class FormComponent implements OnInit, OnDestroy {
                         this._renderer.removeClass(field, 'mat-focused');
                     }
                 });
-                
+
                 // Remove focus from mat-select elements that are not actually focused
                 const selectElements = componentElement.querySelectorAll('.mat-mdc-select.mat-focused');
                 selectElements.forEach((select: Element) => {
@@ -1479,7 +1512,7 @@ export class FormComponent implements OnInit, OnDestroy {
                         this._renderer.removeClass(select, 'mat-focused');
                     }
                 });
-                
+
                 // Force blur on select trigger elements
                 const selectTriggers = componentElement.querySelectorAll('.mat-mdc-select-trigger');
                 selectTriggers.forEach((trigger: Element) => {
@@ -1489,13 +1522,13 @@ export class FormComponent implements OnInit, OnDestroy {
                 });
             }, 50);
         });
-        
+
         // Additional cleanup after a longer delay
         setTimeout(() => {
             const componentElement = this._elementRef.nativeElement;
             const formFields = componentElement.querySelectorAll('.mat-mdc-form-field.mat-focused');
             formFields.forEach((field: Element) => {
-                const isActuallyFocused = field.querySelector(':focus') !== null || 
+                const isActuallyFocused = field.querySelector(':focus') !== null ||
                                          field.matches(':focus-within');
                 if (!isActuallyFocused) {
                     this._renderer.removeClass(field, 'mat-focused');

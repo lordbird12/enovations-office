@@ -335,7 +335,7 @@ export class FormComponent implements OnInit {
             user_id: null,
             function_qualifications: null,
             work_station_id: null,
-            work_station_required: 'no_need',
+            work_station_required: 'Y',
             work_station_detail: '',
             additional_equipment: null,
             meeting_details: null,
@@ -394,7 +394,7 @@ export class FormComponent implements OnInit {
                         ? this.workstationData.find(item => item.id === this.itemData.work_station_id)?.name ?? ''
                         : this.itemData?.work_station_detail ?? '';
                     this.formData.patchValue({
-                        work_station_required: hasWorkStation ? 'need' : 'no_need',
+                        work_station_required: hasWorkStation ? 'Y' : 'N',
                         work_station_detail: workstationName || '',
                     });
                     for (let index = 0; index < this.itemData.machine_models.length; index++) {
@@ -487,7 +487,7 @@ export class FormComponent implements OnInit {
                     this.formData.get('work_station_id')?.setValue(null, { emitEvent: false });
                 }
             });
-        
+
         this.formData.get('type')?.valueChanges
             .pipe(takeUntil(this._onDestroy))
             .subscribe((value) => {

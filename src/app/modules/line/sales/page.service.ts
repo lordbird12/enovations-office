@@ -221,7 +221,7 @@ export class PageService {
             params = params.set('user_id', userId.toString());
         }
         return this._httpClient
-            .get<any>(environment.baseURL + '/api/get_orders', { headers, params })
+            .get<any>(environment.baseURL + '/api/get_order_by_user_id/'+ userId)
             .pipe(
                 switchMap((response: any) => {
                     // Return the data array from the response

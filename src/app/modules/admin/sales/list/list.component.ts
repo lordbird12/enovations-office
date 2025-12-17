@@ -135,14 +135,17 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
         this._router.navigate(['admin/sales/view/' + element.id]);
     }
     addElement(data: any) {
+        // Check if we're in marketing view mode
+        const source = this.viewMode === 'marketing-all' || this.viewMode === 'marketing-pending' ? 'marketing' : 'sale';
+        
         if (data === 'Echocardiogram') {
-            this._router.navigate(['admin/sales/form/echocardiogram']);
+            this._router.navigate(['admin/sales/form/echocardiogram'], { queryParams: { source } });
         } else if (data === 'Ultrasound Imaging') {
-            this._router.navigate(['admin/sales/form/ultrasound-imaging']);
+            this._router.navigate(['admin/sales/form/ultrasound-imaging'], { queryParams: { source } });
         } else if (data === 'ec') {
-            this._router.navigate(['admin/sales/form/ec']);
+            this._router.navigate(['admin/sales/form/ec'], { queryParams: { source } });
         } else if (data === 'rc') {
-            this._router.navigate(['admin/sales/form/rc']);
+            this._router.navigate(['admin/sales/form/rc'], { queryParams: { source } });
         }
     }
 
