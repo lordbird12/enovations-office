@@ -1,0 +1,76 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 flex min-w-0 items-start sm:items-center justify-between gap-4">
+            <div class="min-w-0">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    แก้ไขโปรไฟล์
+                </h2>
+                <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    แก้ไขข้อมูลพื้นฐานของผู้ใช้งาน
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-end gap-2">
+                <button class="px-6" mat-stroked-button color="primary" (click)="cancel()">
+                    <mat-icon svgIcon="heroicons_outline:arrow-left"></mat-icon>
+                    <span class="ml-2">กลับ</span>
+                </button>
+                <button class="px-6" mat-flat-button color="primary" (click)="save()" [disabled]="isLoading">
+                    <mat-icon svgIcon="heroicons_outline:check"></mat-icon>
+                    <span class="ml-2">บันทึก</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="p-6 sm:p-10">
+        <div class="bg-card shadow-md rounded-2xl overflow-hidden">
+            <form class="p-6 sm:p-8" [formGroup]="form">
+                <div class="flex flex-col sm:flex-row gap-6 sm:items-center">
+                    <div class="h-24 w-24 rounded-full overflow-hidden bg-gray-100 ring-1 ring-gray-200 flex-shrink-0">
+                        <img
+                            class="h-full w-full object-cover object-center"
+                            [src]="urlImage || 'assets/images/no_image.png'"
+                            [alt]="form.value.name || 'profile'"
+                            (error)="onImageError($event)"
+                        />
+                    </div>
+
+                    <div class="flex-1">
+                        <ngx-dropzone (change)="onSelect($event)">
+                            <ngx-dropzone-label>อัปโหลดรูปโปรไฟล์</ngx-dropzone-label>
+                            <div *ngFor="let f of files">
+                                <ngx-dropzone-image-preview [file]="f" [removable]="true" (removed)="onRemove(f)"></ngx-dropzone-image-preview>
+                            </div>
+                        </ngx-dropzone>
+                        <div class="mt-2 text-xs text-gray-500">รองรับการอัปโหลด 1 รูป (รูปใหม่จะทับรูปเดิม)</div>
+                    </div>
+                </div>
+
+                <mat-divider class="my-6"></mat-divider>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <mat-form-field class="w-full">
+                        <mat-label>ชื่อ</mat-label>
+                        <input matInput formControlName="name" />
+                        <mat-error *ngIf="form.get('name')?.hasError('required')">กรุณากรอกชื่อ</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full">
+                        <mat-label>อีเมล</mat-label>
+                        <input matInput formControlName="email" />
+                        <mat-error *ngIf="form.get('email')?.hasError('required')">กรุณากรอกอีเมล</mat-error>
+                        <mat-error *ngIf="form.get('email')?.hasError('email')">รูปแบบอีเมลไม่ถูกต้อง</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full md:col-span-2">
+                        <mat-label>เบอร์ติดต่อ</mat-label>
+                        <input matInput formControlName="phone" />
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

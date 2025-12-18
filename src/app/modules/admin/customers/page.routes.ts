@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { PageComponent } from './page.component';
 import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
-import { EditComponent } from './edit/edit.component';
 
 export default [
     // {

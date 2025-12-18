@@ -17,8 +17,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
-import moment from 'moment';
-import { ListComponent } from "../../customer/list/list.component";
 import { DataTablesModule } from 'angular-datatables';
 
 @Component({
@@ -61,9 +59,9 @@ export class ProductDialogComponent implements OnInit {
         private _fuseConfirmationService: FuseConfirmationService,
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
-     
-    ) 
-    { 
+
+    )
+    {
 
 
     }
@@ -90,7 +88,7 @@ export class ProductDialogComponent implements OnInit {
         }, 3000);
     }
 
-   
+
     onSelect(item: any) {
         this.dialogRef.close(item);
     }

@@ -18,7 +18,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import moment from 'moment';
-import { ListComponent } from "../../customer/list/list.component";
 import { DataTablesModule } from 'angular-datatables';
 
 @Component({
@@ -46,7 +45,6 @@ import { DataTablesModule } from 'angular-datatables';
     MatRadioModule,
     CommonModule,
     CustomerDialogComponent,
-    ListComponent,
     DataTablesModule
 ],
 })
@@ -78,11 +76,11 @@ export class CustomerDialogComponent implements OnInit {
         private _fuseConfirmationService: FuseConfirmationService,
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
-     
-    ) 
-    { 
+
+    )
+    {
         console.log(this.data.type);
-        
+
         this.form = this.formBuilder.group({
             name: '',
             email: '',
@@ -224,7 +222,7 @@ export class CustomerDialogComponent implements OnInit {
         }, 3000);
     }
 
-   
+
     onSelect(item: any) {
         this.dialogRef.close(item);
     }

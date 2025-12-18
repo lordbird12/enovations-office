@@ -21,7 +21,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { PageService } from '../page.service';
@@ -31,6 +33,7 @@ import { Router } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DialogImportForm } from 'app/shared/dialog-import/dialog.component';
+import { finalize } from 'rxjs/operators';
 @Component({
     selector: 'employee-list-employee',
     templateUrl: './list.component.html',
@@ -54,18 +57,21 @@ import { DialogImportForm } from 'app/shared/dialog-import/dialog.component';
         MatPaginatorModule,
         MatTableModule,
         DataTablesModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatProgressSpinnerModule,
+        MatMenuModule,
     ],
 })
 export class ListComponent implements OnInit, AfterViewInit {
     isLoading: boolean = false;
     dtOptions: DataTables.Settings = {};
     positions: any[];
-    public dataRow: any[];
+    dataRow: any[] = [];
     flashMessage: 'success' | 'error' | null = null;
+    totalRecords = 0;
 
     @ViewChild(DataTableDirective)
-    dtElement: DataTableDirective;
+    dtElement!: DataTableDirective;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     constructor(
         private dialog: MatDialog,
@@ -119,13 +125,16 @@ export class ListComponent implements OnInit, AfterViewInit {
             },
             ajax: (dataTablesParameters: any, callback) => {
                 dataTablesParameters.status = null;
+                this.isLoading = true;
                 that._service
                     .getPage(dataTablesParameters)
+                    .pipe(finalize(() => (this.isLoading = false)))
                     .subscribe((resp: any) => {
                         this.dataRow = resp.data;
                         this.pages.current_page = resp.current_page;
                         this.pages.last_page = resp.last_page;
                         this.pages.per_page = resp.per_page;
+                        this.totalRecords = resp.total ?? 0;
                         if (resp.current_page > 1) {
                             this.pages.begin =
                                 resp.per_page * resp.current_page - 1;
@@ -299,7 +308,38 @@ export class ListComponent implements OnInit, AfterViewInit {
 
     onImageError(event: Event) {
         const target = event.target as HTMLImageElement;
-        target.src = "assets/images/no_image.png"; // Set your default image path here
+        if (target.src.includes('assets/images/no_image.png')) {
+            return;
+        }
+        target.src = 'assets/images/no_image.png';
+    }
+
+    toDate(value: unknown): Date | null {
+        if (value === null || value === undefined) {
+            return null;
+        }
+
+        // Handle string cases like "-", " - ", ""
+        if (typeof value === 'string') {
+            const v = value.trim();
+            if (!v || v === '-') {
+                return null;
+            }
+            const d = new Date(v);
+            return Number.isNaN(d.getTime()) ? null : d;
+        }
+
+        if (value instanceof Date) {
+            return Number.isNaN(value.getTime()) ? null : value;
+        }
+
+        // Handle numbers / timestamps / other date-like inputs
+        const d = new Date(value as any);
+        return Number.isNaN(d.getTime()) ? null : d;
+    }
+
+    trackById(index: number, item: any): any {
+        return item?.id ?? index;
     }
     openDialogImort(): void {
         this.dialog

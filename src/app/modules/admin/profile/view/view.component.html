@@ -1,0 +1,143 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 flex min-w-0 items-start sm:items-center justify-between gap-4">
+            <div class="min-w-0">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    โปรไฟล์ของฉัน
+                </h2>
+                <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    ข้อมูลผู้ใช้งานจากระบบ
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-end gap-2">
+                <button class="px-6" mat-stroked-button color="primary" (click)="goEdit()">
+                    <mat-icon svgIcon="heroicons_outline:pencil-square"></mat-icon>
+                    <span class="ml-2">แก้ไข</span>
+                </button>
+                <button class="px-6" mat-stroked-button color="warn" (click)="openResetPassword()">
+                    <mat-icon svgIcon="heroicons_outline:key"></mat-icon>
+                    <span class="ml-2">Reset password</span>
+                </button>
+                <button class="px-6" mat-stroked-button color="primary" (click)="reload()">
+                    <mat-icon svgIcon="heroicons_outline:arrow-path"></mat-icon>
+                    <span class="ml-2">รีเฟรช</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="p-6 sm:p-10">
+        <div class="bg-card shadow-md rounded-2xl overflow-hidden">
+            <div class="p-6 sm:p-8">
+                <ng-container *ngIf="user; else noUser">
+                    <div class="flex flex-col sm:flex-row gap-6 sm:items-center">
+                        <div class="h-24 w-24 rounded-full overflow-hidden bg-gray-100 ring-1 ring-gray-200 flex-shrink-0">
+                            <img
+                                class="h-full w-full object-cover object-center"
+                                [src]="user.image || 'assets/images/no_image.png'"
+                                [alt]="user.name || user.username || 'profile'"
+                                (error)="onImageError($event)"
+                            />
+                        </div>
+
+                        <div class="min-w-0 flex-1">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100 truncate">
+                                    {{ valueOrDash(user.name) }}
+                                </div>
+                                <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium" [ngClass]="statusColorClass">
+                                    {{ statusLabel }}
+                                </span>
+                                <mat-chip-set *ngIf="user.team_role">
+                                    <mat-chip color="primary" selected>{{ user.team_role }}</mat-chip>
+                                </mat-chip-set>
+                            </div>
+
+                            <div class="mt-2 text-sm text-gray-600 dark:text-gray-400 flex flex-wrap gap-x-6 gap-y-1">
+                                <div class="inline-flex items-center gap-2">
+                                    <mat-icon class="icon-size-5" svgIcon="heroicons_outline:at-symbol"></mat-icon>
+                                    <span class="truncate">{{ valueOrDash(user.username) }}</span>
+                                </div>
+                                <div class="inline-flex items-center gap-2">
+                                    <mat-icon class="icon-size-5" svgIcon="heroicons_outline:envelope"></mat-icon>
+                                    <span class="truncate">{{ valueOrDash(user.email) }}</span>
+                                </div>
+                                <div class="inline-flex items-center gap-2">
+                                    <mat-icon class="icon-size-5" svgIcon="heroicons_outline:phone"></mat-icon>
+                                    <span class="truncate">{{ valueOrDash(user.phone) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <mat-divider class="my-6"></mat-divider>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">รหัสพนักงาน</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.user_no) }}</div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">User ID</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100 break-all">{{ valueOrDash(user.user_id) }}</div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">สิทธิ์ (Permission)</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.permission_id) }}</div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">แผนก (Department)</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.department_id) }}</div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">ตำแหน่ง (Position)</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.position_id) }}</div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">ทีม</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ teamName }}</div>
+                            <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ valueOrDash(user.team?.detail) }}</div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">สร้างโดย</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.create_by) }}</div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">อัปเดตโดย</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.update_by) }}</div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">วันที่สร้าง</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.created_at) }}</div>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4 md:col-span-2 xl:col-span-3">
+                            <div class="text-xs uppercase tracking-wider text-gray-500">วันที่อัปเดต</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.updated_at) }}</div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #noUser>
+                    <div class="p-8 text-center">
+                        <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">ไม่พบข้อมูลผู้ใช้</div>
+                        <div class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                            กรุณาเข้าสู่ระบบใหม่ หรือเช็คว่ามีข้อมูลใน LocalStorage key <span class="font-mono">user</span>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
