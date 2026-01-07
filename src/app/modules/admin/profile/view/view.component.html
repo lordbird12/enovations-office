@@ -88,17 +88,17 @@
 
                         <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
                             <div class="text-xs uppercase tracking-wider text-gray-500">สิทธิ์ (Permission)</div>
-                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.permission_id) }}</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.permission.name) }}</div>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
                             <div class="text-xs uppercase tracking-wider text-gray-500">แผนก (Department)</div>
-                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.department_id) }}</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.department.name) }}</div>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
                             <div class="text-xs uppercase tracking-wider text-gray-500">ตำแหน่ง (Position)</div>
-                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.position_id) }}</div>
+                            <div class="mt-1 font-semibold text-gray-900 dark:text-gray-100">{{ valueOrDash(user.position.name) }}</div>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
