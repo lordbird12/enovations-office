@@ -358,17 +358,12 @@ export class ViewOrderComponent implements OnInit {
                         // memberIds: memberIds,
                         // tds: tDs
                     });
-
-                    console.log(this.formData.value);
-
                     this._changeDetectorRef.markForCheck();
 
                 });
 
                 const win_lose = this.activatedRoute.snapshot.data.winLose.data
                 this.winLose = win_lose.filter((resp: any) => resp.order_id === +this.Id)
-                console.log(this.Id);
-                console.log(this.winLose);
 
             });
         } else {
@@ -811,6 +806,77 @@ export class ViewOrderComponent implements OnInit {
 
     getFormFieldHelpersAsString(): string {
         return this.formFieldHelpers.join(' ');
+    }
+
+    submit() {
+        const dialogRef = this._fuseConfirmationService.open({
+            "title": "บันทึกข้อมูล",
+            "message": "คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?",
+            "icon": {
+                "show": true,
+                "name": "heroicons_outline:exclamation-triangle",
+                "color": "accent"
+            },
+            "actions": {
+                "confirm": {
+                    "show": true,
+                    "label": "ตกลง",
+                    "color": "primary"
+                },
+                "cancel": {
+                    "show": true,
+                    "label": "ยกเลิก"
+                }
+            },
+            "dismissible": true
+        })
+        dialogRef.afterClosed().subscribe((result => {
+            if (result === 'confirmed') {
+                let formValue = this.formData.value;
+                formValue.start_date = DateTime.fromISO(this.formData.value.start_date).toFormat('yyyy-MM-dd')
+                formValue.end_date = DateTime.fromISO(this.formData.value.end_date).toFormat('yyyy-MM-dd')
+                this._service.update(formValue, this.Id).subscribe({
+                    next: (resp: any) => {
+                        const updatedId = this._extractOrderIdFromResponse(resp) ?? this.Id
+                        this._navigateAfterSave(updatedId)
+                    },
+                    error: (err: any) => {
+                        this._fuseConfirmationService.open({
+                            "title": "กรุณาระบุข้อมูล",
+                            "message": err.error.message,
+                            "icon": {
+                                "show": true,
+                                "name": "heroicons_outline:exclamation",
+                                "color": "warning"
+                            },
+                            "actions": {
+                                "confirm": {
+                                    "show": false,
+                                    "label": "ยืนยัน",
+                                    "color": "primary"
+                                },
+                                "cancel": {
+                                    "show": false,
+                                    "label": "ยกเลิก",
+
+                                }
+                            },
+                            "dismissible": true
+                        });
+                    }
+                })
+            } else {
+
+            }
+        }))
+    }
+
+    _extractOrderIdFromResponse(resp: any): unknown {
+        return resp.data?.id
+    }
+
+    _navigateAfterSave(updatedId: unknown): void {
+        window.location.reload()
     }
 
     onBack() {
