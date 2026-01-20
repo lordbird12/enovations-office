@@ -32,6 +32,7 @@ import { CustomerDialogComponent } from '../customer-dialog/customer-dialog.comp
 import { CarouselComponent } from '../image-slide/carousel.component';
 import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 @Component({
     selector: 'form-product-sales',
     templateUrl: './form.component.html',
@@ -56,7 +57,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatChipsModule,
         MatDatepickerModule,
         MatCheckboxModule,
-        MatChipsModule
+        MatChipsModule,
+        NgxMatSelectSearchModule
 
     ],
 })
@@ -115,6 +117,7 @@ export class FormComponent implements OnInit, OnDestroy {
         'OB-ANC',
         'OB-LR'
     ];
+    filteredDepartments: string[] = [];
 
     // provinces: string[] = [
     //     'Bangkok',
@@ -272,6 +275,7 @@ export class FormComponent implements OnInit, OnDestroy {
         'ยะลา',
         'ยโสธร'
     ];
+    filteredProvinces: string[] = [];
 
 
     finanaceData: any[] = [];
@@ -344,8 +348,11 @@ export class FormComponent implements OnInit, OnDestroy {
 
     ///workstationFilter
     clientFilter = new FormControl('');
+    clientSearchFilter = new FormControl('');
     filterClient: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
     clientData: any[] = [];
+    provinceSearchFilter = new FormControl('');
+    departmentSearchFilter = new FormControl('');
 
     user: any
     pageType: any
@@ -389,8 +396,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
         this.mcData = this.activatedRoute.snapshot.data.machine_model.data
         this.filterMachineModel.next(this.mcData.slice());
-        console.log(this.mcData);
-
 
         this.formData = this._fb.group({
             reserve_ref_no: null,
@@ -433,6 +438,8 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.filteredDepartments = this.departments.slice();
+        this.filteredProvinces = this.provinces.slice();
         // Get source from query params, default to 'sale' if not specified
         this.source = this.activatedRoute.snapshot.queryParams['source'] || 'sale';
 
@@ -512,7 +519,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
 
         }
-        this.clientFilter.valueChanges
+        this.clientSearchFilter.valueChanges
             .pipe(takeUntil(this._onDestroy))
             .subscribe(() => {
                 this._filterClient();
@@ -547,6 +554,16 @@ export class FormComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._onDestroy))
             .subscribe(() => {
                 this._filterMachineModel();
+            });
+        this.provinceSearchFilter.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+                this._filterProvinces();
+            });
+        this.departmentSearchFilter.valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+                this._filterDepartments();
             });
         this.formData.get('work_station_required')?.valueChanges
             .pipe(takeUntil(this._onDestroy))
@@ -829,7 +846,7 @@ export class FormComponent implements OnInit, OnDestroy {
         if (!this.clientData) {
             return;
         }
-        let search = this.clientFilter.value;
+        let search = this.clientSearchFilter.value;
         if (!search) {
             this.filterClient.next(this.clientData.slice());
             return;
@@ -838,7 +855,7 @@ export class FormComponent implements OnInit, OnDestroy {
         }
         this.filterClient.next(
             this.clientData.filter(item =>
-                item.name.toLowerCase().includes(search)
+                (item?.name ?? '').toString().toLowerCase().includes(search)
             )
         );
     }
@@ -873,6 +890,30 @@ export class FormComponent implements OnInit, OnDestroy {
         }
         this.filterSale.next(
             this.financeData.filter(item => item.name.toLowerCase().indexOf(search) > -1)
+        );
+    }
+
+    protected _filterProvinces() {
+        const search = this.provinceSearchFilter.value;
+        if (!search) {
+            this.filteredProvinces = this.provinces.slice();
+            return;
+        }
+        const query = search.toString().toLowerCase();
+        this.filteredProvinces = this.provinces.filter(item =>
+            item.toLowerCase().includes(query)
+        );
+    }
+
+    protected _filterDepartments() {
+        const search = this.departmentSearchFilter.value;
+        if (!search) {
+            this.filteredDepartments = this.departments.slice();
+            return;
+        }
+        const query = search.toString().toLowerCase();
+        this.filteredDepartments = this.departments.filter(item =>
+            item.toLowerCase().includes(query)
         );
     }
 

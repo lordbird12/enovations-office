@@ -56,6 +56,7 @@
               "src/@fuse/styles/main.scss",
               "src/styles/styles.scss",
               "src/styles/tailwind.scss",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/datatables.net-dt/css/jquery.dataTables.min.css"
             ],
             "scripts": [
@@ -129,7 +130,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles/styles.scss"
+              "src/styles/styles.scss",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "scripts": []
           }

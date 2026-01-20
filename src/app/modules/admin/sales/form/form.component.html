@@ -47,15 +47,18 @@
                                 </div>
                             </div>
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-
-                                <input matInput [formControl]="clientFilter" [matAutocomplete]="clientAutoComplete"
-                                    placeholder="ค้นหาโรงพยาบาล" />
-                                <mat-autocomplete #clientAutoComplete="matAutocomplete"
-                                    (optionSelected)="onSelectClient($event.option.value, 'manual')">
+                                <mat-label>โรงพยาบาล</mat-label>
+                                <mat-select [formControl]="clientFilter"
+                                    (selectionChange)="onSelectClient($event.value, 'manual')">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="clientSearchFilter"
+                                            placeholderLabel="ค้นหาโรงพยาบาล" noEntriesFoundLabel="ไม่พบข้อมูล">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
                                     <mat-option *ngFor="let item of filterClient | async" [value]="item.name">
                                         {{item.name}}
                                     </mat-option>
-                                </mat-autocomplete>
+                                </mat-select>
                             </mat-form-field>
                         </div>
 
@@ -75,7 +78,12 @@
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>จังหวัด</mat-label>
                                 <mat-select [formControlName]="'province'" placeholder="" (selectionChange)="onSelectClosed()" (closed)="onSelectClosed()" (openedChange)="onSelectOpenedChange($event)">
-                                    <mat-option *ngFor="let item of provinces" [value]="item">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="provinceSearchFilter"
+                                            placeholderLabel="ค้นหาจังหวัด" noEntriesFoundLabel="ไม่พบข้อมูล">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of filteredProvinces" [value]="item">
                                         {{item}}
                                     </mat-option>
                                 </mat-select>
@@ -85,7 +93,12 @@
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>แผนก</mat-label>
                                 <mat-select [formControlName]="'department'" placeholder="" (selectionChange)="onSelectClosed()" (closed)="onSelectClosed()" (openedChange)="onSelectOpenedChange($event)">
-                                    <mat-option *ngFor="let item of departments" [value]="item">
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="departmentSearchFilter"
+                                            placeholderLabel="ค้นหาแผนก" noEntriesFoundLabel="ไม่พบข้อมูล">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngFor="let item of filteredDepartments" [value]="item">
                                         {{item}}
                                     </mat-option>
                                 </mat-select>
@@ -103,12 +116,12 @@
                                 ข้อมูลการจอง
                             </p>
                         </span>
-                        <div class="w-full px-3 mb-6 md:mb-0">
+                        <!-- <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>เลขที่ใบยืม</mat-label>
                                 <input matInput placeholder="เลขที่ใบยืม" [formControlName]="'reserve_ref_no'">
                             </mat-form-field>
-                        </div>
+                        </div> -->
                         <div class="w-full px-3 mb-6 md:mb-0">
                             <mat-form-field class="w-full" [ngClass]="formFieldHelpers">
                                 <mat-label>วันทีจอง</mat-label>
