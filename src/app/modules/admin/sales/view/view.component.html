@@ -24,16 +24,16 @@
             <div class="bg-card p-6 rounded-lg shadow  space-y-2">
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลการจอง</h3>
                 <p><strong>เลขที่ใบยืม:</strong> {{ formData.value.reserve_ref_no ?? '-' }}</p>
-                <p><strong>วันที่จอง:</strong> {{ formData.value.start_date }} - {{ formData.value.end_date }}</p>
+                <p><strong>วันที่จอง:</strong> {{ formData.value.start_date ?? '-' }} - {{ formData.value.end_date ?? '-' }}</p>
                 <p><strong>วัตถุประสงค์:</strong> {{ formData.value.request_purpose ?? '-' }}</p>
                 <p *ngIf="formData.value.request_purpose === 'Demo'"><strong>งบประมาณ:</strong> {{ formData.value.budget
                     ?? 0 }}</p>
-                <p><strong>Function Qualifications:</strong> {{ formData.value.function_qualifications }}</p>
-                <p><strong>อุปกรณ์เพิ่มเติม:</strong> {{ formData.value.additional_equipment }}</p>
-                <p><strong>วัน เวลา สถานที่นัดหมาย:</strong> {{ formData.value.meeting_details }}</p>
-                <p><strong>วันที่ขอ:</strong> {{ formData.value.created_at | date:'dd-MM-yyyy' }}</p>
+                <p><strong>Function Qualifications:</strong> {{ formData.value.function_qualifications ?? '-' }}</p>
+                <p><strong>อุปกรณ์เพิ่มเติม:</strong> {{ formData.value.additional_equipment ?? '-' }}</p>
+                <p><strong>วัน เวลา สถานที่นัดหมาย:</strong> {{ formData.value.meeting_details ?? '-' }}</p>
+                <p><strong>วันที่ขอ:</strong> {{ formData.value.created_at ? (formData.value.created_at | date:'dd-MM-yyyy') : '-' }}</p>
                 <p><strong>สถานะ:</strong> <span
-                        class="bg-green-50 rounded-md text-sm px-2 mb-2 mx-2 py-1 text-green-400 font-semibold">{{formData.value.status}}</span>
+                        class="bg-green-50 rounded-md text-sm px-2 mb-2 mx-2 py-1 text-green-400 font-semibold">{{ formData.value.status ?? '-' }}</span>
                 </p>
 
                 <mat-form-field class="w-full mt-2" [subscriptSizing]="'dynamic'">
@@ -44,24 +44,24 @@
             <!-- ข้อมูลโรงพยาบาล -->
             <div class="bg-card p-6 rounded-lg shadow space-y-2">
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลการใช้เครื่องปัจจุบันของโรงพยาบาล</h3>
-                <p><strong>รุ่นที่ใช้อยู่:</strong> {{ formData.value.current_machine_model }}</p>
-                <p><strong>Work Station:</strong> {{ formData.value.current_work_station }}</p>
-                <p><strong>ปัญหาหรือความต้องการ:</strong> {{ formData.value.current_usage_problem }}</p>
+                <p><strong>รุ่นที่ใช้อยู่:</strong> {{ formData.value.current_machine_model ?? '-' }}</p>
+                <p><strong>Work Station:</strong> {{ formData.value.current_work_station ?? '-' }}</p>
+                <p><strong>ปัญหาหรือความต้องการ:</strong> {{ formData.value.current_usage_problem ?? '-' }}</p>
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลการเครื่องคู่แข่งที่นำเสนอ</h3>
-                <p><strong>รุ่นที่นำเสนอ:</strong> {{ formData.value.competitor_model }}</p>
-                <p><strong>หัวตรวจ:</strong> {{ formData.value.competitor_transducer }}</p>
-                <p><strong>Feddback ลูกค้า:</strong> {{ formData.value.customer_feedback }}</p>
+                <p><strong>รุ่นที่นำเสนอ:</strong> {{ formData.value.competitor_model ?? '-' }}</p>
+                <p><strong>หัวตรวจ:</strong> {{ formData.value.competitor_transducer ?? '-' }}</p>
+                <p><strong>Feddback ลูกค้า:</strong> {{ formData.value.customer_feedback ?? '-' }}</p>
             </div>
 
             <!-- ข้อมูลโรงพยาบาล -->
             <div class="bg-card p-6 rounded-lg shadow space-y-2">
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลโรงพยาบาล</h3>
                 <p><strong>ชื่อโรงพยาบาล:</strong> {{ formData.value.client_name ?? '-' }}</p>
-                <p><strong>ประเภทโรงพยาบาล:</strong> {{ formData.value.customer_type }}</p>
-                <p><strong>จังหวัด:</strong> {{ formData.value.province }}</p>
-                <p><strong>แผนก:</strong> {{ formData.value.department }}</p>
-                <p><strong>ชั้น:</strong> {{ formData.value.floor }}</p>
-                <p><strong>แพทย์ KOL:</strong> {{ formData.value.kol_doctor }}</p>
+                <p><strong>ประเภทโรงพยาบาล:</strong> {{ formData.value.customer_type ?? '-' }}</p>
+                <p><strong>จังหวัด:</strong> {{ formData.value.province ?? '-' }}</p>
+                <p><strong>แผนก:</strong> {{ formData.value.department ?? '-' }}</p>
+                <p><strong>ชั้น:</strong> {{ formData.value.floor ?? '-' }}</p>
+                <p><strong>แพทย์ KOL:</strong> {{ formData.value.kol_doctor ?? '-' }}</p>
             </div>
         </div>
 
@@ -269,7 +269,7 @@
                             {{ item?.note ?? '-' }}
                         </td>
                         <td class="border p-2 text-center">
-                            {{ (item?.updated_at | date : 'dd/MM/yyyy') ?? '-' }}
+                            {{ item?.updated_at ? (item?.updated_at | date : 'dd/MM/yyyy') : '-' }}
                         </td>
                     </tr>
                 </tbody>
