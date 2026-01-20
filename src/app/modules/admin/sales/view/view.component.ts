@@ -362,6 +362,27 @@ export class ViewOrderComponent implements OnInit {
                         // memberIds: memberIds,
                         // tds: tDs
                     });
+                    for (let index = 0; index < this.itemData.machine_models.length; index++) {
+                        const element = this.itemData.machine_models[index];
+                        this.machine_models.push(this._fb.group({
+                            id: element.id,
+                            machine_model_id: element.machine_model_id,
+                            machine_model_name: element.machine_model.name,
+                            qty: element.qty
+                        }))
+
+                    }
+
+                    for (let index = 0; index < this.itemData.transducers.length; index++) {
+                        const element = this.itemData.transducers[index];
+                        this.transducers.push(this._fb.group({
+                            id: element.id,
+                            machine_model_id: element.machine_model_id,
+                            machine_model_name: element.machine_model.name,
+                            qty: element.qty
+                        }))
+
+                    }
                     this._changeDetectorRef.markForCheck();
 
                 });
@@ -1300,75 +1321,75 @@ export class ViewOrderComponent implements OnInit {
 
     }
     openDialogReturnProductarray(formValue: any[]): void {
-        if(this.type_return === 'return'){
+        if (this.type_return === 'return') {
             this.dialog
-            .open(DialogReturnProductComponent, {
-                maxHeight: '100vh',
-                width: '80vh',
-                maxWidth: '100vh',
-                data: {
-                    order: this.itemData,
-                    product: formValue,
-                },
-            })
-            .afterClosed()
-            .subscribe((item) => {
-                if (item) {
-                    this._service.getById(this.Id).subscribe((resp: any) => {
-                        this.itemData = resp.data;
-                        // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
-                        // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
-                        this.saleFilter.setValue(this.itemData.user?.name)
-                        this.clientFilter.setValue(this.itemData.client?.name)
-                        this.productFilter.setValue(this.itemData.product?.name)
-                        this.accessorieFilter.setValue(this.itemData.product?.name)
-                        this.workstationFilter.setValue(this.itemData.product?.name)
-                        this.formData.patchValue({
-                            ...this.itemData,
-                            // memberIds: memberIds,
-                            // tds: tDs
+                .open(DialogReturnProductComponent, {
+                    maxHeight: '100vh',
+                    width: '80vh',
+                    maxWidth: '100vh',
+                    data: {
+                        order: this.itemData,
+                        product: formValue,
+                    },
+                })
+                .afterClosed()
+                .subscribe((item) => {
+                    if (item) {
+                        this._service.getById(this.Id).subscribe((resp: any) => {
+                            this.itemData = resp.data;
+                            // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
+                            // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
+                            this.saleFilter.setValue(this.itemData.user?.name)
+                            this.clientFilter.setValue(this.itemData.client?.name)
+                            this.productFilter.setValue(this.itemData.product?.name)
+                            this.accessorieFilter.setValue(this.itemData.product?.name)
+                            this.workstationFilter.setValue(this.itemData.product?.name)
+                            this.formData.patchValue({
+                                ...this.itemData,
+                                // memberIds: memberIds,
+                                // tds: tDs
+                            });
+
+                            // console.log(this.formData.value);
+                            this.selectedMachineProducts = [];
+                            this.selectedTransducerProducts = [];
+                            this._changeDetectorRef.markForCheck();
+
+
                         });
+                    } else {
+                        console.log('no data');
 
-                        // console.log(this.formData.value);
-                        this.selectedMachineProducts = [];
-                        this.selectedTransducerProducts = [];
-                        this._changeDetectorRef.markForCheck();
+                    }
 
-
-                    });
-                } else {
-                    console.log('no data');
-
-                }
-
-            });
-        }else{
+                });
+        } else {
             this.dialog
-            .open(DialogReturnProductWaitApprovedComponent, {
-                maxHeight: '100vh',
-                width: '80vh',
-                maxWidth: '100vh',
-                data: {
-                    order: this.itemData,
-                    product: formValue,
-                },
-            })
-            .afterClosed()
-            .subscribe((item) => {
-                if (item) {
-                    this._service.getById(this.Id).subscribe((resp: any) => {
-                        this.itemData = resp.data;
-                        this.formData.patchValue({
-                            ...this.itemData,
+                .open(DialogReturnProductWaitApprovedComponent, {
+                    maxHeight: '100vh',
+                    width: '80vh',
+                    maxWidth: '100vh',
+                    data: {
+                        order: this.itemData,
+                        product: formValue,
+                    },
+                })
+                .afterClosed()
+                .subscribe((item) => {
+                    if (item) {
+                        this._service.getById(this.Id).subscribe((resp: any) => {
+                            this.itemData = resp.data;
+                            this.formData.patchValue({
+                                ...this.itemData,
+                            });
+                            this.selectedMachineProducts = [];
+                            this.selectedTransducerProducts = [];
+                            this._changeDetectorRef.markForCheck();
                         });
-                        this.selectedMachineProducts = [];
-                        this.selectedTransducerProducts = [];
-                        this._changeDetectorRef.markForCheck();
-                    });
-                } else {
-                    console.log('no data');
-                }
-            });
+                    } else {
+                        console.log('no data');
+                    }
+                });
         }
 
     }
@@ -1411,13 +1432,13 @@ export class ViewOrderComponent implements OnInit {
 
     selectedMachineProducts: any[] = [];
     selectedTransducerProducts: any[] = [];
-    type_return:string;
+    type_return: string;
 
     onSelectMultipleMachineProducts(event: any, product: any): void {
         const selectedStatus = this.selectedMachineProducts.length > 0 ? this.selectedMachineProducts[0]?.return_products : null;
         const productStatus = product?.return_products;
 
-        if(this.selectedMachineProducts.length > 0 ){
+        if (this.selectedMachineProducts.length > 0) {
             if ((selectedStatus === null && productStatus !== null) ||
                 (selectedStatus !== null && productStatus === null) ||
                 (selectedStatus?.status === 'waiting_approve' && productStatus?.status !== 'waiting_approve') ||
@@ -1435,9 +1456,9 @@ export class ViewOrderComponent implements OnInit {
         if (event.checked) {
             this.selectedMachineProducts.push(product);
 
-            if(productStatus?.status === 'waiting_approve'){
+            if (productStatus?.status === 'waiting_approve') {
                 this.type_return = 'waiting_approve'
-            }else{
+            } else {
                 this.type_return = 'return'
             }
 
@@ -1453,7 +1474,7 @@ export class ViewOrderComponent implements OnInit {
         const selectedStatus = this.selectedTransducerProducts.length > 0 ? this.selectedTransducerProducts[0]?.return_products : null;
         const productStatus = product?.return_products;
 
-        if(this.selectedTransducerProducts.length > 0 ){
+        if (this.selectedTransducerProducts.length > 0) {
             if ((selectedStatus === null && productStatus !== null) ||
                 (selectedStatus !== null && productStatus === null) ||
                 (selectedStatus?.status === 'waiting_approve' && productStatus?.status !== 'waiting_approve') ||
@@ -1471,9 +1492,9 @@ export class ViewOrderComponent implements OnInit {
         if (event.checked) {
             this.selectedTransducerProducts.push(product);
 
-            if(productStatus?.status === 'waiting_approve'){
+            if (productStatus?.status === 'waiting_approve') {
                 this.type_return = 'waiting_approve'
-            }else{
+            } else {
                 this.type_return = 'return'
             }
         } else {
