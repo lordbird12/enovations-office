@@ -45,7 +45,7 @@
             <!-- ข้อมูลการจอง -->
             <div class="bg-card p-6 rounded-xl shadow-md  space-y-2">
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลการจอง</h3>
-                <p><strong>เลขที่ใบจอง:</strong> {{ formData.value.reserve_ref_no ?? '-' }}</p>
+                <p><strong>เลขที่ใบยืม:</strong> {{ formData.value.reserve_ref_no ?? '-' }}</p>
                 <p><strong>วันที่จอง:</strong> {{ formData.value.start_date }} - {{ formData.value.end_date }}</p>
                 <p><strong>วัตถุประสงค์:</strong> {{ formData.value.request_purpose ?? '-' }}</p>
                 <p *ngIf="formData.value.request_purpose === 'Demo'"><strong>งบประมาณ:</strong> {{ formData.value.budget

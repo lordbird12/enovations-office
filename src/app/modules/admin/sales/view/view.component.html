@@ -23,7 +23,7 @@
             <!-- ข้อมูลการจอง -->
             <div class="bg-card p-6 rounded-lg shadow  space-y-2">
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลการจอง</h3>
-                <p><strong>เลขที่ใบจอง:</strong> {{ formData.value.reserve_ref_no ?? '-' }}</p>
+                <p><strong>เลขที่ใบยืม:</strong> {{ formData.value.reserve_ref_no ?? '-' }}</p>
                 <p><strong>วันที่จอง:</strong> {{ formData.value.start_date }} - {{ formData.value.end_date }}</p>
                 <p><strong>วัตถุประสงค์:</strong> {{ formData.value.request_purpose ?? '-' }}</p>
                 <p *ngIf="formData.value.request_purpose === 'Demo'"><strong>งบประมาณ:</strong> {{ formData.value.budget
@@ -37,7 +37,7 @@
                 </p>
 
                 <mat-form-field class="w-full mt-2" [subscriptSizing]="'dynamic'">
-                    <mat-label>เลขที่ใบจอง</mat-label>
+                    <mat-label>เลขที่ใบยืม</mat-label>
                     <input matInput [formControl]="formData.get('reserve_ref_no')">
                 </mat-form-field>
             </div>
