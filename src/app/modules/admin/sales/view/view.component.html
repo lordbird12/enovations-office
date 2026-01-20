@@ -56,7 +56,7 @@
             <!-- ข้อมูลโรงพยาบาล -->
             <div class="bg-card p-6 rounded-lg shadow space-y-2">
                 <h3 class="text-xl font-bold text-gray-500">ข้อมูลโรงพยาบาล</h3>
-                <p><strong>ชื่อโรงพยาบาล:</strong> {{ formData.value.client_name }}</p>
+                <p><strong>ชื่อโรงพยาบาล:</strong> {{ formData.value.client_name ?? '-' }}</p>
                 <p><strong>ประเภทโรงพยาบาล:</strong> {{ formData.value.customer_type }}</p>
                 <p><strong>จังหวัด:</strong> {{ formData.value.province }}</p>
                 <p><strong>แผนก:</strong> {{ formData.value.department }}</p>

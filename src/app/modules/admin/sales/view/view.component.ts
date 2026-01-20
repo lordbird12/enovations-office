@@ -318,6 +318,7 @@ export class ViewOrderComponent implements OnInit {
             competitor_transducer: null,
             customer_feedback: null,
             client_id: null,
+            client_name: null,
             customer_type: null,
             province: null,
             department: null,
@@ -345,6 +346,8 @@ export class ViewOrderComponent implements OnInit {
                 this.Id = id
                 this._service.getById(id).subscribe((resp: any) => {
                     this.itemData = resp.data;
+                    console.log(this.itemData);
+
                     // const memberIds = this.itemData.machine_models.map(model => Number(model.product_id));
                     // const tDs = this.itemData.transducers.map(model => Number(model.product_id));
                     this.saleFilter.setValue(this.itemData.user?.name)
@@ -354,6 +357,7 @@ export class ViewOrderComponent implements OnInit {
                     this.workstationFilter.setValue(this.itemData.product?.name)
                     this.formData.patchValue({
                         ...this.itemData,
+                        client_name: this.itemData?.client?.name,
                         created_at: DateTime.fromISO(this.itemData.created_at).toFormat('yyyy-MM-dd'),
                         // memberIds: memberIds,
                         // tds: tDs
